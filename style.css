@@ -1,0 +1,43 @@
+
+body {
+    width: 90%;
+    background-color: darksalmon;
+    color: black;
+    margin: auto;
+    padding: 0px;
+}
+
+.top {
+    height: 80%;
+    width: 100%;
+    /* border: 1px; */
+    background-color: darkolivegreen
+}
+
+.avatar {
+    height: 200px;
+    width: 200px;
+}
+
+.bottom {
+    height: 100px;
+    width: 100%;
+    /* border: 1px; */
+    background-color: khaki
+}
+.left {
+    height: 100%;
+    width: 25%;
+    float: left;
+    padding: 0px;
+    border: 2px dotted #000000;
+    /* background-color: khaki */
+}
+.right {
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    /* float: right; */
+    border: 2px dotted #000000;
+    /* background-color: khaki */
+}
