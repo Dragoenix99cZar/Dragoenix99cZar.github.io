@@ -8,15 +8,20 @@ body {
 }
 
 .top {
-    height: 80%;
+    height: 500px;
     width: 100%;
     /* border: 1px; */
     background-color: darkolivegreen
 }
 
 .avatar {
-    height: 200px;
-    width: 200px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    background-color: aquamarine;
+    border: 2px dotted #000000;
+    height: 100px;
+    width: 100px;
 }
 
 .bottom {
