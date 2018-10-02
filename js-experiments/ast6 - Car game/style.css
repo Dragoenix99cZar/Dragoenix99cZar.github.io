@@ -1,0 +1,36 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background-color: #313335;
+}
+#canvas-container{
+  width: 1000px;
+  margin: 10px auto;
+}
+
+#game-canvas{
+  border: 1px solid gray;
+  /*background-color: #000;*/
+}
+
+h1{
+  margin: 0 auto;
+  color: #fff;
+}
+
+#score-display{
+  margin: 0 auto;
+}
+
+h2{
+  margin: 0 auto;
+  color: #fff;
+}
+
+span{
+  font-size: 30px;
+  color: #fff;
+}

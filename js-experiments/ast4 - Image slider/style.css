@@ -1,0 +1,44 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+ul li {
+	display: inline;
+	overflow: hidden;
+}
+.container {
+	overflow: hidden;
+	margin: auto;
+		
+}
+.left-arrow {
+	float: left;
+	position: absolute;
+	top: 45%;
+	left: 0px;	
+}
+.right-arrow {
+	float: right;
+	position: absolute;
+	top: 45%;
+	right: 0px;
+	
+}
+.frame {
+	height: 360px;
+	width: 638px;
+	overflow: hidden;
+	border: 10px solid rgba(197,107,108,1.00);
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+.pics {
+	width: 2560px;
+	margin-left: 4px;
+	margin-top: 0px;
+}
+.pics img {
+	margin-left: -4px;
+}
