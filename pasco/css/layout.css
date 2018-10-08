@@ -1,0 +1,72 @@
+.inner-width{
+	width: 1170px;
+	margin: 0 auto;
+}
+
+.header-container {
+	width: 100%;
+}
+
+.head-top-warpper {
+	background: #000000;
+	line-height: 40px;
+}
+
+.head-bottom-wrapper {
+	background-image: url(../images/MaskedheadBg.png);
+	background-repeat: no-repeat;
+/*	line-height: 200px;*/
+}
+
+.footer {
+	width: 100%;
+}
+.footer-top {
+	background-color: #212121;
+	width: 100%;
+/*	line-height: 540px;*/
+	
+}
+
+.footer-bottom {
+	width: 100%;
+	background: #303030;
+}
+
+
+.col2-right {
+	display: flex;
+	margin-top: 30px;
+}
+
+.main {
+/*	width: 70%;*/
+/*	width: 70.08547008547008547008547008547%;*/
+	width: calc(820*100%/1170);
+	display: flex;
+  	flex-direction: column;
+	margin-right: 40px;
+}
+
+.right-side-bar {
+/*	width: 30%;*/
+/*	width: 26.495726495726495726495726495726%;*/
+	width: calc(310*100%/1170);
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+}
+
+.nav-bar-wrapper {
+	background-color: white;
+	border-bottom: 1px solid #dddddd;
+}
+
+.body-wrapper {
+	background-color: #f5f5f5;
+}
+
+.footer-top-content {
+	display: flex;
+	color: white;
+}
