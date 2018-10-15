@@ -4,8 +4,12 @@
 
 span:hover {
 	color: #3f51b5;
+	cursor: pointer;
 }
 
+input {
+	outline: none;
+}
 
 * {
 	padding: 0;
