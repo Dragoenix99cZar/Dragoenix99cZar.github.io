@@ -103,25 +103,80 @@ function info( person){
   }
   return temp;
 }
-var being = [];
-function func( person){
-  if( hasChild(person)){
-    being.push(info(person));
-    func(person.children);
-  } else{
-    return being;
+
+
+var output = [];  //output array
+
+
+function normalize(people)
+{
+  for(var i = 0 ; i< people.length ; i++)
+    {
+        getChildren(people[i]);
+    }
+}
+
+// console.log(people[0]);
+
+function getChildren(peopleElement)
+{
+
+  if (peopleElement.children === undefined)
+  {
+    var list = {
+      id :  peopleElement.id,
+      name : peopleElement.name,
+      children : [] 
+      }
+          output.push(list); //for pushing elements that have no children
+        }
+
+        else
+        {
+          // console.log (peopleElement.children.length);
+         var childrenId = [];
+
+          for (var i = 0; i < peopleElement.children.length; i++)  //gets the id's of childrens recursively
+          {
+            childrenId.push(peopleElement.children[i].id);
+            // console.log (childrenId);
+            getChildren(peopleElement.children[i]); 
+          }
+          
+          var newlist = {
+            id :  peopleElement.id,
+            name : peopleElement.name,
+            children : childrenId
+          }
+
+
+            // console.log(newlist);
+
+          output.push(newlist); // pushes elements that have childrens
+
+      }
+
+
+  } 
+
+normalize(people);
+
+function arraySort(output){
+  var tmp;
+  for( var i = 0; i < output.length-1; i++){
+    for(var j = 0; j<output.length-i-1; j++){
+     if (output[j].id > output[j+1].id){
+      tmp =output[j];
+      output[j] = output[j+1];
+      output[j+1] = tmp;
+    }   
   }
+}
 }
 
 
-
-
-
-var first = info(people[0]);
-var second = info(people[0].children[0]);
-var third = info(people[0].children[1]);
-
-var data = func(people[0]);
+arraySort(output);
+console.log(output);
 
 
 
