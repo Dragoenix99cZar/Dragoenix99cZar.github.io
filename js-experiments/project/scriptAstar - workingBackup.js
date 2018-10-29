@@ -1,30 +1,36 @@
-var canvas = null;
-var ctx = null;
+let canvas = null;
+let ctx = null;
 
-var spritesheet = null;
-var spritesheetLoaded = false;
+let spritesheet = null;
+let spritesheetLoaded = false;
 
-var world = [[]];
+let world = [[]];
 
-// var dijkstraFlag = false;
-var pathDensity = 0.7;
+let pathDensity = 0.7;
 
-var worldWidth = 16;
-var worldHeight = 16;
+let worldWidth = 18;
+let worldHeight = 18;
 
-var tileWidth = 32;
-var tileHeight = 32;
+let tileWidth = 32;
+let tileHeight = 32;
 
-var pathStart = [worldWidth,worldHeight];
-var pathEnd = [0,0];
-var currentPath = [];
+let pathStart = [worldWidth,worldHeight];
+let pathEnd = [0,0];
+let currentPath = [];
+let closedSet = [];	
 
-// ensure that concole.log doesn't cause errors
-//if (typeof console == "undefined") var console = { log: function() {} };
+let pathAnimationTime = 40;
+let ref1;	//ClosedPath setInterval reference
+let ref2;	//Path setInterval reference
+let ref3;	//Move Start Point setInterval reference
+
+let pathText = document.getElementById('pathLength');
+let coord = document.getElementById('coordinates');
+let activeButton = document.getElementsByClassName('btnActive')[0].style;
+let inactiveButton = document.getElementsByClassName('btnInactive')[0].style;
 
 function onload()
 {
-	// console.log('Page loaded.');
 	canvas = document.getElementById('gameCanvas');
 	canvas.width = worldWidth * tileWidth;
 	canvas.height = worldHeight * tileHeight;
@@ -33,12 +39,15 @@ function onload()
 	spritesheet = new Image();
 	spritesheet.src = 'spritesheet.png';
 	spritesheet.onload = loaded;
+
+	pathText.style.margin = "5px auto";
+	pathText.style.fontAlign = 'center';
+	pathText.style.width = '300px';
 }
 
 // the spritesheet is loaded
 function loaded()
 {
-	// console.log('Spritesheet Ready.');
 	spritesheetLoaded = true;
 	createWorld();
 }
@@ -46,23 +55,21 @@ function loaded()
 // fill the world with walls
 function createWorld()
 {
-	// console.log('Creating world...');
-
 	// create emptiness
-	for (var x=0; x < worldWidth; x++)
+	for (let x=0; x < worldWidth; x++)
 	{
 		world[x] = [];
 
-		for (var y=0; y < worldHeight; y++)
+		for (let y=0; y < worldHeight; y++)
 		{
 			world[x][y] = 0;
 		}
 	}
 
 	// scatter some obstacles
-	for (var x=0; x < worldWidth; x++)
+	for (let x=0; x < worldWidth; x++)
 	{
-		for (var y=0; y < worldHeight; y++)
+		for (let y=0; y < worldHeight; y++)
 		{
 			if (Math.random() > pathDensity)
 			world[x][y] = 1;
@@ -84,15 +91,11 @@ function redraw()
 {
 	if (!spritesheetLoaded) return;
 
-	// console.log('redrawing...');
-
-	// var spriteNum = 0;
-
 	ctx.fillStyle = '#000000';
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-	for (var x=0; x < worldWidth; x++){
-		for (var y=0; y < worldHeight; y++){
+	for (let x=0; x < worldWidth; x++){
+		for (let y=0; y < worldHeight; y++){
 
 			// choose a sprite to draw
 			switch(world[x][y]){
@@ -112,83 +115,48 @@ function redraw()
 		}
 	}
 
-	// draw the path
-	// console.log('Current path length: '+currentPath.length);
-	var pathText = document.getElementById('pathLength');
-	document.getElementById('pathLength').style.margin = "5px auto";
+	try{
+		ctx.drawImage(spritesheet,
+			2*tileWidth, 0,
+			tileWidth, tileHeight,
+			pathStart[0]*tileWidth,
+			pathStart[1]*tileHeight,
+			tileWidth, tileHeight);	
+		ctx.drawImage(spritesheet,
+			3*tileWidth, 0,
+			tileWidth, tileHeight,
+			pathEnd[0]*tileWidth,
+			pathEnd[1]*tileHeight,
+			tileWidth, tileHeight);	
+	} catch(err){
+		console.log(err);
+	}
+
+	
 	if( currentPath.length === 0){
-		pathText.style.margin = '0px auto';
-		pathText.style.fontAlign = 'center';
-		pathText.style.width = '300px';
 		pathText.style.color = 'red';
 		pathText.style.fontSize = '20px';
-		pathText.innerText = "Path doesn't exist!!!";
-
-		try{
-			// console.log(currentPath);
-			ctx.drawImage(spritesheet,
-				2*tileWidth, 0,
-				tileWidth, tileHeight,
-				pathStart[0]*tileWidth,
-				pathStart[1]*tileHeight,
-				tileWidth, tileHeight);	
-			ctx.drawImage(spritesheet,
-				3*tileWidth, 0,
-				tileWidth, tileHeight,
-				pathEnd[0]*tileWidth,
-				pathEnd[1]*tileHeight,
-				tileWidth, tileHeight);	
-		} catch(err){
-			console.log(err);
-		}
-
-		// setTimeout( onload, 1800);		
+		pathText.innerText = "Path doesn't exist!!!";		
 	} else {
-		// console.log('Cost: ', closedSet.length);
-		pathText.style.color = 'black';
-		pathText.style.fontSize = '16px';
-		pathText.innerText = 'Current path length: ' + (currentPath.length-1) + '\t Cost: ' + 0;	
-	
-		// let tmpText = 'Current path length: ' + (currentPath.length-1) + '\t Cost: ' + closedSet.length;
-		// document.getElementById('pathLength').innerText = tmpText;
+		pathText.style.color = 'rgb(26, 66, 58)';
+		pathText.style.fontSize = '18px';
+		let tmpText = 
+		pathText.innerText = '\nCurrent Path Information: \nLength: ' + (currentPath.length-1) + 
+							 ' steps\nCost: ' + (closedSet.length * pathAnimationTime / 1000) + ' sec\n';;
 
-		var coord = 'Start: (' + pathStart[0] + ',' + pathStart[1] + '), Goal: (' + pathEnd[0] + ',' + pathEnd[1] + ')';
-		document.getElementById('coordinates').innerText = coord;
-		document.getElementById('coordinates').style.margin = "10px auto";
+		coord.innerText = 'Start: (' + pathStart[0] + ',' + pathStart[1] + '), Goal: (' + pathEnd[0] + ',' + pathEnd[1] + ')\n\n';;
 
+		activeButton.display = 'none';
+		inactiveButton.display = 'block';
 
-		try{
-			ctx.drawImage(spritesheet,
-				2*tileWidth, 0,
-				tileWidth, tileHeight,
-				currentPath[0][0]*tileWidth,
-				currentPath[0][1]*tileHeight,
-				tileWidth, tileHeight);	
-
-			ctx.drawImage(spritesheet,
-				3*tileWidth, 0,
-				tileWidth, tileHeight,
-				currentPath[currentPath.length - 1][0]*tileWidth,
-				currentPath[currentPath.length - 1][1]*tileHeight,
-				tileWidth, tileHeight);	
-		} catch(err){
-			console.log(err);
-		}
 	 	showClosedPath();
-	 	setTimeout( showPath, closedSet.length * pathAnimationTime);
-	 	// showPath();
  	}
 }
-var pathAnimationTime = 40;
-var ref1;	//ClosedPath
-var ref2;	//Path
-var ref3;	//Start Point Move
+
 function showClosedPath(){
-	// console.log('showClosedPath called');
 	clearInterval(ref1);
-	var spriteNum = 0;
 	let i=0;
-	var subClosedSet = [];
+	let subClosedSet = [];
 	if( currentPath.length === 0){
 		try{
 			ctx.drawImage(spritesheet,
@@ -211,9 +179,10 @@ function showClosedPath(){
 		ref1 = setInterval(function(){
 			subClosedSet.push(closedSet[i]);
 
-			for (var k = 1; k < subClosedSet.length; k++) {
-				let tmpText = 'Current path length: ' + (currentPath.length-1) + '\t Cost: ' + subClosedSet.length;
-				document.getElementById('pathLength').innerText = tmpText;
+			for (let k = 1; k < subClosedSet.length; k++) {
+				let infoText = document.getElementById('pathLength');
+				infoText.innerText = '\nCurrent Path Information: \nLength: ' + (currentPath.length-1) + 
+									 ' steps\nCost: ' + (subClosedSet.length * pathAnimationTime / 1000) + ' sec\n';
 				try{
 					spriteNum = 5;
 					ctx.drawImage(spritesheet,
@@ -229,16 +198,15 @@ function showClosedPath(){
 			}
 			(i < closedSet.length-1)? i++: clearInterval(ref1);
 		}, pathAnimationTime);
-		return;
+		setTimeout( showPath, closedSet.length * pathAnimationTime);
 	}	
 }
 
 function showPath(){
-	// console.log('path called');
 	clearInterval(ref1);
-	var spriteNum = 0;
+	let spriteNum = 0;
 	let k=0;
-	var subCurrentPath = [];
+	let subCurrentPath = [];
 	ref2 = setInterval(function(){
 		subCurrentPath.push(currentPath[k]);
 
@@ -253,7 +221,6 @@ function showPath(){
 				break;
 			default:
 				spriteNum = 4; // path node
-				// spriteNum = 0; // path node
 				break;
 			}
 			try{
@@ -268,24 +235,19 @@ function showPath(){
 				clearInterval(ref2)
 			}
 		}
-	(k < currentPath.length-1)? k++: clearInterval(ref2);
+		(k < currentPath.length-1)? k++: clearInterval(ref2);
 	}, pathAnimationTime - 20);
-
-	// setTimeout( moveStartPoint, currentPath.length * (pathAnimationTime - 20) + 20);
-
-	return;
+	setTimeout( moveStartPoint, currentPath.length * (pathAnimationTime - 20) + 20);
 }
 
 function moveStartPoint(){
-	// console.log('path called');
 	clearInterval(ref1);
 	clearInterval(ref2);
-	var spriteNum = 2;
+	let spriteNum = 2;
 	let k=0;
-	var subCurrentPath = [];
+	let subCurrentPath = [];
 	ref3 = setInterval(function(){
 		subCurrentPath.push(currentPath[k]);
-
 		for (let j = 0; j < subCurrentPath.length; j++) {
 			try{
 				ctx.drawImage(spritesheet,
@@ -307,7 +269,11 @@ function moveStartPoint(){
 				clearInterval(ref3)
 			}
 		}
-	(k < currentPath.length-1)? k++: clearInterval(ref3);
+		if(subCurrentPath.length === currentPath.length){
+			inactiveButton.display = "none";
+			activeButton.display = "block";
+		}
+		(k < currentPath.length-1)? k++: clearInterval(ref3);
 	}, pathAnimationTime + 50);
 	return;
 }
@@ -316,8 +282,8 @@ function moveStartPoint(){
 
 function canvasClick(e)
 {
-	var x;
-	var y;
+	let x;
+	let y;
 
 	clearInterval(ref1);
 	clearInterval(ref2);
@@ -341,20 +307,17 @@ function canvasClick(e)
 	y -= canvas.offsetTop;
 
 	// return tile x,y that we clicked
-	var cell =
+	let cell =
 	[
 	Math.floor(x/tileWidth),
 	Math.floor(y/tileHeight)
 	];
 
 	// now we know while tile we clicked
-	// console.log('Clicked tile (x,y): '+cell[0]+','+cell[1]);
-	// console.log(currentPath);
 	pathStart = pathEnd;
 	pathEnd = cell;
 
 	try{
-		// console.log(currentPath);
 		ctx.drawImage(spritesheet,
 			2*tileWidth, 0,
 			tileWidth, tileHeight,
@@ -376,35 +339,31 @@ function canvasClick(e)
 	redraw();
 }
 
-var closedSet;	
-
 function findPath(world, pathStart, pathEnd)
 {
 	closedSet = [];	
 
-	var	abs = Math.abs;
-	var	max = Math.max;
-	var	pow = Math.pow;
-	var	sqrt = Math.sqrt;
+	let	abs = Math.abs;
+	let	max = Math.max;
+	let	pow = Math.pow;
+	let	sqrt = Math.sqrt;
 
-	var maxWalkableTileNum = 0;
+	let maxWalkableTileNum = 0;
 
-	var worldWidth = world[0].length;
-	var worldHeight = world.length;
-	var worldSize =	worldWidth * worldHeight;
+	let worldWidth = world[0].length;
+	let worldHeight = world.length;
+	let worldSize =	worldWidth * worldHeight;
 
-	var distanceFunction = ManhattanDistance;
-	var findNeighbours = function(){};
+	let distanceFunction = ManhattanDistance;
 
 	function ManhattanDistance(Point, Goal)
 	{	
 		return ((document.getElementById('dijkstra').checked)? 0: abs(Point.x - Goal.x) + abs(Point.y - Goal.y));
-		// return sqrt(pow(Point.x - Goal.x, 2) + pow(Point.y - Goal.y, 2));
 	}
 
 	function Neighbours(x, y)
 	{
-		var	North = y - 1,
+		let	North = y - 1,
 		South = y + 1,
 		East = x + 1,
 		West = x - 1,
@@ -421,7 +380,6 @@ function findPath(world, pathStart, pathEnd)
 		result.push({x:x, y:South});
 		if(myWest)
 		result.push({x:West, y:y});
-		// findNeighbours(myNorth, mySouth, myEast, myWest, North, South, East, West, result);
 		return result;
 	}
 
@@ -435,7 +393,7 @@ function findPath(world, pathStart, pathEnd)
 
 	function Node(Parent, Point)
 	{
-		var newNode = {
+		let newNode = {
 			
 			Parent:Parent,
 			
@@ -455,21 +413,21 @@ function findPath(world, pathStart, pathEnd)
 	function calculatePath()
 	{
 		
-		var	mypathStart = Node(null, {x:pathStart[0], y:pathStart[1]});
-		var mypathEnd = Node(null, {x:pathEnd[0], y:pathEnd[1]});
+		let	mypathStart = Node(null, {x:pathStart[0], y:pathStart[1]});
+		let mypathEnd = Node(null, {x:pathEnd[0], y:pathEnd[1]});
 		
-		var AStar = new Array(worldSize);
+		let AStar = new Array(worldSize);
 		
-		var Open = [mypathStart];
-		var Closed = [];
+		let Open = [mypathStart];
+		let Closed = [];
 		
-		var result = [];
+		let result = [];
 		
-		var myNeighbours;
-		var myNode;
-		var myPath;
+		let myNeighbours;
+		let myNode;
+		let myPath;
 		
-		var length, max, min, i, j;
+		let length, max, min, i, j;
 		
 		while(Open.length){
 			length = Open.length;
@@ -512,15 +470,13 @@ function findPath(world, pathStart, pathEnd)
 						AStar[myPath.value] = true;
 					}
 				}
-				// console.log(myNode);
 				closedSet.push([myNode.x, myNode.y]);
 				Closed.push(myNode);
 			}
 		}
 		return result;
 	}
-	var calcPath = calculatePath();
-	// console.log(calcPath);
+	let calcPath = calculatePath();
 	return calcPath;
 
 } // end of findPath() function
