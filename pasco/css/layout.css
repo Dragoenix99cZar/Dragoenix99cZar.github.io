@@ -14,7 +14,7 @@
 
 .head-bottom-wrapper {
 	background-image: url(../images/MaskedheadBg.png);
-	background-repeat: no-repeat;
+	background-repeat: repeat-x;
 /*	line-height: 200px;*/
 }
 

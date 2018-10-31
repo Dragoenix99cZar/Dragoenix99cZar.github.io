@@ -19,10 +19,11 @@ let pathEnd = [0,0];
 let currentPath = [];
 let closedSet = [];	
 
+let animationFlag = false;
 let pathAnimationTime = 40;
-let ref1;	//ClosedPath setInterval reference
-let ref2;	//Path setInterval reference
-let ref3;	//Move Start Point setInterval reference
+let ref1;	
+let ref2;	
+let ref3;	
 
 let pathText = document.getElementById('pathLength');
 let coord = document.getElementById('coordinates');
@@ -45,17 +46,14 @@ function onload()
 	pathText.style.width = '300px';
 }
 
-// the spritesheet is loaded
 function loaded()
 {
 	spritesheetLoaded = true;
 	createWorld();
 }
 
-// fill the world with walls
 function createWorld()
 {
-	// create emptiness
 	for (let x=0; x < worldWidth; x++)
 	{
 		world[x] = [];
@@ -66,7 +64,6 @@ function createWorld()
 		}
 	}
 
-	// scatter some obstacles
 	for (let x=0; x < worldWidth; x++)
 	{
 		for (let y=0; y < worldHeight; y++)
@@ -97,7 +94,6 @@ function redraw()
 	for (let x=0; x < worldWidth; x++){
 		for (let y=0; y < worldHeight; y++){
 
-			// choose a sprite to draw
 			switch(world[x][y]){
 			case 1:
 				spriteNum = 1;
@@ -148,6 +144,7 @@ function redraw()
 
 		activeButton.display = 'none';
 		inactiveButton.display = 'block';
+		animationFlag = true;
 
 	 	showClosedPath();
  	}
@@ -214,13 +211,13 @@ function showPath(){
 			switch(j)
 			{
 			case 0:
-				spriteNum = 2; // start
+				spriteNum = 2;
 				break;
 			case currentPath.length-1:
-				spriteNum = 3; // end
+				spriteNum = 3;
 				break;
 			default:
-				spriteNum = 4; // path node
+				spriteNum = 4;
 				break;
 			}
 			try{
@@ -272,23 +269,23 @@ function moveStartPoint(){
 		if(subCurrentPath.length === currentPath.length){
 			inactiveButton.display = "none";
 			activeButton.display = "block";
+			animationFlag = false;
 		}
 		(k < currentPath.length-1)? k++: clearInterval(ref3);
 	}, pathAnimationTime + 50);
 	return;
 }
 
-
-
 function canvasClick(e)
 {
+	if(animationFlag) return;
+	
 	let x;
 	let y;
 
 	clearInterval(ref1);
 	clearInterval(ref2);
 
-	// grab html page coords
 	if (e.pageX != undefined && e.pageY != undefined)
 	{
 		x = e.pageX;
@@ -302,18 +299,15 @@ function canvasClick(e)
 		document.documentElement.scrollTop;
 	}
 
-	// make them relative to the canvas only
 	x -= canvas.offsetLeft;
 	y -= canvas.offsetTop;
 
-	// return tile x,y that we clicked
 	let cell =
 	[
 	Math.floor(x/tileWidth),
 	Math.floor(y/tileHeight)
 	];
 
-	// now we know while tile we clicked
 	pathStart = pathEnd;
 	pathEnd = cell;
 
@@ -334,7 +328,6 @@ function canvasClick(e)
 		console.log(err);
 	}
 	
-	// calculate path
 	currentPath = findPath(world,pathStart,pathEnd);
 	redraw();
 }
@@ -383,7 +376,6 @@ function findPath(world, pathStart, pathEnd)
 		return result;
 	}
 
-	// returns boolean value (world cell is available and open)
 	function canWalkHere(x, y)
 	{
 		return ((world[x] != null) &&
@@ -409,7 +401,6 @@ function findPath(world, pathStart, pathEnd)
 		return newNode;
 	}
 
-	// Path function, executes AStar algorithm operations
 	function calculatePath()
 	{
 		
@@ -455,15 +446,12 @@ function findPath(world, pathStart, pathEnd)
 			}else {
 				
 				myNeighbours = Neighbours(myNode.x, myNode.y);
-				// test each one that hasn't been tried already
 				for(i = 0, j = myNeighbours.length; i < j; i++){
 					myPath = Node(myNode, myNeighbours[i]);
 					if (!AStar[myPath.value]){
 						
 						myPath.g = myNode.g + distanceFunction(myNeighbours[i], myNode);
 						myPath.f = myPath.g + distanceFunction(myNeighbours[i], mypathEnd);
-						// myPath.g = myNode.g;
-						// myPath.f = myPath.g;
 						
 						Open.push(myPath);
 						
@@ -479,5 +467,5 @@ function findPath(world, pathStart, pathEnd)
 	let calcPath = calculatePath();
 	return calcPath;
 
-} // end of findPath() function
-
+}
+window.onload = onload();
