@@ -76,7 +76,7 @@ input[type=radio]{
     margin-left: 10px;
     margin-right: 40px;
     float: right;
-    max-width: 25%;
+    /* max-width: 24%; */
     text-align: left;
     font-size: 18px;
     /*color: darkblue;*/
@@ -94,5 +94,11 @@ input[type=radio]{
 
 .container {
     margin: 0 auto;
-    width: 60em;
+    /* width: 61em; */
+    width: 1000px;
+}
+
+#details{
+    font-family: "mazeFont";
+    font-size: 20px;
 }

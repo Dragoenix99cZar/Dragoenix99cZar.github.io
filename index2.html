@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My Bio</title>
+    <style>
+        /* Make the canvas fill the entire screen */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #181818;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <link rel="trunk-dist" data-bin="my_bio_app" />
+<link rel="modulepreload" href="/my_portfolio_r-d0d8ecd6f82c0c5e.js" crossorigin="anonymous" integrity="sha384-QPN3wcUq0Eg8a+kYsdK5WeAFNIguhfr/OmCR7QeqPZrkdVGNThlTR/HPSxdVxMKX"><link rel="preload" href="/my_portfolio_r-d0d8ecd6f82c0c5e_bg.wasm" crossorigin="anonymous" integrity="sha384-8ippM1a5fdbAcZEtqmm2XEjv6QwCbR85XpY4tDY+us/f6UPwYLWiZpCnryxS/ca1" as="fetch" type="application/wasm"></head>
+<body>
+    <canvas id="the_canvas_id"></canvas>
+
+<script type="module">
+import init, * as bindings from '/my_portfolio_r-d0d8ecd6f82c0c5e.js';
+const wasm = await init({ module_or_path: '/my_portfolio_r-d0d8ecd6f82c0c5e_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script></body>
+</html>

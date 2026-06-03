@@ -8,8 +8,8 @@ let world = [[]];
 
 let pathDensity = 0.7;
 
-let worldWidth = 18;
-let worldHeight = 18;
+let worldWidth = 20;
+let worldHeight = 20;
 
 let tileWidth = 32;
 let tileHeight = 32;
@@ -43,7 +43,7 @@ function onload()
 
 	pathText.style.margin = "5px auto";
 	pathText.style.fontAlign = 'center';
-	pathText.style.width = '300px';
+	pathText.style.width = '220px';
 }
 
 function loaded()
@@ -64,14 +64,17 @@ function createWorld()
 		}
 	}
 
-	for (let x=0; x < worldWidth; x++)
-	{
-		for (let y=0; y < worldHeight; y++)
+	if(!document.getElementById('noObstacle').checked){
+		for (let x=0; x < worldWidth; x++)
 		{
-			if (Math.random() > pathDensity)
-			world[x][y] = 1;
+			for (let y=0; y < worldHeight; y++)
+			{
+				if (Math.random() > pathDensity)
+				world[x][y] = 1;
+			}
 		}
 	}
+	
 
 	currentPath = [];
 	while (currentPath.length == 0)

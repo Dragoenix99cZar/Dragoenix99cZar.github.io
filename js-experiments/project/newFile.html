@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A* Pathfinding Visualizer</title>
+<style>
+  body { font-family: Arial; text-align: center; }
+  #controls { margin: 10px; }
+  button { padding: 8px 12px; margin: 5px; }
+  #grid { display: grid; margin: auto; }
+  .cell {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #ddd;
+  }
+  .wall { background: black; }
+  .start { background: blue; }
+  .end { background: red; }
+  .path { background: limegreen; }
+</style>
+</head>
+<body>
+
+<h2>A* Pathfinding Visualizer</h2>
+
+<div id="controls">
+  <button onclick="generateGrid()">New Grid</button>
+  <button onclick="runAStar()">Run A*</button>
+  <label>
+    <input type="checkbox" id="diagonal"> Diagonal Movement
+  </label>
+</div>
+
+<div id="grid"></div>
+
+<script>
+const SIZE = 20;
+let grid = [];
+let start = {x:0, y:0};
+let end = {x:19, y:19};
+let path = [];
+
+class MinHeap {
+  constructor(){ this.heap=[]; }
+  push(n){ this.heap.push(n); this.bubbleUp(); }
+  bubbleUp(){
+    let i=this.heap.length-1;
+    while(i>0){
+      let p=Math.floor((i-1)/2);
+      if(this.heap[p].f<=this.heap[i].f) break;
+      [this.heap[p],this.heap[i]]=[this.heap[i],this.heap[p]];
+      i=p;
+    }
+  }
+  pop(){
+    let top=this.heap[0];
+    let end=this.heap.pop();
+    if(this.heap.length>0){
+      this.heap[0]=end; this.sinkDown(0);
+    }
+    return top;
+  }
+  sinkDown(i){
+    let len=this.heap.length;
+    while(true){
+      let l=2*i+1, r=2*i+2, s=i;
+      if(l<len && this.heap[l].f<this.heap[s].f) s=l;
+      if(r<len && this.heap[r].f<this.heap[s].f) s=r;
+      if(s===i) break;
+      [this.heap[i],this.heap[s]]=[this.heap[s],this.heap[i]];
+      i=s;
+    }
+  }
+  isEmpty(){ return this.heap.length===0; }
+}
+
+function heuristic(a,b,diag){
+  let dx=Math.abs(a.x-b.x);
+  let dy=Math.abs(a.y-b.y);
+  return diag ? Math.max(dx,dy) : dx+dy;
+}
+
+function neighbors(node, diag){
+  let dirs = diag ? [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1],[1,-1],[-1,1]]
+                  : [[1,0],[-1,0],[0,1],[0,-1]];
+  let result=[];
+  for(let [dx,dy] of dirs){
+    let x=node.x+dx, y=node.y+dy;
+    if(x>=0 && y>=0 && x<SIZE && y<SIZE && grid[x][y]===0){
+      result.push({x,y,cost:(dx&&dy)?Math.SQRT2:1});
+    }
+  }
+  return result;
+}
+
+function aStar(){
+  let open=new MinHeap();
+  let closed=new Set();
+  let nodes={};
+  let diag=document.getElementById('diagonal').checked;
+  let key=(x,y)=>x+","+y;
+
+  let startNode={...start,g:0,f:heuristic(start,end,diag),parent:null};
+  open.push(startNode);
+  nodes[key(start.x,start.y)] = startNode;
+
+  while(!open.isEmpty()){
+    let cur=open.pop();
+    if(cur.x===end.x && cur.y===end.y){
+      let p=[];
+      while(cur){ p.push(cur); cur=cur.parent; }
+      return p.reverse();
+    }
+
+    closed.add(key(cur.x,cur.y));
+
+    for(let nb of neighbors(cur,diag)){
+      let k=key(nb.x,nb.y);
+      if(closed.has(k)) continue;
+
+      let g=cur.g+nb.cost;
+      if(!nodes[k] || g<nodes[k].g){
+        let h=heuristic(nb,end,diag);
+        let node={x:nb.x,y:nb.y,g,f:g+h,parent:cur};
+        nodes[k]=node;
+        open.push(node);
+      }
+    }
+  }
+  return [];
+}
+
+function generateGrid(){
+  grid = Array.from({length:SIZE},()=>
+    Array.from({length:SIZE},()=>Math.random()<0.2?1:0)
+  );
+  draw();
+}
+
+function runAStar(){
+  path = aStar();
+  draw();
+}
+
+function draw(){
+  let container=document.getElementById('grid');
+  container.style.gridTemplateColumns=`repeat(${SIZE},25px)`;
+  container.innerHTML="";
+
+  for(let x=0;x<SIZE;x++){
+    for(let y=0;y<SIZE;y++){
+      let div=document.createElement('div');
+      div.className='cell';
+
+      if(grid[x][y]===1) div.classList.add('wall');
+      if(path.some(p=>p.x===x && p.y===y)) div.classList.add('path');
+      if(x===start.x && y===start.y) div.classList.add('start');
+      if(x===end.x && y===end.y) div.classList.add('end');
+
+      div.onclick=()=>{ end={x,y}; draw(); };
+
+      container.appendChild(div);
+    }
+  }
+}
+
+generateGrid();
+</script>
+
+</body>
+</html>
