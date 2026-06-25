@@ -1,7 +1,7 @@
-const ZOOM_LEVEL = 22;
-const DRAW_RATE = 1;
+const tree_OFFSET = {x:0, y: -3, z:22};
+const tree_DRAW_RATE = 50000;
 
-const vertices = [
+const tree_vertices = [
     {x: -0.1131, y: -8.364, z: 1.4855},
     {x: -1.171, y: -8.364, z: 0.1285},
     {x: 0.1471, y: -7.9551, z: -0.8991},
@@ -425,7 +425,7 @@ const vertices = [
     {x: 0.7432, y: -6.9384, z: 0.5819},
 ];
 
-const faces = [
+const tree_faces = [
     [11, 8, 116, 119],
     [10, 11, 119, 118],
     [9, 10, 118, 117],

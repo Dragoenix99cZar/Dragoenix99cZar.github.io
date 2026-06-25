@@ -1,7 +1,7 @@
-const ZOOM_LEVEL = 2.5;
-const DRAW_RATE = 1;
+const monkey_OFFSET = {x:0, y: 0, z:2.5};
+const monkey_DRAW_RATE = 10;
 
-const vertices = [
+const monkey_vertices = [
     {x: -0.4375, y: 0.1641, z: -0.7656},
     {x: 0.4375, y: 0.1641, z: -0.7656},
     {x:  -0.5, y: 0.0937, z: -0.6875},
@@ -511,7 +511,7 @@ const vertices = [
     {x: 0.8594, y: 0.3828, z: 0.3828},
 ];
 
-const faces = [
+const monkey_faces = [
     [46, 0, 2, 44],
     [3, 1, 47, 45],
     [44, 2, 4, 42],

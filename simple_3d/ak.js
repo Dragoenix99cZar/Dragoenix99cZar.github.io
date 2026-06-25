@@ -1,7 +1,7 @@
-const OFFSET = {x:0, y: -3, z:16.5};
-const DRAW_RATE = 1;
+const ak_OFFSET = {x:0, y: -3, z:16.5};
+const ak_DRAW_RATE = 1;
 
-const vertices = [
+const ak_vertices = [
     {x: 10.4695, y: -2.3719, z: -1.1228},
     {x: 9.9114, y: -2.3719, z: -1.1228},
     {x: 10.4695, y: -2.3719, z: -0.5646},
@@ -1160,7 +1160,7 @@ const vertices = [
     {x: -5.7162, y: 7.1163, z: 1.6679},
 ];
 
-const faces = [
+const ak_faces = [
     [2, 3, 5, 4],
     [0, 2, 4, 1],
     [11, 12, 14, 13],
