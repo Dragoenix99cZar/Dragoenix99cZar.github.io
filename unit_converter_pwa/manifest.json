@@ -1,6 +1,6 @@
 {
   "name": "Quick Unit Converter",
-  "short_name": "Unit Convert",
+  "short_name": "Quick Unit Converter",
   "description": "A fast, offline-capable unit converter for metric, imperial, and traditional units.",
   "start_url": "./index.html",
   "scope": "./",

@@ -4,10 +4,16 @@
   const els = {
     loadError: document.getElementById("load-error"),
     tabs: document.getElementById("category-tabs"),
+    categoryLabel: document.getElementById("category-label"),
     input: document.getElementById("value-input"),
     inputError: document.getElementById("input-error"),
     clearBtn: document.getElementById("clear-btn"),
     fromSelect: document.getElementById("from-select"),
+    rateInput: document.getElementById("rate-input"),
+    rateError: document.getElementById("rate-error"),
+    toSelect: document.getElementById("to-select"),
+    rateResult: document.getElementById("rate-result"),
+    rateCopyBtn: document.getElementById("rate-copy-btn"),
     resultsList: document.getElementById("results-list"),
     rowTemplate: document.getElementById("result-row-template"),
     installBtn: document.getElementById("install-btn"),
@@ -21,6 +27,7 @@
     data: { categories: [] },
     categoryIdx: 0,
     fromIdx: 0,
+    toIdx: 0,
   };
 
   // ---------- Data loading ----------
@@ -75,6 +82,24 @@
     return (val * fromRatio) / toRatio;
   }
 
+  function withThousandsSeparators(numStr) {
+    const negative = numStr.startsWith("-");
+    const unsigned = negative ? numStr.slice(1) : numStr;
+    const [intPart, decPart] = unsigned.split(".");
+    const groupedInt = groupIndianStyle(intPart);
+    return (negative ? "-" : "") + groupedInt + (decPart ? "." + decPart : "");
+  }
+
+  // Indian/Nepali digit grouping: the last 3 digits form one group,
+  // then every group to the left is 2 digits — e.g. 100000 -> 1,00,000
+  // (one lakh), 10000000 -> 1,00,00,000 (one crore).
+  function groupIndianStyle(digits) {
+    if (digits.length <= 3) return digits;
+    const lastThree = digits.slice(-3);
+    const rest = digits.slice(0, -3).replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+    return `${rest},${lastThree}`;
+  }
+
   function formatValue(n) {
     if (!Number.isFinite(n)) return "—";
     if (Math.abs(n) < 0.00001 && n !== 0) {
@@ -84,13 +109,19 @@
     if (s.includes(".")) {
       s = s.replace(/0+$/, "").replace(/\.$/, "");
     }
-    return s;
+    return withThousandsSeparators(s);
   }
 
   // ---------- Rendering ----------
 
+  function renderCategoryLabel() {
+    const cat = currentCategory();
+    els.categoryLabel.textContent = cat ? cat.name : "";
+  }
+
   function renderTabs() {
     els.tabs.innerHTML = "";
+    renderCategoryLabel();
     state.data.categories.forEach((cat, idx) => {
       const btn = document.createElement("button");
       btn.className = "tab-btn";
@@ -102,9 +133,12 @@
         if (state.categoryIdx !== idx) {
           state.categoryIdx = idx;
           state.fromIdx = 0;
+          state.toIdx = 0;
           renderTabs();
           renderFromSelect();
+          renderToSelect();
           renderResults();
+          renderRateResult();
           saveState();
         }
       });
@@ -130,6 +164,63 @@
       if (idx === state.fromIdx) opt.selected = true;
       els.fromSelect.appendChild(opt);
     });
+  }
+
+  function renderToSelect() {
+    const cat = currentCategory();
+    els.toSelect.innerHTML = "";
+    if (!cat) return;
+
+    if (state.toIdx >= cat.units.length) state.toIdx = 0;
+
+    cat.units.forEach((u, idx) => {
+      const opt = document.createElement("option");
+      opt.value = String(idx);
+      opt.textContent = u.name;
+      if (idx === state.toIdx) opt.selected = true;
+      els.toSelect.appendChild(opt);
+    });
+  }
+
+  // Result (In $) = Converted units * ($ rate of a single unit)
+  //
+  // Unlike the automatic ledger below (which just shows the value
+  // converted into every unit), this takes the value, converts it into
+  // whichever unit is chosen in "To", then multiplies that converted
+  // amount by a per-unit dollar rate the user supplies — e.g. convert
+  // 10 m to feet, then multiply by a $/ft price to get a total cost.
+  function renderRateResult() {
+    const cat = currentCategory();
+    if (!cat) {
+      els.rateResult.textContent = "—";
+      return;
+    }
+
+    const rawValue = els.input.value.trim();
+    const rawRate = els.rateInput.value.trim();
+    const val = parseFloat(rawValue);
+    const rate = parseFloat(rawRate);
+
+    const numberPattern = /^[+-]?[\d.]+([eE][+-]?\d+)?$/;
+    const isValueValid = rawValue !== "" && Number.isFinite(val) && numberPattern.test(rawValue);
+    const isRateValid = rawRate !== "" && Number.isFinite(rate) && numberPattern.test(rawRate);
+
+    els.rateError.hidden = isRateValid;
+    els.rateInput.classList.toggle("invalid", !isRateValid);
+
+    if (!isValueValid || !isRateValid) {
+      els.rateResult.textContent = "—";
+      return;
+    }
+
+    const converted = convertSingle(val, cat, state.fromIdx, state.toIdx);
+    if (!Number.isFinite(converted)) {
+      els.rateResult.textContent = "—";
+      return;
+    }
+
+    const result = converted * rate;
+    els.rateResult.textContent = `$ ${formatValue(result)}`;
   }
 
   function renderResults() {
@@ -191,7 +282,13 @@
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ categoryIdx: state.categoryIdx, fromIdx: state.fromIdx, value: els.input.value })
+        JSON.stringify({
+          categoryIdx: state.categoryIdx,
+          fromIdx: state.fromIdx,
+          toIdx: state.toIdx,
+          value: els.input.value,
+          rate: els.rateInput.value,
+        })
       );
     } catch {
       /* storage unavailable — ignore */
@@ -210,8 +307,14 @@
       if (cat && Number.isInteger(saved.fromIdx) && saved.fromIdx < cat.units.length) {
         state.fromIdx = saved.fromIdx;
       }
+      if (cat && Number.isInteger(saved.toIdx) && saved.toIdx < cat.units.length) {
+        state.toIdx = saved.toIdx;
+      }
       if (typeof saved.value === "string" && saved.value.trim() !== "") {
         els.input.value = saved.value;
+      }
+      if (typeof saved.rate === "string" && saved.rate.trim() !== "") {
+        els.rateInput.value = saved.rate;
       }
     } catch {
       /* ignore malformed saved state */
@@ -222,12 +325,15 @@
 
   els.input.addEventListener("input", () => {
     renderResults();
+    renderRateResult();
     saveState();
   });
 
   els.clearBtn.addEventListener("click", () => {
     els.input.value = "0";
+    els.rateInput.value = "0";
     renderResults();
+    renderRateResult();
     saveState();
     els.input.focus();
   });
@@ -235,7 +341,25 @@
   els.fromSelect.addEventListener("change", () => {
     state.fromIdx = Number(els.fromSelect.value);
     renderResults();
+    renderRateResult();
     saveState();
+  });
+
+  els.rateInput.addEventListener("input", () => {
+    renderRateResult();
+    saveState();
+  });
+
+  els.toSelect.addEventListener("change", () => {
+    state.toIdx = Number(els.toSelect.value);
+    renderRateResult();
+    saveState();
+  });
+
+  els.rateCopyBtn.addEventListener("click", () => {
+    const text = els.rateResult.textContent.trim();
+    if (!text || text === "—") return;
+    copyValue(text, els.rateCopyBtn);
   });
 
   // ---------- Offline indicator ----------
@@ -305,15 +429,19 @@
     await loadUnits();
     if (state.data.categories.length === 0) {
       els.tabs.hidden = true;
+      els.categoryLabel.hidden = true;
       document.querySelector(".input-row").hidden = true;
       document.querySelector(".from-row").hidden = true;
+      document.querySelector(".rate-row").hidden = true;
       els.resultsList.innerHTML = "";
       return;
     }
     restoreState();
     renderTabs();
     renderFromSelect();
+    renderToSelect();
     renderResults();
+    renderRateResult();
     updateOfflinePill();
     loadDeveloperInfo();
   })();

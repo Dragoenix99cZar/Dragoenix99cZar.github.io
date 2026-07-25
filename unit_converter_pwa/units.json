@@ -36,16 +36,16 @@
         { "name": "US Ton", "ratio": 907.185 },
         { "name": "Tonne", "ratio": 1000.0 },
         { "name": "Imperial Ton", "ratio": 1016.05 },
-        { "name": "Lal", "ratio": 0.0001166 },
-        { "name": "Aana (Gold)", "ratio": 0.000729 },
-        { "name": "Tola", "ratio": 0.01166 },
         { "name": "Chatak", "ratio": 0.05831 },
         { "name": "Pau (Traditional)", "ratio": 0.19945 },
         { "name": "Pau (Metric)", "ratio": 0.25 },
         { "name": "Seer", "ratio": 0.9331 },
         { "name": "Bisauli", "ratio": 1.196 },
         { "name": "Dharni", "ratio": 2.3934 },
-        { "name": "Maund (Mon)", "ratio": 37.3242 }
+        { "name": "Maund (Mon)", "ratio": 37.3242 },
+        { "name": "Gold - Tola", "ratio": 0.0116638 },
+        { "name": "Gold - Aana", "ratio": 7.289875e-4 },
+        { "name": "Gold - Lal", "ratio": 0.000116638 }
       ]
     },
     {

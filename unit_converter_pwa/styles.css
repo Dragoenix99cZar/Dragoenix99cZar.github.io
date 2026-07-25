@@ -193,6 +193,24 @@ h1 {
   margin-bottom: 7px;
 }
 
+/* ---------- Selected category label ---------- */
+
+.category-label {
+  display: inline-flex;
+  align-self: flex-start;
+  background: var(--amber);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: -0.005em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  white-space: normal;
+  word-break: break-word;
+}
+.category-label:empty { display: none; }
+
 /* ---------- Input ---------- */
 
 .input-group {
@@ -251,7 +269,8 @@ h1 {
   pointer-events: none;
 }
 
-#from-select {
+#from-select,
+#to-select {
   width: 100%;
   appearance: none;
   background: var(--ink);
@@ -261,7 +280,67 @@ h1 {
   font-size: 0.92rem;
   cursor: pointer;
 }
-#from-select:focus { border-color: var(--amber); }
+#from-select:focus,
+#to-select:focus { border-color: var(--amber); }
+
+/* ---------- Rate / destination calculator ---------- */
+
+.rate-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.rate-field {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+
+.rate-row #rate-input {
+  width: 100%;
+}
+
+.rate-row .input-error {
+  flex-basis: 100%;
+  margin: 0;
+}
+
+.rate-result-row {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 11px 12px;
+  border-radius: 8px;
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+}
+
+.rate-result-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.rate-result-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--mint);
+}
+
+.rate-result-value-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rate-result-value-group .copy-btn {
+  padding: 3px;
+}
 
 /* ---------- Results ledger ---------- */
 
