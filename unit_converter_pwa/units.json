@@ -1,0 +1,151 @@
+{
+  "categories": [
+    {
+      "name": "Length",
+      "type": "ratio",
+      "units": [
+        { "name": "Meters (m)", "ratio": 1.0 },
+        { "name": "Nanometers (nm)", "ratio": 1e-9 },
+        { "name": "Micrometers (µm)", "ratio": 1e-6 },
+        { "name": "Millimeters (mm)", "ratio": 0.001 },
+        { "name": "Centimeters (cm)", "ratio": 0.01 },
+        { "name": "Kilometers (km)", "ratio": 1000.0 },
+        { "name": "Inches (in)", "ratio": 0.0254 },
+        { "name": "Feet (ft)", "ratio": 0.3048 },
+        { "name": "Yard (yd)", "ratio": 0.9144 },
+        { "name": "Miles (mi)", "ratio": 1609.34 },
+        { "name": "Nautical Miles", "ratio": 1852.0 },
+        { "name": "Angul", "ratio": 0.01905 },
+        { "name": "Bitta", "ratio": 0.2286 },
+        { "name": "Haat (Cubit)", "ratio": 0.4572 },
+        { "name": "Gaj (Yard)", "ratio": 0.9144 },
+        { "name": "Danda", "ratio": 1.8288 },
+        { "name": "Kosh", "ratio": 3218.0 }
+      ]
+    },
+    {
+      "name": "Mass",
+      "type": "ratio",
+      "units": [
+        { "name": "Kilograms (kg)", "ratio": 1.0 },
+        { "name": "Milligrams (mg)", "ratio": 1e-6 },
+        { "name": "Grams (g)", "ratio": 0.001 },
+        { "name": "Ounces (oz)", "ratio": 0.0283495 },
+        { "name": "Pounds (lb)", "ratio": 0.453592 },
+        { "name": "Stone (st)", "ratio": 6.35029 },
+        { "name": "US Ton", "ratio": 907.185 },
+        { "name": "Tonne", "ratio": 1000.0 },
+        { "name": "Imperial Ton", "ratio": 1016.05 },
+        { "name": "Lal", "ratio": 0.0001166 },
+        { "name": "Aana (Gold)", "ratio": 0.000729 },
+        { "name": "Tola", "ratio": 0.01166 },
+        { "name": "Chatak", "ratio": 0.05831 },
+        { "name": "Pau (Traditional)", "ratio": 0.19945 },
+        { "name": "Pau (Metric)", "ratio": 0.25 },
+        { "name": "Seer", "ratio": 0.9331 },
+        { "name": "Bisauli", "ratio": 1.196 },
+        { "name": "Dharni", "ratio": 2.3934 },
+        { "name": "Maund (Mon)", "ratio": 37.3242 }
+      ]
+    },
+    {
+      "name": "Temperature",
+      "type": "formula",
+      "units": [
+        { "name": "Celsius (°C)", "ratio": 0.0 },
+        { "name": "Fahrenheit (°F)", "ratio": 0.0 },
+        { "name": "Kelvin (K)", "ratio": 0.0 }
+      ]
+    },
+    {
+      "name": "Area",
+      "type": "ratio",
+      "units": [
+        { "name": "Square Meters (m²)", "ratio": 1.0 },
+        { "name": "Square Feet (ft²)", "ratio": 0.092903 },
+        { "name": "Acres", "ratio": 4046.86 },
+        { "name": "Hectare", "ratio": 10000.0 },
+        { "name": "Square Mile", "ratio": 2.59e+6 },
+        { "name": "Square Yard", "ratio": 0.836127 },
+        { "name": "Daam", "ratio": 1.99 },
+        { "name": "Dhur", "ratio": 16.93 },
+        { "name": "Paisa", "ratio": 7.95 },
+        { "name": "Aana (Land)", "ratio": 31.80 },
+        { "name": "Kattha", "ratio": 338.63 },
+        { "name": "Ropani", "ratio": 508.72 },
+        { "name": "Bigha", "ratio": 6772.63 }
+      ]
+    },
+    {
+      "name": "Digital Storage",
+      "type": "ratio",
+      "units": [
+        { "name": "Bits (b)", "ratio": 0.125 },
+        { "name": "Bytes (B)", "ratio": 1.0 },
+        { "name": "Kilobytes (KB - 1000 B)", "ratio": 1000.0 },
+        { "name": "Kibibytes (KiB - 1024 B)", "ratio": 1024.0 },
+        { "name": "Megabytes (MB - 1000 KB)", "ratio": 1000000.0 },
+        { "name": "Mebibytes (MiB - 1024 KiB)", "ratio": 1048576.0 },
+        { "name": "Gigabytes (GB - 1000 MB)", "ratio": 1000000000.0 },
+        { "name": "Gibibytes (GiB - 1024 MiB)", "ratio": 1073741824.0 },
+        { "name": "Terabytes (TB - 1000 GB)", "ratio": 1000000000000.0 },
+        { "name": "Tebibytes (TiB - 1024 GiB)", "ratio": 1099511627776.0 }
+      ]
+    },
+    {
+      "name": "Volume & Concrete",
+      "type": "ratio",
+      "units": [
+        { "name": "Cubic Meters (m³)", "ratio": 1.0 },
+        { "name": "Cubic Yards (yd³ / Batch)", "ratio": 0.764554858 },
+        { "name": "Cubic Feet (ft³)", "ratio": 0.0283168466 },
+        { "name": "Liters (L)", "ratio": 0.001 },
+        { "name": "US Gallons (gal)", "ratio": 0.00378541 }
+      ]
+    },
+    {
+      "name": "Pressure & Stress (f'c, Soil)",
+      "type": "ratio",
+      "units": [
+        { "name": "Pascal (Pa)", "ratio": 1.0 },
+        { "name": "Kilopascal (kPa - Soil Bearing)", "ratio": 1000.0 },
+        { "name": "Megapascal (MPa - Concrete f'c)", "ratio": 1000000.0 },
+        { "name": "Gigapascal (GPa - Steel E)", "ratio": 1000000000.0 },
+        { "name": "Pounds per sq in (psi)", "ratio": 6894.75729 },
+        { "name": "Kips per sq in (ksi)", "ratio": 6894757.29 },
+        { "name": "Pounds per sq ft (psf)", "ratio": 47.880258 }
+      ]
+    },
+    {
+      "name": "Force & Structural Load",
+      "type": "ratio",
+      "units": [
+        { "name": "Newton (N)", "ratio": 1.0 },
+        { "name": "Kilonewton (kN)", "ratio": 1000.0 },
+        { "name": "Meganewton (MN)", "ratio": 1000000.0 },
+        { "name": "Pound-force (lbf)", "ratio": 4.4482216 },
+        { "name": "Kip (k - 1000 lbf)", "ratio": 4448.2216 }
+      ]
+    },
+    {
+      "name": "Distributed Load (Beams)",
+      "type": "ratio",
+      "units": [
+        { "name": "Newton per meter (N/m)", "ratio": 1.0 },
+        { "name": "Kilonewton per meter (kN/m)", "ratio": 1000.0 },
+        { "name": "Pounds per foot (plf / lb/ft)", "ratio": 14.5939029 },
+        { "name": "Kips per foot (klf / k/ft)", "ratio": 14593.9029 }
+      ]
+    },
+    {
+      "name": "Density & Unit Weight",
+      "type": "ratio",
+      "units": [
+        { "name": "Kilograms per m³ (kg/m³)", "ratio": 1.0 },
+        { "name": "Grams per cm³ (g/cm³)", "ratio": 1000.0 },
+        { "name": "Pounds per ft³ (pcf)", "ratio": 16.018463 },
+        { "name": "Kilonewtons per m³ (kN/m³)", "ratio": 101.971621 }
+      ]
+    }
+  ]
+}

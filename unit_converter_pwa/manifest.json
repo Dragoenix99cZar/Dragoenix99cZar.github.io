@@ -1,0 +1,23 @@
+{
+  "name": "Quick Unit Converter",
+  "short_name": "Unit Convert",
+  "description": "A fast, offline-capable unit converter for metric, imperial, and traditional units.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#10151a",
+  "theme_color": "#10151a",
+  "orientation": "portrait-primary",
+  "developer": {
+    "name": "Aman karn",
+    "url": "https://dragoenix99czar.github.io/"
+  },
+  "icons": [
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
