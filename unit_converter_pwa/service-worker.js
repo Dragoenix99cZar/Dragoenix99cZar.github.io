@@ -1,4 +1,4 @@
-const CACHE_NAME = "unit-converter-v2";
+const CACHE_NAME = "unit-converter-v3";
 
 const APP_SHELL = [
   "./",
@@ -7,7 +7,7 @@ const APP_SHELL = [
   "./app.js",
   "./units.json",
   "./manifest.json",
-  "./icons/icon-512.png",
+  "./icons/new-icon-512.png",
 ];
 
 self.addEventListener("install", (event) => {
