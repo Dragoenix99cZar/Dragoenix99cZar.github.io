@@ -89,71 +89,112 @@ function DrawLine(context, p1, p2){
 
 
 const FPS = 60;
-const DELTA_TIME = 1 / FPS;    
+const DELTA_TIME = 1 / FPS;
 
 // let dz = ZOOM_LEVEl;
 // let updateRate = DRAW_RATE;
 let angle = 0;
 
-let sub = 1;
+let sub_ak = 1;
+let sub_tree = 1;
+let sub_monkey = 1;
 let framecount_ak = 0
 let framecount_tree = 0
 let framecount_monkey = 0
 
-function draw(context, _vertices, _faces, _offset, updateRate, _framecount){
-    // dz += 1 * DELTA_TIME;
-    angle += 0.001 * Math.PI;// * DELTA_TIME;
+function draw(context, _vertices, _faces, _offset, updateRate, _framecount, _sub){
+  // dz += 1 * DELTA_TIME;
+  angle += 0.001 * Math.PI;// * DELTA_TIME;
 
-    const linesToDraw = _faces.slice(0, sub);
-    
-    clear(context);        
-    // for(const p of _vertices){
-    //     point(
-    //         context,
-    //         viewport(
-    //             project(
-    //                 translate_offset(
-    //                     rotate_xz(p, angle),
-    //                     _offset
-    //                 )
-    //             )
-    //         )
-    //     );
-    // }
-    for(const face of linesToDraw) {
-        for (let j = 0; j < face.length; j++) {
-            const a = _vertices[face[j]];
-            const b = _vertices[face[(j+1)%face.length]];
-            // console.log("a: " + a.x + ", b: " + b.x);
-            // DrawLine(
-            //     viewport(project(translate_z(rotate_xz(a, angle), dz))),
-            //     viewport(project(translate_z(rotate_xz(b, angle), dz)))
-            // );
-            DrawLine(
-                context,
-                viewport(project(translate_offset(rotate_xz(a, angle), _offset))),
-                viewport(project(translate_offset(rotate_xz(b, angle), _offset)))
-            );
-        }
-    }
-    _framecount++;
-    if((_framecount % updateRate) === 0){
-        sub = (sub < _vertices.length)? sub + 1 : _faces.length;
-        _framecount = 0;
-    }
+  const linesToDraw = _faces.slice(0, _sub);
+
+  clear(context);
+  // for(const p of _vertices){
+  //     point(
+  //         context,
+  //         viewport(
+  //             project(
+  //                 translate_offset(
+  //                     rotate_xz(p, angle),
+  //                     _offset
+  //                 )
+  //             )
+  //         )
+  //     );
+  // }
+  for(const face of linesToDraw) {
+      for (let j = 0; j < face.length; j++) {
+          const a = _vertices[face[j]];
+          const b = _vertices[face[(j+1)%face.length]];
+          // console.log("a: " + a.x + ", b: " + b.x);
+          // DrawLine(
+          //     viewport(project(translate_z(rotate_xz(a, angle), dz))),
+          //     viewport(project(translate_z(rotate_xz(b, angle), dz)))
+          // );
+          DrawLine(
+              context,
+              viewport(project(translate_offset(rotate_xz(a, angle), _offset))),
+              viewport(project(translate_offset(rotate_xz(b, angle), _offset)))
+          );
+      }
+  }
+  // _framecount++;
+  // if((_framecount % updateRate) === 0){
+  //     sub = (sub < _vertices.length)? sub + 1 : _faces.length;
+  //     _framecount = 0;
+  // }
+
+  _framecount++;
+  if (_framecount % updateRate === 0) { _sub = _sub < _faces.length ? _sub + 1 : _faces.length; _framecount = 0; }
+  return {
+    framecount: _framecount,
+    sub: _sub
+  };
 
     // point(viewport(project({x:  0.0, y: 0.9, z:  1})));
 }
 
 
 function frame() {
-    // draw(ctxCube, cube_vertices, cube_faces, cube_OFFSET, cube_DRAW_RATE);
-    draw(ctxAK, ak_vertices, ak_faces, ak_OFFSET, ak_DRAW_RATE, framecount_ak);
-    draw(ctxTree, tree_vertices, tree_faces, tree_OFFSET, tree_DRAW_RATE, framecount_tree);
-    draw(ctxMonkey, monkey_vertices, monkey_faces, monkey_OFFSET, monkey_DRAW_RATE, framecount_monkey);
+  // draw(ctxCube, cube_vertices, cube_faces, cube_OFFSET, cube_DRAW_RATE);
+  let ak = draw(
+    ctxAK,
+    ak_vertices,
+    ak_faces,
+    ak_OFFSET,
+    ak_DRAW_RATE,
+    framecount_ak,
+    sub_ak
+  );
+  framecount_ak = ak.framecount;
+  sub_ak = ak.sub;
 
-    // setTimeout(frame, 1000 / FPS);
-    requestAnimationFrame(frame);
+  let tree = draw(
+    ctxTree,
+    tree_vertices,
+    tree_faces,
+    tree_OFFSET,
+    tree_DRAW_RATE,
+    framecount_tree,
+    sub_tree
+  );
+  framecount_tree = tree.framecount;
+  sub_tree = tree.sub;
+
+  let monkey = draw(
+    ctxMonkey,
+    monkey_vertices,
+    monkey_faces,
+    monkey_OFFSET,
+    monkey_DRAW_RATE,
+    framecount_monkey,
+    sub_monkey
+  );
+  framecount_monkey = monkey.framecount;
+  sub_monkey = monkey.sub;
+
+  // setTimeout(frame, 1000 / FPS);
+  requestAnimationFrame(frame);
 }
 
 // setTimeout(frame, 1000 / FPS);
@@ -170,7 +211,7 @@ requestAnimationFrame(frame);
 // # Check if an object is selected and if it's a mesh
 // if obj and obj.type == 'MESH':
 //     mesh = obj.data
-    
+
 //     # 1. Format the Vertices
 //     print("const vertices = [")
 //     for vertex in mesh.vertices:
@@ -181,7 +222,7 @@ requestAnimationFrame(frame);
 //         z = round(vertex.co.z, 4)
 //         print(f"    {{x: {x:5}, y: {y:5}, z: {z:5}}},")
 //     print("];\n")
-    
+
 //     # 2. Format the Faces
 //     print("const faces = [")
 //     for poly in mesh.polygons:

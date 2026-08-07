@@ -5,6 +5,12 @@
       "type": "ratio",
       "units": [
         { "name": "Meters (m)", "ratio": 1.0 },
+        { "name": "Angul", "ratio": 0.01905 },
+        { "name": "Bitta", "ratio": 0.2286 },
+        { "name": "Haat (Cubit)", "ratio": 0.4572 },
+        { "name": "Gaj (Yard)", "ratio": 0.9144 },
+        { "name": "Danda", "ratio": 1.8288 },
+        { "name": "Kosh", "ratio": 3218.0 },
         { "name": "Nanometers (nm)", "ratio": 1e-9 },
         { "name": "Micrometers (µm)", "ratio": 1e-6 },
         { "name": "Millimeters (mm)", "ratio": 0.001 },
@@ -14,13 +20,7 @@
         { "name": "Feet (ft)", "ratio": 0.3048 },
         { "name": "Yard (yd)", "ratio": 0.9144 },
         { "name": "Miles (mi)", "ratio": 1609.34 },
-        { "name": "Nautical Miles", "ratio": 1852.0 },
-        { "name": "Angul", "ratio": 0.01905 },
-        { "name": "Bitta", "ratio": 0.2286 },
-        { "name": "Haat (Cubit)", "ratio": 0.4572 },
-        { "name": "Gaj (Yard)", "ratio": 0.9144 },
-        { "name": "Danda", "ratio": 1.8288 },
-        { "name": "Kosh", "ratio": 3218.0 }
+        { "name": "Nautical Miles", "ratio": 1852.0 }
       ]
     },
     {
@@ -30,13 +30,7 @@
         { "name": "Kilograms (kg)", "ratio": 1.0 },
         { "name": "Milligrams (mg)", "ratio": 1e-6 },
         { "name": "Grams (g)", "ratio": 0.001 },
-        { "name": "Ounces (oz)", "ratio": 0.0283495 },
-        { "name": "Pounds (lb)", "ratio": 0.453592 },
-        { "name": "Stone (st)", "ratio": 6.35029 },
-        { "name": "US Ton", "ratio": 907.185 },
-        { "name": "Tonne", "ratio": 1000.0 },
-        { "name": "Imperial Ton", "ratio": 1016.05 },
-        { "name": "Chatak", "ratio": 0.05831 },
+        { "name": "Chhatak", "ratio": 0.05831 },
         { "name": "Pau (Traditional)", "ratio": 0.19945 },
         { "name": "Pau (Metric)", "ratio": 0.25 },
         { "name": "Seer", "ratio": 0.9331 },
@@ -45,7 +39,13 @@
         { "name": "Maund (Mon)", "ratio": 37.3242 },
         { "name": "Gold - Tola", "ratio": 0.0116638 },
         { "name": "Gold - Aana", "ratio": 7.289875e-4 },
-        { "name": "Gold - Lal", "ratio": 0.000116638 }
+        { "name": "Gold - Lal", "ratio": 0.000116638 },
+        { "name": "Ounces (oz)", "ratio": 0.0283495 },
+        { "name": "Pounds (lb)", "ratio": 0.453592 },
+        { "name": "Stone (st)", "ratio": 6.35029 },
+        { "name": "US Ton", "ratio": 907.185 },
+        { "name": "Tonne", "ratio": 1000.0 },
+        { "name": "Imperial Ton", "ratio": 1016.05 }
       ]
     },
     {
@@ -63,17 +63,17 @@
       "units": [
         { "name": "Square Meters (m²)", "ratio": 1.0 },
         { "name": "Square Feet (ft²)", "ratio": 0.092903 },
-        { "name": "Acres", "ratio": 4046.86 },
-        { "name": "Hectare", "ratio": 10000.0 },
-        { "name": "Square Mile", "ratio": 2.59e+6 },
-        { "name": "Square Yard", "ratio": 0.836127 },
         { "name": "Daam", "ratio": 1.99 },
         { "name": "Dhur", "ratio": 16.93 },
         { "name": "Paisa", "ratio": 7.95 },
         { "name": "Aana (Land)", "ratio": 31.80 },
         { "name": "Kattha", "ratio": 338.63 },
         { "name": "Ropani", "ratio": 508.72 },
-        { "name": "Bigha", "ratio": 6772.63 }
+        { "name": "Bigha", "ratio": 6772.63 },
+        { "name": "Acres", "ratio": 4046.86 },
+        { "name": "Hectare", "ratio": 10000.0 },
+        { "name": "Square Mile", "ratio": 2.59e+6 },
+        { "name": "Square Yard", "ratio": 0.836127 }
       ]
     },
     {

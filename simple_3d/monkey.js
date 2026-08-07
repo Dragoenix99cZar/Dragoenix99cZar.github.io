@@ -1,5 +1,5 @@
 const monkey_OFFSET = {x:0, y: 0, z:2.5};
-const monkey_DRAW_RATE = 10;
+const monkey_DRAW_RATE = 1;
 
 const monkey_vertices = [
     {x: -0.4375, y: 0.1641, z: -0.7656},

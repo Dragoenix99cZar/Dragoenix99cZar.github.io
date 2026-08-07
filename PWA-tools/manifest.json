@@ -1,0 +1,16 @@
+{
+  "name": "Bench — Pocket Toolbox",
+  "short_name": "Bench",
+  "description": "Eight offline-first utility tools: color, base, text case, aspect ratio, BMI/calorie/tip, loan/interest, word count, QR.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#14181D",
+  "theme_color": "#14181D",
+  "orientation": "any",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

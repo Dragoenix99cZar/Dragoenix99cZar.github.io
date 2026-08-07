@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bench &mdash; a pocket toolbox</title>
+<meta name="description" content="Eight offline-first utility tools: color, base, text case, aspect ratio, BMI/calorie/tip, loan/interest, word count, QR.">
+<meta name="theme-color" content="#14181D">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="board" aria-hidden="true"></div>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2.6-.6-.6-2.6 2.1-2.1z"/></svg>
+      <span>Bench</span>
+    </div>
+    <span class="brand-sub">eight tools, one panel, zero server - AMAN KARN</span>
+    <button class="install-btn" id="installBtn" hidden>Install</button>
+  </header>
+
+  <div class="layout">
+
+    <nav class="rail" id="rail" aria-label="Tools">
+      <button class="slot active" data-tool="color" aria-current="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 4v8l6 3"/></svg>
+        <span>Color</span>
+      </button>
+      <button class="slot" data-tool="base">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        <span>Base</span>
+      </button>
+      <button class="slot" data-tool="text">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 6h14M5 12h9M5 18h14"/></svg>
+        <span>Text case</span>
+      </button>
+      <button class="slot" data-tool="ratio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="10" rx="1"/><path d="M8 7v10"/></svg>
+        <span>Aspect ratio</span>
+      </button>
+      <button class="slot" data-tool="health">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.4-9.6-8.6C.6 8.8 2 5 5.6 4.3 8 3.8 10 5 12 7.4 14 5 16 3.8 18.4 4.3 22 5 23.4 8.8 21.6 12.4 19 16.6 12 21 12 21z"/></svg>
+        <span>BMI &amp; tip</span>
+      </button>
+      <button class="slot" data-tool="loan">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9 15.5s.9 1.5 3 1.5 3.3-2.7 1-3.7-3.7-.9-4-2.8c-.2-1.6 1.4-2.5 3-2.5s2.6.7 3 1.4M12 5.3v1.2M12 17.5v1.2"/></svg>
+        <span>Loan &amp; interest</span>
+      </button>
+      <button class="slot" data-tool="words">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h11l5 5v11H4z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg>
+        <span>Word count</span>
+      </button>
+      <button class="slot" data-tool="qr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20v.01"/></svg>
+        <span>QR code</span>
+      </button>
+    </nav>
+
+    <main class="stage">
+
+      <!-- COLOR -->
+      <section class="panel active" id="panel-color" data-panel="color">
+        <div class="plate"><span>01</span> Color converter</div>
+        <div class="grid two">
+          <div class="card">
+            <label class="field">
+              <span>Pick</span>
+              <input type="color" id="colorPick" value="#c6963e">
+            </label>
+            <label class="field">
+              <span>HEX</span>
+              <input type="text" id="colorHex" spellcheck="false" maxlength="7">
+            </label>
+            <label class="field">
+              <span>RGB</span>
+              <input type="text" id="colorRgb" spellcheck="false" placeholder="198, 150, 62">
+            </label>
+            <label class="field">
+              <span>HSL</span>
+              <input type="text" id="colorHsl" spellcheck="false" placeholder="38, 55%, 51%">
+            </label>
+            <div class="readout" id="colorReadout">#C6963E</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Palette</div>
+            <div class="palette-group">
+              <div class="palette-label">Shades</div>
+              <div class="swatch-row" id="paletteShades"></div>
+            </div>
+            <div class="palette-group">
+              <div class="palette-label">Complementary &amp; analogous</div>
+              <div class="swatch-row" id="paletteHarmony"></div>
+            </div>
+            <p class="hint">Click any swatch to copy its hex.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- BASE -->
+      <section class="panel" id="panel-base" data-panel="base">
+        <div class="plate"><span>02</span> Base converter</div>
+        <div class="grid two">
+          <label class="field wide">
+            <span>Binary</span>
+            <input type="text" id="baseBin" class="mono" spellcheck="false" inputmode="numeric">
+          </label>
+          <label class="field wide">
+            <span>Octal</span>
+            <input type="text" id="baseOct" class="mono" spellcheck="false" inputmode="numeric">
+          </label>
+          <label class="field wide">
+            <span>Decimal</span>
+            <input type="text" id="baseDec" class="mono" spellcheck="false" inputmode="numeric">
+          </label>
+          <label class="field wide">
+            <span>Hexadecimal</span>
+            <input type="text" id="baseHex" class="mono" spellcheck="false" inputmode="text">
+          </label>
+        </div>
+        <p class="hint" id="baseError"></p>
+      </section>
+
+      <!-- TEXT CASE -->
+      <section class="panel" id="panel-text" data-panel="text">
+        <div class="plate"><span>03</span> Text case converter</div>
+        <label class="field">
+          <span>Input</span>
+          <textarea id="textInput" rows="3" placeholder="Type or paste text&hellip;">Bench toolbox for quick conversions</textarea>
+        </label>
+        <div class="case-list" id="caseList"></div>
+      </section>
+
+      <!-- ASPECT RATIO -->
+      <section class="panel" id="panel-ratio" data-panel="ratio">
+        <div class="plate"><span>04</span> Aspect ratio &amp; resolution</div>
+        <div class="grid two">
+          <div class="card">
+            <label class="field">
+              <span>Width (px)</span>
+              <input type="number" id="ratioW" class="mono" min="1" value="1920">
+            </label>
+            <label class="field">
+              <span>Height (px)</span>
+              <input type="number" id="ratioH" class="mono" min="1" value="1080">
+            </label>
+            <div class="readout" id="ratioReadout">16:9</div>
+            <div class="preset-row" id="ratioPresets"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Scale to a new width</div>
+            <label class="field">
+              <span>New width (px)</span>
+              <input type="number" id="ratioNewW" class="mono" min="1" value="1280">
+            </label>
+            <div class="readout" id="ratioScaled">1280 &times; 720</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HEALTH -->
+      <section class="panel" id="panel-health" data-panel="health">
+        <div class="plate"><span>05</span> BMI &middot; calorie &middot; tip</div>
+        <div class="subtabs" data-subtabs="health">
+          <button class="subtab active" data-sub="bmi">BMI</button>
+          <button class="subtab" data-sub="cal">Calories</button>
+          <button class="subtab" data-sub="tip">Tip split</button>
+        </div>
+
+        <div class="subpanel active" data-sub-panel="bmi">
+          <div class="grid two">
+            <label class="field"><span>Height (cm)</span><input type="number" id="bmiHeight" class="mono" min="1" value="170"></label>
+            <label class="field"><span>Weight (kg)</span><input type="number" id="bmiWeight" class="mono" min="1" value="65"></label>
+          </div>
+          <div class="readout" id="bmiReadout">22.5 &mdash; normal</div>
+        </div>
+
+        <div class="subpanel" data-sub-panel="cal">
+          <div class="grid two">
+            <label class="field"><span>Sex</span>
+              <select id="calSex"><option value="m">Male</option><option value="f">Female</option></select>
+            </label>
+            <label class="field"><span>Age</span><input type="number" id="calAge" class="mono" min="1" value="30"></label>
+            <label class="field"><span>Height (cm)</span><input type="number" id="calHeight" class="mono" min="1" value="170"></label>
+            <label class="field"><span>Weight (kg)</span><input type="number" id="calWeight" class="mono" min="1" value="65"></label>
+            <label class="field wide"><span>Activity level</span>
+              <select id="calActivity">
+                <option value="1.2">Sedentary (little/no exercise)</option>
+                <option value="1.375">Light (1&ndash;3 days/wk)</option>
+                <option value="1.55" selected>Moderate (3&ndash;5 days/wk)</option>
+                <option value="1.725">Active (6&ndash;7 days/wk)</option>
+                <option value="1.9">Very active (physical job/2x train)</option>
+              </select>
+            </label>
+          </div>
+          <div class="readout" id="calReadout">BMR &mdash; &middot; TDEE &mdash;</div>
+        </div>
+
+        <div class="subpanel" data-sub-panel="tip">
+          <div class="grid two">
+            <label class="field"><span>Bill amount</span><input type="number" id="tipBill" class="mono" min="0" value="50" step="0.01"></label>
+            <label class="field"><span>Tip %</span><input type="number" id="tipPct" class="mono" min="0" value="15" step="1"></label>
+            <label class="field"><span>Split between</span><input type="number" id="tipPeople" class="mono" min="1" value="1" step="1"></label>
+          </div>
+          <div class="readout" id="tipReadout">Tip 0.00 &middot; Total 0.00 &middot; Each 0.00</div>
+        </div>
+      </section>
+
+      <!-- LOAN -->
+      <section class="panel" id="panel-loan" data-panel="loan">
+        <div class="plate"><span>06</span> Loan / EMI &middot; compound interest</div>
+        <div class="subtabs" data-subtabs="loan">
+          <button class="subtab active" data-sub="emi">Loan / EMI</button>
+          <button class="subtab" data-sub="ci">Compound interest</button>
+        </div>
+
+        <div class="subpanel active" data-sub-panel="emi">
+          <div class="grid two">
+            <label class="field"><span>Principal</span><input type="number" id="emiPrincipal" class="mono" min="0" value="20000"></label>
+            <label class="field"><span>Annual rate (%)</span><input type="number" id="emiRate" class="mono" min="0" value="9" step="0.1"></label>
+            <label class="field"><span>Tenure (months)</span><input type="number" id="emiMonths" class="mono" min="1" value="36"></label>
+          </div>
+          <div class="readout" id="emiReadout">EMI &mdash;</div>
+        </div>
+
+        <div class="subpanel" data-sub-panel="ci">
+          <div class="grid two">
+            <label class="field"><span>Principal</span><input type="number" id="ciPrincipal" class="mono" min="0" value="10000"></label>
+            <label class="field"><span>Annual rate (%)</span><input type="number" id="ciRate" class="mono" min="0" value="6" step="0.1"></label>
+            <label class="field"><span>Years</span><input type="number" id="ciYears" class="mono" min="0" value="5" step="0.5"></label>
+            <label class="field"><span>Compounds / year</span>
+              <select id="ciFreq">
+                <option value="1">Annually</option>
+                <option value="2">Semi-annually</option>
+                <option value="4">Quarterly</option>
+                <option value="12" selected>Monthly</option>
+                <option value="365">Daily</option>
+              </select>
+            </label>
+          </div>
+          <div class="readout" id="ciReadout">Maturity &mdash;</div>
+        </div>
+      </section>
+
+      <!-- WORDS -->
+      <section class="panel" id="panel-words" data-panel="words">
+        <div class="plate"><span>07</span> Word &amp; character counter</div>
+        <label class="field">
+          <span>Text</span>
+          <textarea id="wordsInput" rows="8" placeholder="Paste or type&hellip;"></textarea>
+        </label>
+        <div class="stat-row" id="wordsStats"></div>
+      </section>
+
+      <!-- QR -->
+      <section class="panel" id="panel-qr" data-panel="qr">
+        <div class="plate"><span>08</span> QR code &middot; generate &amp; scan</div>
+        <div class="subtabs" data-subtabs="qr">
+          <button class="subtab active" data-sub="gen">Generate</button>
+          <button class="subtab" data-sub="scan">Scan</button>
+        </div>
+
+        <div class="subpanel active" data-sub-panel="gen">
+          <label class="field">
+            <span>Text or URL</span>
+            <textarea id="qrText" rows="2" placeholder="https://&hellip;">https://dragoenix99czar.github.io/</textarea>
+          </label>
+          <div class="qr-out">
+            <div id="qrCanvasWrap" class="qr-canvas"></div>
+            <button class="btn" id="qrDownload">Download PNG</button>
+          </div>
+        </div>
+
+        <div class="subpanel" data-sub-panel="scan">
+          <div class="qr-out">
+            <video id="qrVideo" class="qr-video" playsinline muted></video>
+            <canvas id="qrScanCanvas" hidden></canvas>
+            <div class="scan-controls">
+              <button class="btn" id="qrScanStart">Start camera</button>
+              <label class="btn file-btn">Scan from image
+                <input type="file" id="qrFileInput" accept="image/*" hidden>
+              </label>
+            </div>
+            <div class="readout" id="qrResult">No code scanned yet</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="footbar">Works offline once loaded &middot; installable &middot; no data leaves your device - AMAN KARN</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+
+<script src="app.js"></script>
+</body>
+</html>

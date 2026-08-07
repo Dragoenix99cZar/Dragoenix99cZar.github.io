@@ -182,7 +182,7 @@
     });
   }
 
-  // Result (In $) = Converted units * ($ rate of a single unit)
+  // Result (In रु) = Converted units * (रु rate of a single unit)
   //
   // Unlike the automatic ledger below (which just shows the value
   // converted into every unit), this takes the value, converts it into
@@ -220,7 +220,7 @@
     }
 
     const result = converted * rate;
-    els.rateResult.textContent = `$ ${formatValue(result)}`;
+    els.rateResult.textContent = `रु ${formatValue(result)}`;
   }
 
   function renderResults() {

@@ -1,5 +1,5 @@
 const tree_OFFSET = {x:0, y: -3, z:22};
-const tree_DRAW_RATE = 50000;
+const tree_DRAW_RATE = 1;
 
 const tree_vertices = [
     {x: -0.1131, y: -8.364, z: 1.4855},
