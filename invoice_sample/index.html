@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt Generator - Labeled Item Fields</title>
+    <style>
+        :root {
+            --bill-yellow: #f5e042;
+            --bill-red: #8b0000;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-card h2, .form-card h3 {
+            margin-top: 0;
+            color: var(--bill-red);
+            border-bottom: 2px solid var(--bill-red);
+            padding-bottom: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .form-group input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .items-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .btn {
+            background-color: var(--bill-red);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        .btn-secondary { background-color: #555; }
+
+        .btn-print {
+            background-color: #2e7d32;
+            font-size: 16px;
+            padding: 12px 24px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        /* Particulars Items Section Layout */
+        .items-column-headers {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1fr 1fr 1.2fr 40px;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--bill-red);
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1fr 1fr 1.2fr 40px;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .item-row input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .btn-remove {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            height: 35px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Preview Card */
+        .preview-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Yellow Paper Styles */
+        #receipt-paper {
+            background-color: var(--bill-yellow);
+            color: var(--bill-red);
+            padding: 25px;
+            border: 2px solid var(--bill-red);
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .company-banner-container {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .company-banner-container img {
+            max-width: 100%;
+            max-height: 120px;
+            object-fit: contain;
+            display: none;
+        }
+
+        .bill-header {
+            text-align: center;
+            border-bottom: 1.5px dashed var(--bill-red);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .logo-img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            max-width: 80px;
+            max-height: 80px;
+            object-fit: contain;
+            display: none;
+        }
+
+        .bill-header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .bill-header p {
+            margin: 3px 0;
+            font-size: 13px;
+        }
+
+        .bill-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .bill-table th, .bill-table td {
+            border: 1px solid var(--bill-red);
+            padding: 6px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .bill-table th { background-color: rgba(139, 0, 0, 0.05); }
+
+        .text-left { text-align: left !important; }
+        .text-right { text-align: right !important; }
+
+        .bill-footer {
+            margin-top: 15px;
+            font-size: 11px;
+            border-top: 1px solid var(--bill-red);
+            padding-top: 8px;
+        }
+
+        .print-timestamp {
+            margin-top: 10px;
+            font-size: 10px;
+            font-style: italic;
+            text-align: right;
+            border-top: 0.5px dashed var(--bill-red);
+            padding-top: 4px;
+        }
+
+        @media print {
+            body { background-color: transparent; padding: 0; }
+            .form-card, .btn-print, .preview-title { display: none !important; }
+            .container { max-width: 100%; }
+            .preview-card { box-shadow: none; padding: 0; }
+            #receipt-paper {
+                border: 1px solid var(--bill-red);
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- INPUT FORM -->
+    <div class="form-card">
+        <h2>Header & Branding Details</h2>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Company Name (कम्पनीको नाम)</label>
+                <input type="text" id="companyName" value="सोनार ज्वेलरी पसल" oninput="updateInvoice()">
+            </div>
+            <div class="form-group">
+                <label>Address / Sub-location (ठेगाना)</label>
+                <input type="text" id="headerAddress" value="ग्रीन ल्याण्ड स्कुल नजिकै, मलङ्गवा, सर्लाही" oninput="updateInvoice()">
+            </div>
+            <div class="form-group">
+                <label>Tagline / Description (विवरण)</label>
+                <input type="text" id="headerTagline" value="(सुन चाँदीको आकर्षक गहनाहरुको निर्माता)" oninput="updateInvoice()">
+            </div>
+            <div class="form-group">
+                <label>Proprietor & Phone (प्रो. तथा सम्पर्क)</label>
+                <input type="text" id="headerContact" value="प्रो. आकाश जी | मो.नं: 9844255874" oninput="updateInvoice()">
+            </div>
+            <div class="form-group">
+                <label>Company Logo</label>
+                <input type="file" id="logoInput" accept="image/*" onchange="handleImageUpload(event, 'outLogo')">
+            </div>
+            <div class="form-group">
+                <label>Company Banner Graphic</label>
+                <input type="file" id="bannerInput" accept="image/*" onchange="handleImageUpload(event, 'outBanner')">
+            </div>
+        </div>
+
+        <h3>Bill Details Input</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Bill No. (बिल नं.)</label>
+                <input type="text" id="billNo" value="01" oninput="updateInvoice()">
+            </div>
+            <div class="form-group">
+                <label>Delivery Date (डिलेभरी मिति)</label>
+                <input type="text" id="deliveryDate" value="२०८३/०४/२१" oninput="updateInvoice()">
+            </div>
+            <div class="form-group">
+                <label>Customer Name (श्री)</label>
+                <input type="text" id="custName" value="अमेन्दर कुमार कर्ण" oninput="updateInvoice()">
+            </div>
+            <div class="form-group">
+                <label>Mobile No. (मो.नं.)</label>
+                <input type="text" id="custMobile" value="9845027245" oninput="updateInvoice()">
+            </div>
+            <div class="form-group">
+                <label>Address (ठेगाना)</label>
+                <input type="text" id="custAddress" value="मलङ्गवा-०३" oninput="updateInvoice()">
+            </div>
+            <div class="form-group">
+                <label>PAN No. (पान नं.)</label>
+                <input type="text" id="custPan" value="६१११०६०००२" oninput="updateInvoice()">
+            </div>
+            <div class="form-group">
+                <label>Discounted Subtotal (रु.)</label>
+                <input type="number" id="subtotalInput" value="34000" oninput="updateInvoice()">
+            </div>
+        </div>
+
+        <div class="items-header">
+            <h3>Particulars / Items</h3>
+            <button type="button" class="btn btn-secondary" onclick="addItemRow()">+ Add Item</button>
+        </div>
+
+        <!-- LABELS FOR PARTICULARS INPUT FIELDS -->
+        <div class="items-column-headers">
+            <div>Description (विवरण)</div>
+            <div>Rate (दर)</div>
+            <div>Weight (तौल)</div>
+            <div>Jyala (ज्याला)</div>
+            <div>Total Amount (रु.)</div>
+            <div>Action</div>
+        </div>
+
+        <div id="itemsContainer"></div>
+
+        <button class="btn btn-print" onclick="triggerPrint()">Download / Print PDF</button>
+    </div>
+
+    <!-- LIVE PREVIEW AREA -->
+    <div class="preview-card">
+        <h3 class="preview-title">Live Bill Preview</h3>
+
+        <div id="receipt-paper">
+            <!-- Banner Image Output -->
+            <div class="company-banner-container">
+                <img id="outBanner" alt="Company Banner">
+            </div>
+
+            <div class="bill-header">
+                <!-- Logo Image Output -->
+                <img id="outLogo" class="logo-img" alt="Logo">
+
+                <h1 id="outCompanyName">सोनार ज्वेलरी पसल</h1>
+                <p id="outHeaderAddress">ग्रीन ल्याण्ड स्कुल नजिकै, मलङ्गवा, सर्लाही</p>
+                <p id="outHeaderTagline">(सुन चाँदीको आकर्षक गहनाहरुको निर्माता)</p>
+                <p id="outHeaderContact">प्रो. आकाश जी | मो.नं: 9844255874</p>
+                <br>
+            </div>
+
+            <div class="bill-info">
+                <div>बिल नं.: <span id="outBillNo">01</span></div>
+                <div class="text-right">डिलेभरी मिति: <span id="outDate">२०८३/०४/२१</span></div>
+                <div>श्री: <span id="outName">अमेन्दर कुमार कर्ण</span></div>
+                <div class="text-right">मो.नं.: <span id="outMobile">9845027245</span></div>
+                <div>ठेगाना: <span id="outAddress">मलङ्गवा-०३</span></div>
+                <div class="text-right">पान नं.: <span id="outPan">६१११०६०००२</span></div>
+            </div>
+
+            <table class="bill-table">
+                <thead>
+                    <tr>
+                        <th style="width: 6%;">क्र.सं.</th>
+                        <th>विवरण</th>
+                        <th style="width: 16%;">दर (Rate)</th>
+                        <th style="width: 16%;">तौल</th>
+                        <th style="width: 14%;">ज्याला</th>
+                        <th style="width: 18%;">जम्मा रकम</th>
+                    </tr>
+                </thead>
+                <tbody id="outItemsTable"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" rowspan="3" class="text-left" style="vertical-align: top;">
+                            <em>भुल् चुक लिने-दिने</em>
+                        </td>
+                        <td class="text-right"><strong>जम्मा:</strong></td>
+                        <td id="outSubtotal">34,000/-</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><strong>विलासिता कर (०.५%):</strong></td>
+                        <td id="outTax">+ 170</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><strong>बाँकी / जम्मा:</strong></td>
+                        <td id="outGrandTotal" style="font-weight: bold;">34,170/-</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="bill-footer">
+                <p>• सामान अदल-बदल र बिक्री गर्नु परेमा बिल साथमा अनिवार्य रुपले लिएर आउनुहोला।</p>
+                <p>• सुन चाँदीको शुद्धताको ग्यारेन्टी हुन्छ, कालो पिलोको होइन।</p>
+            </div>
+
+            <!-- PRINT TIMESTAMP -->
+            <div class="print-timestamp">
+                Printed On: <span id="outTimestamp">--</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let items = [
+        { desc: "चाँदीको धनेश्वर - १ गोटा", rate: "4590", weight: "76.460 g", jyala: "650", total: 30738 },
+        { desc: "सुनको बिन्दी - १ पिस", rate: "297400", weight: "0.130 g", jyala: "200", total: 3510 }
+    ];
+
+    function updateTimestamp() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        document.getElementById('outTimestamp').innerText = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    function triggerPrint() {
+        updateTimestamp();
+        window.print();
+    }
+
+    window.onbeforeprint = updateTimestamp;
+
+    function handleImageUpload(event, targetElementId) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgElement = document.getElementById(targetElementId);
+                imgElement.src = e.target.result;
+                imgElement.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function renderItemInputs() {
+        const container = document.getElementById('itemsContainer');
+        container.innerHTML = '';
+        items.forEach((item, index) => {
+            const row = document.createElement('div');
+            row.className = 'item-row';
+            row.innerHTML = `
+                <input type="text" placeholder="e.g. सुनको औंठी" value="${item.desc}" oninput="updateItem(${index}, 'desc', this.value)">
+                <input type="text" placeholder="e.g. 297400" value="${item.rate}" oninput="updateItem(${index}, 'rate', this.value)">
+                <input type="text" placeholder="e.g. 1.16 g" value="${item.weight}" oninput="updateItem(${index}, 'weight', this.value)">
+                <input type="text" placeholder="e.g. 500" value="${item.jyala}" oninput="updateItem(${index}, 'jyala', this.value)">
+                <input type="number" placeholder="e.g. 30000" value="${item.total}" oninput="updateItem(${index}, 'total', this.value)">
+                <button class="btn-remove" onclick="removeItemRow(${index})">X</button>
+            `;
+            container.appendChild(row);
+        });
+    }
+
+    function addItemRow() {
+        items.push({ desc: "", rate: "", weight: "", jyala: "", total: 0 });
+        renderItemInputs();
+        updateInvoice();
+    }
+
+    function removeItemRow(index) {
+        items.splice(index, 1);
+        renderItemInputs();
+        updateInvoice();
+    }
+
+    function updateItem(index, key, value) {
+        items[index][key] = key === 'total' ? parseFloat(value) || 0 : value;
+        updateInvoice();
+    }
+
+    function updateInvoice() {
+        // Dynamic Header Updates
+        document.getElementById('outCompanyName').innerText = document.getElementById('companyName').value;
+        document.getElementById('outHeaderAddress').innerText = document.getElementById('headerAddress').value;
+        document.getElementById('outHeaderTagline').innerText = document.getElementById('headerTagline').value;
+        document.getElementById('outHeaderContact').innerText = document.getElementById('headerContact').value;
+
+        // Dynamic Bill Details
+        document.getElementById('outBillNo').innerText = document.getElementById('billNo').value;
+        document.getElementById('outDate').innerText = document.getElementById('deliveryDate').value;
+        document.getElementById('outName').innerText = document.getElementById('custName').value;
+        document.getElementById('outMobile').innerText = document.getElementById('custMobile').value;
+        document.getElementById('outAddress').innerText = document.getElementById('custAddress').value;
+        document.getElementById('outPan').innerText = document.getElementById('custPan').value;
+
+        // Dynamic Table Injection
+        const tbody = document.getElementById('outItemsTable');
+        tbody.innerHTML = '';
+        items.forEach((item, idx) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${idx + 1}</td>
+                <td class="text-left">${item.desc}</td>
+                <td>${item.rate}</td>
+                <td>${item.weight}</td>
+                <td>${item.jyala}</td>
+                <td>${item.total ? item.total.toLocaleString() : 0}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Totals Calculations
+        const subtotal = parseFloat(document.getElementById('subtotalInput').value) || 0;
+        const tax = subtotal * 0.005;
+        const grandTotal = subtotal + tax;
+
+        document.getElementById('outSubtotal').innerText = subtotal.toLocaleString() + '/-';
+        document.getElementById('outTax').innerText = '+ ' + tax.toFixed(0);
+        document.getElementById('outGrandTotal').innerText = grandTotal.toLocaleString() + '/-';
+    }
+
+    renderItemInputs();
+    updateInvoice();
+    updateTimestamp();
+</script>
+
+</body>
+</html>
