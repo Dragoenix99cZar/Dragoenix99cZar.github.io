@@ -2,71 +2,331 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Aman Karn | Game Developer Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aman Karn | Senior Game & Software Engineer</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+
+    :root {
+        --bg-color: #0d1117;        /* Very dark charcoal */
+        --card-bg: #161b22;        /* Dark gray card */
+        --card-border: #30363d;    /* Subtle gray border */
+        --primary-color: #3fb950;   /* Bright emerald green */
+        --text-main: #f0f6fc;      /* Bright white */
+        --text-muted: #8b949e;     /* Muted gray */
+        --accent-color: #238636;    /* Deep green */
+        --tag-bg: #0d1117;         /* Matching dark tag bg */
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      background-color: #1e1e1e;
-      color: #ffffff;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
       line-height: 1.6;
     }
 
     header {
-      background: #111;
-      padding: 40px 20px;
+      background: #020617;
+      padding: 60px 20px;
       text-align: center;
+      border-bottom: 1px solid var(--card-border);
     }
 
     header h1 {
-      margin: 0;
-      font-size: 2.5rem;
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
     }
 
-    header p {
-      font-size: 1.2rem;
-      color: #aaa;
+    header .subtitle {
+      font-size: 1.25rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    header .tagline {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 24px auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-color);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-color);
+      color: var(--bg-color);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      background-color: var(--card-bg);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
     }
 
     main {
-      max-width: 960px;
+      max-width: 1080px;
       margin: auto;
-      padding: 40px 20px;
+      padding: 50px 20px;
     }
 
     section {
-      margin-bottom: 40px;
+      margin-bottom: 50px;
     }
 
     h2 {
-      color: #00bcd4;
-      border-bottom: 2px solid #444;
-      padding-bottom: 5px;
+      font-size: 1.5rem;
+      color: var(--text-main);
+      border-bottom: 2px solid var(--card-border);
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    ul {
-      list-style: none;
-      padding: 0;
+    h2::before {
+      content: "";
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background-color: var(--primary-color);
+      border-radius: 2px;
     }
 
-    ul li {
-      margin: 10px 0;
+    p {
+      color: var(--text-muted);
+      margin-bottom: 16px;
     }
 
-    a {
-      color: #4fc3f7;
+    /* Grid Layout for Featured Projects */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 24px;
+    }
+
+    @media (max-width: 560px) {
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .project-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .project-card h3 {
+      font-size: 1.25rem;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .project-card .role {
+      font-size: 0.85rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .project-card p {
+      font-size: 0.95rem;
+      flex-grow: 1;
+    }
+
+    .project-card ul {
+      margin-left: 20px;
+      margin-bottom: 16px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .project-card ul li {
+      margin-bottom: 6px;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+      margin-bottom: 16px;
+    }
+
+    .tag {
+      background-color: var(--tag-bg);
+      color: var(--primary-color);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+      font-weight: 500;
+    }
+
+    .card-links {
+      display: flex;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .card-links a {
+      font-size: 0.85rem;
+      color: var(--primary-color);
       text-decoration: none;
+      font-weight: 600;
     }
 
-    a:hover {
+    .card-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .skill-category {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .skill-category h3 {
+      font-size: 1rem;
+      color: var(--primary-color);
+      margin-bottom: 12px;
+    }
+
+    .skill-category ul {
+      list-style: none;
+    }
+
+    .skill-category li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    /* Card Grid for Experiments */
+    .experiment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .experiment-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .experiment-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary-color);
+    }
+
+    .experiment-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-bottom: 1px solid var(--card-border);
+      background-color: #000;
+    }
+
+    .experiment-card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .experiment-card-body h3 {
+      font-size: 1rem;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .experiment-card-body p {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      flex-grow: 1;
+    }
+
+    .experiment-card-body a {
+      font-size: 0.85rem;
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .experiment-card-body a:hover {
       text-decoration: underline;
     }
 
     footer {
       text-align: center;
-      padding: 20px;
-      background-color: #111;
-      color: #777;
+      padding: 30px 20px;
+      background-color: #020617;
+      border-top: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -74,63 +334,270 @@
 
 <header>
   <h1>Aman Karn</h1>
-  <p>Game Developer | Unity | Unreal | Multimedia Developer | QA | Mentor</p>
+  <div class="subtitle">Senior Game & Software Engineer</div>
+  <div class="tagline">
+    Architecting scalable 2D/3D games, XR (VR/AR/MR) applications, and real-time simulations across Unity3D and Unreal Engine 5.
+  </div>
+  <div class="cta-buttons">
+      <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank" class="btn btn-primary">LinkedIn Profile</a>
+      <a href="https://github.com/Dragoenix99cZar" target="_blank" class="btn btn-outline">GitHub Profile</a>
+      <span class="btn btn-outline">For CV: ak99professional_[at]_gmail_[dot]_com</span>
+    </div>
 </header>
 
 <main>
 
+  <!-- About Section -->
   <section id="about">
-    <h2>About Me</h2>
+    <h2>Professional Overview</h2>
     <p>
-      I'm a passionate game developer focused on building engaging gameplay experiences with Unity, C++, and JavaScript.
-      I love experimenting with mechanics, AI, and interactive systems. Below is a selection of my personal and academic projects.
+      Senior Game & Software Engineer with over 5 years of professional experience developing commercial titles, cross-platform spatial applications, and technical simulations. Specialized in deep Unity3D architecture (C#) and Unreal Engine 5 development (C++ / Blueprints), having shipped and contributed to over 30 interactive applications across PC, Mobile, and XR platforms.
     </p>
   </section>
 
-  <section id="projects">
-    <h2>Featured Projects</h2>
-    <ul>
-      <li><a href="js-experiments/project/index.html" target="_blank">Maze Bot (Pathfinding AI)</a></li>
-      <li><a href="stealth_game/index.html" target="_blank">Stealth Game (Prototype)</a></li>
-      <li><a href="fps/index.html" target="_blank">First-Person Shooter (Basic Mechanics)</a></li>
-      <li><a href="recall/index.html" target="_blank">Mini Brain Game (In Progress)</a></li>
-      <li><a href="unit_converter_pwa/" target="_blank">Unit Converter PWA</a></li>
-      <li><a href="PWA-tools/" target="_blank">Misc. PWA  Tools (WIP)</a></li>
-      <li><a href="Wave/index.html" target="_blank">Wave Battle Game (In Progress)</a></li>
-      <li><a href="Wave2/index.html" target="_blank">Wave Battle Game V2 (In Progress)</a></li>
-    </ul>
+  <!-- Featured Professional Projects -->
+  <section id="featured-projects">
+    <h2>Featured Work & Case Studies</h2>
+    <div class="project-grid">
+
+      <!-- Sandbox Game -->
+      <div class="project-card">
+        <div>
+          <h3>Real-World Terrain Sandbox Game</h3>
+          <div class="role">Senior Developer | Unity3D & Unreal Engine 5</div>
+          <p>A procedural sandbox environment enabling players to create and build custom worlds rendered on top of real-world terrain generated from satellite-fetched building data.</p>
+          <ul>
+            <li>Engineered mesh generation and streaming pipelines for real-world elevation and satellite datasets.</li>
+            <li>Connected in-game player progression and achievements with a dedicated companion web application.</li>
+            <li>Utilized Unreal Engine 5 workflows for environmental content rendering and video production.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag-container">
+            <span class="tag">Unity3D</span>
+            <span class="tag">Unreal Engine 5</span>
+            <span class="tag">C#</span>
+            <span class="tag">Satellite GIS</span>
+            <span class="tag">Web API Integration</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- VR Board Games -->
+      <div class="project-card">
+        <div>
+          <h3>VR Board Game Suite</h3>
+          <div class="role">Unity Game Developer | Multi-Platform XR</div>
+          <p>Adapted 9 classic 2D board games into spatial 3D/VR experiences, re-engineering gameplay mechanics, input systems, and spatial UI for immersive headsets.</p>
+          <ul>
+            <li>Converted titles including Snakes & Ladders, Tic-Tac-Toe, Jenga, Bingo, Call Break, Gin Rummy, Ludo, Mancala, and Backgammon.</li>
+            <li>Optimized performance and framerates across low-power and standalone headsets.</li>
+            <li>Showreel includes VR interaction patterns and custom hand-tracking mechanics.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag-container">
+            <span class="tag">Unity3D</span>
+            <span class="tag">VR / MR</span>
+            <span class="tag">Oculus Quest 1/2</span>
+            <span class="tag">Magic Leap One</span>
+            <span class="tag">Spatial UI</span>
+          </div>
+          <!--<div class="card-links">
+            <a href="https://drive.google.com/file/d/1CMe6diSIvcyHNH_Xnu1gr7QtZbVd-Kg3/view" target="_blank">Brain Games Video →</a>
+            <a href="https://drive.google.com/file/d/1QykkooHNzNZPC3kOEOfgPEPerkC1uni1/view" target="_blank">Magic Leap Showreel →</a>
+          </div>-->
+        </div>
+      </div>
+
+      <!-- Medical VR -->
+      <div class="project-card">
+        <div>
+          <h3>Psycho-Education & Healthcare VR Platform</h3>
+          <div class="role">XR Developer | Clinical VR Collaboration</div>
+          <p>Collaborated with medical personnel, psychiatrists, artists, and programmers to develop therapy and psycho-education VR courses aimed at supporting social interaction challenges.</p>
+          <ul>
+            <li>Built immersive interactive environments tailored to specific therapeutic scenarios.</li>
+            <li>Iteratively refined user interactions to accommodate non-gamer patient demographics.</li>
+            <li>Maintained strict performance stability required for clinical usability.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag-container">
+            <span class="tag">Unity3D</span>
+            <span class="tag">Virtual Reality</span>
+            <span class="tag">Healthcare / XR</span>
+            <span class="tag">Cross-Disciplinary</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Synthetic ML Data -->
+      <div class="project-card">
+        <div>
+          <h3>Synthetic Image Dataset Generator</h3>
+          <div class="role">Simulation Engineer | Unity & Machine Learning</div>
+          <p>Developed high-fidelity synthetic image dataset generation environments within Unity3D targeting safety-critical computer vision models.</p>
+          <ul>
+            <li>Constructed realistic procedural environments and lighting variations.</li>
+            <li>Authored custom Python scripts for automated dataset validation and quality checking.</li>
+            <li>Provided reliable, annotated datasets for downstream machine learning training workflows.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag-container">
+            <span class="tag">Unity3D</span>
+            <span class="tag">Python</span>
+            <span class="tag">Synthetic Data</span>
+            <span class="tag">Computer Vision</span>
+            <span class="tag">Automation</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </section>
 
-  <section id="assignments">
-    <h2>JavaScript Experiments</h2>
-    <ul>
-      <li><a href="js-experiments/ast1/index.html" target="_blank">Assignment 1</a></li>
-      <li><a href="js-experiments/ast2/index.html" target="_blank">Assignment 2</a></li>
-      <li><a href="js-experiments/ast3/index.html" target="_blank">Assignment 3</a></li>
-      <li><a href="js-experiments/ast4/index.html" target="_blank">Assignment 4</a></li>
-      <li><a href="js-experiments/ast5/index.html" target="_blank">Assignment 5</a></li>
-      <li><a href="js-experiments/ast6/index.html" target="_blank">Assignment 6</a></li>
-      <li><a href="js-experiments/ast7/index.html" target="_blank">Assignment 7</a></li>
-      <li><a href="pasco/index.html" target="_blank">Assignment Pasco Page</a></li>
-      <li><a href="simple_3d/index.html" target="_blank">Simple 3D graphic</a></li>
-    </ul>
-  </section>
-
+  <!-- Technical Taxonomy Section -->
   <section id="skills">
-    <h2>Skills</h2>
-    <ul>
-      <li>Languages: C, C++, C#, JavaScript, Python, Rust</li>
-      <li>Engines: Unity, Unreal (basic)</li>
-      <li>Web: HTML, CSS, JS</li>
-      <li>Tools: Git, VS Code, Blender (basic), Figma, FFmpeg, Wasm</li>
-      <li>Platforms: WebGL, PC, Android (Unity export)</li>
-    </ul>
+    <h2>Technical Capabilities</h2>
+    <div class="skills-grid">
+      <div class="skill-category">
+        <h3>Game Engines</h3>
+        <ul>
+          <li>Unity3D (5+ Years)</li>
+          <li>Unreal Engine 5 (1 Year)</li>
+          <li>System Architecture</li>
+          <li>Modular Code Design</li>
+        </ul>
+      </div>
+      <div class="skill-category">
+        <h3>Programming</h3>
+        <ul>
+          <li>C#</li>
+          <li>C++</li>
+          <li>Python</li>
+          <li>PowerShell</li>
+          <li>Blueprint Scripting</li>
+        </ul>
+      </div>
+      <div class="skill-category">
+        <h3>XR Hardware</h3>
+        <ul>
+          <li>Meta Quest 1 & 2 / Rift</li>
+          <li>Oculus Go</li>
+          <li>Magic Leap One</li>
+          <li>HoloLens One</li>
+        </ul>
+      </div>
+      <div class="skill-category">
+        <h3>Tools & Infrastructure</h3>
+        <ul>
+          <li>Git / CodeCommit / GitLab</li>
+          <li>Jira / Agile Workflows</li>
+          <li>AWS / CDN Pipelines</li>
+          <li>Blender (Prop Creation)</li>
+        </ul>
+      </div>
+    </div>
   </section>
+
+  <!-- Visual Experiments & Prototypes Section -->
+    <section id="experiments">
+      <h2>Prototypes & Technical Experiments</h2>
+      <p>A collection of minor technical explorations, algorithmic studies, and personal gameplay prototypes:</p>
+
+      <div class="experiment-grid">
+
+        <!-- Maze Bot -->
+        <div class="experiment-card">
+          <img src="images/maze-bot.jpg" alt="Maze Bot Pathfinding AI" />
+          <div class="experiment-card-body">
+            <h3>Maze Bot (Pathfinding AI)</h3>
+            <p>Grid-based pathfinding algorithms and autonomous maze solving in JavaScript.</p>
+            <a href="js-experiments/project/index.html" target="_blank">Launch Experiment →</a>
+          </div>
+        </div>
+
+        <!-- Stealth Game -->
+        <div class="experiment-card">
+          <img src="images/stealth-game.gif" alt="Stealth Game Mechanics Prototype" />
+          <div class="experiment-card-body">
+            <h3>Stealth Game Mechanics</h3>
+            <p>Line-of-sight cone detection, enemy perception states, and cover mechanics.</p>
+            <a href="stealth_game/index.html" target="_blank">Launch Experiment →</a>
+          </div>
+        </div>
+
+        <!-- FPS Mechanics -->
+        <div class="experiment-card">
+          <img src="images/fps-prototype.gif" alt="FPS Mechanics Study" />
+          <div class="experiment-card-body">
+            <h3>FPS Mechanics Study</h3>
+            <p>Raycast shooting mechanics, recoil modeling, and weapon handling logic.</p>
+            <a href="fps/index.html" target="_blank">Launch Experiment →</a>
+          </div>
+        </div>
+
+        <!-- Software Renderer -->
+        <div class="experiment-card">
+          <img src="images/software-renderer.gif" alt="Software Renderer Wireframe Study" />
+          <div class="experiment-card-body">
+            <h3>Software Renderer Study</h3>
+            <p>3D software rendering study calculating rasterization and wireframes manually.</p>
+            <a href="simple_3d/index.html" target="_blank">Launch Experiment →</a>
+          </div>
+        </div>
+
+        <!-- Wave Battle V1/V2 -->
+        <div class="experiment-card">
+          <img src="images/wave-battle.gif" alt="Wave Battle Prototype" />
+          <div class="experiment-card-body">
+            <h3>Wave Battle Prototypes</h3>
+            <p>Enemy wave spawner architecture and object pooling performance test.</p>
+            <a href="Wave2/index.html" target="_blank">Launch V2 Prototype →</a>
+          </div>
+        </div>
+
+        <!-- Memory & Recall -->
+        <div class="experiment-card">
+          <img src="images/brain-game.gif" alt="Memory and Recall Prototype" />
+          <div class="experiment-card-body">
+            <h3>Memory & Recall Study</h3>
+            <p>Pattern recognition and memory tracking mechanics prototype.</p>
+            <a href="recall/index.html" target="_blank">Launch Experiment →</a>
+          </div>
+        </div>
+
+        <!-- Unit Converter -->
+        <div class="experiment-card">
+          <img src="images/unit-convert.gif" alt="Unit Converter" />
+          <div class="experiment-card-body">
+            <h3>Nepali Units Converter</h3>
+            <p>PWA for Nepali units conversion like length, mass, volumm, etc.</p>
+            <a href="unit_converter_pwa/" target="_blank">Launch Experiment →</a>
+          </div>
+        </div>
+
+        <!-- Unit Converter -->
+        <div class="experiment-card">
+          <img src="images/basic-utility.gif" alt="Basic Utility Tools" />
+          <div class="experiment-card-body">
+            <h3>Nepali Units Converter</h3>
+            <p>PWA for Basic Utility Tools like color-picker, qr-code, word-count, bim, number-system.</p>
+            <a href="PWA-tools/" target="_blank">Launch Experiment →</a>
+          </div>
+        </div>
+
+
+      </div>
+    </section>
 
 </main>
 
 <footer>
-  <p>© 2025 Aman Karn | <a href="https://github.com/Dragoenix99cZar" target="_blank">GitHub</a> | <a href="rindex.html" target="_blank">Rust</a></p>
+  <p>© Aman Karn | Senior Game & Software Engineer</p>
+  <p>Email: <b>ak99professional_[at]_gmail_[dot]_com</b> | <a href="https://github.com/Dragoenix99cZar" target="_blank">GitHub</a> | <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank">LinkedIn</a></p>
 </footer>
 
 </body>
