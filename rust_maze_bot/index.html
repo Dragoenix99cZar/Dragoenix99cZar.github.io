@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maze Bot - Wasm Engine</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background-image: url(green_snake.jpg);
+            color:#e6c281;
+            text-shadow: 2px 3px 4px rgba(0,0,0,0.5);
+        }
+        #gameCanvas {
+            border: 2px solid #333;
+            background: #000;
+            cursor: pointer;
+            box-shadow: 0px 0px 28px rgba(0,0,0,0.5), 0px 6px 10px rgba(0,0,0,0.44);
+            border-radius: 10px;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 260px;
+        }
+        .info-panel {
+            background-color:#3e3f3fe3;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.5), 0px 6px 10px rgba(0,0,0,0.44);
+        }
+        .newWorldBtn{
+            background: rgb(0, 88, 88);
+            border: none;
+            outline: none;
+            padding: 10px 20px;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 5px;
+            box-shadow: 0 7px 14px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        }
+        .newWorldBtn:hover {
+            background: rgb(0, 108, 108);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        }
+        input[type=radio]{
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="gameCanvas" width="640" height="640"></canvas>
+
+    <div class="controls">
+        <div class="info-panel">
+            <h2>Maze Bot<br>(Rust + Wasm)</h2>
+        </div>
+
+        <div class="info-panel">
+            <!-- Changed Obstacle from Radio Buttons to Checkbox -->
+            <label for="chkObstacle">
+                <input type="checkbox" id="chkObstacle" checked>
+                <strong>Enable Obstacles</strong>
+            </label>
+            <br><br>
+            <label for="chkInstant">
+                <input type="checkbox" id="chkInstant">
+                <strong>Instant Path</strong>
+            </label>
+            <br><br>
+
+            <!-- Introduced Turn Penalty Checkbox -->
+            <label for="chkTurnPenalty">
+                <input type="checkbox" id="chkTurnPenalty">
+                <strong>Apply Turn Penalty</strong>
+            </label>
+            <br><br>
+
+            <label><strong>Algorithm:</strong></label><br>
+            <input type="radio" id="algoAStar" name="algo" value="astar" checked> <label for="algoAStar">A*</label>
+            <input type="radio" id="algoDijkstra" name="algo" value="dijkstra"> <label for="algoDijkstra">Dijkstra</label>
+        </div>
+
+        <div class="info-panel">
+            <p id="pathStats">Path Length: -<br>Explored Nodes: -</p>
+            <p id="coords">Start: -, Goal: -</p>
+        </div>
+
+        <button id="btnNewWorld" class="newWorldBtn">New World</button>
+    </div>
+
+    <!-- Import wasm-bindgen generated glue code -->
+    <script type="module">
+        import init, { MazeEngine } from './pkg/maze_bot_wasm.js';
+
+        const GRID_WIDTH = 45;
+        const GRID_HEIGHT = 28;
+        const TILE_SIZE = 32; // Reduced tile size so canvas fits on screen (800x800px)
+        const STEP_INTERVAL_MS = 8; // Control speed of search/path animation steps
+
+        // Pass batch count to update_animation_step (e.g. 5 steps per animation frame)
+        const STEPS_PER_FRAME = 1;
+
+        // Sprite Sheet Source Coordinates mapping to CellType enum values
+        const SPRITE_MAP = {
+            0: 0 * TILE_SIZE, // Empty
+            1: 1 * TILE_SIZE, // Wall
+            2: 2 * TILE_SIZE, // Start / Bot
+            3: 3 * TILE_SIZE, // Goal
+            4: 4 * TILE_SIZE, // Path
+            5: 5 * TILE_SIZE  // Visited / Explored
+        };
+
+        class App {
+            constructor(wasmModule) {
+                this.wasm = wasmModule;
+                this.canvas = document.getElementById('gameCanvas');
+                this.canvas.width = GRID_WIDTH * TILE_SIZE;   // 40 * 32 = 1280px
+                this.canvas.height = GRID_HEIGHT * TILE_SIZE;
+                this.ctx = this.canvas.getContext('2d');
+
+                this.engine = new MazeEngine(GRID_WIDTH, GRID_HEIGHT);
+
+                this.spritesheet = new Image();
+                // this.spritesheet.src = 'spritesheet.png';
+                this.spritesheet.src = 'spritesheet.png';
+                this.spritesheetLoaded = false;
+                this.spritesheet.onload = () => { this.spritesheetLoaded = true; };
+
+                this.lastStepTime = 0;
+
+                this.pathStatsText = document.getElementById('pathStats');
+                this.coordsText = document.getElementById('coords');
+                this.btnNewWorld = document.getElementById('btnNewWorld');
+
+                // Checkbox elements
+                this.chkObstacle = document.getElementById('chkObstacle');
+                this.chkTurnPenalty = document.getElementById('chkTurnPenalty');
+                this.chkInstant = document.getElementById('chkInstant');
+
+                this.animating = false;
+
+                this.bindEvents();
+                this.generateNewWorld();
+
+                requestAnimationFrame((t) => this.loop(t));
+            }
+
+            getObstacleDensity() {
+                return this.chkObstacle.checked ? 0.3 : 0.0;
+            }
+
+            getIsDijkstra() {
+                return document.getElementById('algoDijkstra').checked;
+            }
+
+            getIsTurnPenaltyEnabled() {
+                return this.chkTurnPenalty.checked;
+            }
+
+            getIsInstantEnabled() {
+                return this.chkInstant.checked;
+            }
+
+            generateNewWorld() {
+                const density = this.getObstacleDensity();
+                this.engine.generate_world(density);
+                this.runPathfinding();
+            }
+
+            // Helper method to route between compute_path and compute_path_instant
+            runPathfinding() {
+                const useDijkstra = this.getIsDijkstra();
+                const turnPenalty = this.getIsTurnPenaltyEnabled();
+                const isInstant = this.getIsInstantEnabled();
+
+                if (isInstant) {
+                    this.engine.compute_path_instant(useDijkstra, turnPenalty);
+                    // Render once immediately for instant mode
+                    this.render();
+                    this.updateUIInfo();
+                } else {
+                    this.engine.compute_path(useDijkstra, turnPenalty);
+                    this.updateUIInfo();
+                    // Start the animation loop if it isn't already running
+                    this.startLoop();
+                }
+
+                this.updateUIInfo();
+            }
+
+            bindEvents() {
+                this.btnNewWorld.addEventListener('click', () => {
+                    if (!this.engine.is_animating() || this.getIsInstantEnabled()) {
+                        this.generateNewWorld();
+                    }
+                });
+
+                this.chkInstant.addEventListener('change', () => {
+                    this.runPathfinding();
+                });
+
+                this.chkTurnPenalty.addEventListener('change', () => {
+                    if (!this.engine.is_animating() || this.getIsInstantEnabled()) {
+                        this.runPathfinding();
+                    }
+                });
+
+                this.canvas.addEventListener('click', (e) => {
+                    if (this.engine.is_animating() && !this.getIsInstantEnabled()) return;
+
+                    const rect = this.canvas.getBoundingClientRect();
+                    const x = Math.floor((e.clientX - rect.left) / TILE_SIZE);
+                    const y = Math.floor((e.clientY - rect.top) / TILE_SIZE);
+
+                    if (x >= 0 && x < GRID_WIDTH && y >= 0 && y < GRID_HEIGHT) {
+                        const isValid = this.engine.set_goal(x, y);
+
+                        if (!isValid) {
+                            console.warn("Invalid cell: Clicked position is a wall.");
+                            this.pathStatsText.innerText = "Invalid Cell: Wall selected!";
+                            return;
+                        }
+
+                        this.runPathfinding();
+                    }
+                });
+            }
+
+
+            updateUIInfo() {
+                this.pathStatsText.innerHTML =
+                    `Length: <strong>${this.engine.path_length()} steps</strong><br>` +
+                    `Explored Nodes: <strong>${this.engine.closed_set_count()}</strong>`;
+
+                this.coordsText.innerHTML =
+                    `Start: (${this.engine.start_x()}, ${this.engine.start_y()})<br>` +
+                    `Goal: (${this.engine.goal_x()}, ${this.engine.goal_y()})`;
+            }
+            startLoop() {
+                if (!this.animating) {
+                    this.animating = true;
+                    requestAnimationFrame((timestamp) => this.loop(timestamp));
+                }
+            }
+
+            loop(timestamp) {
+                // 1. Advance the pathfinding animation step
+                const isStillAnimating = this.engine.update_animation_step(1);
+
+                // 2. Render current frame state
+                this.render();
+
+                // 3. Continue loop ONLY if the engine phase is not Idle
+                if (isStillAnimating && this.engine.is_animating()) {
+                    requestAnimationFrame((t) => this.loop(t));
+                } else {
+                    this.animating = false; // Stop the render loop at AnimationPhase::Idle
+                }
+            }
+
+            render() {
+                if (!this.spritesheetLoaded) return;
+
+                // Clear Canvas background
+                this.ctx.fillStyle = '#000';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Zero-copy read from Wasm Memory Buffer
+                const ptr = this.engine.render_grid_ptr();
+                const gridView = new Uint8Array(
+                    this.wasm.memory.buffer,
+                    ptr,
+                    GRID_WIDTH * GRID_HEIGHT
+                );
+                // console.log("Grid:\n", gridView);
+
+                // Draw Grid Tiles
+                for (let y = 0; y < GRID_HEIGHT; y++) {
+                    for (let x = 0; x < GRID_WIDTH; x++) {
+                        const cellType = gridView[y * GRID_WIDTH + x];
+                        const spriteX = SPRITE_MAP[cellType] ?? 0;
+
+                        this.ctx.drawImage(
+                            this.spritesheet,
+                            spriteX, 0,               // Source X, Y
+                            TILE_SIZE, TILE_SIZE,     // Source Width, Height
+                            x * TILE_SIZE, y * TILE_SIZE, // Canvas Dest X, Y
+                            TILE_SIZE, TILE_SIZE      // Canvas Dest Width, Height
+                        );
+                    }
+                }
+            }
+        }
+        // Helper function to inspect all exported functions and properties
+        function inspectWasm(wasmInstance) {
+            console.group("WebAssembly Module Inspection");
+
+            // 1. Inspect Raw Wasm Instance Exports (memory, pointers, memory allocators)
+            console.group("1. Raw Wasm Instance Exports (wasmModule)");
+            console.log("Exported Keys:", Object.keys(wasmInstance));
+
+            // Log functions vs memory buffers
+            const functions = [];
+            for (const key in wasmInstance) {
+                if (typeof wasmInstance[key] === 'function') {
+                    functions.push(key);
+                }
+            }
+            console.log("Exported Functions:", functions);
+            console.log("Wasm Memory Buffer:", wasmInstance.memory?.buffer);
+            console.groupEnd();
+
+            // 2. Inspect high-level JS Class Wrapper Methods (MazeEngine)
+            console.group("2. MazeEngine Class Prototype Methods");
+            if (MazeEngine && MazeEngine.prototype) {
+                const methods = Object.getOwnPropertyNames(MazeEngine.prototype);
+                console.log("MazeEngine Methods:", methods);
+
+                // Print method names along with their expected parameter counts
+                const signatures = {};
+                methods.forEach(method => {
+                    if (typeof MazeEngine.prototype[method] === 'function') {
+                        signatures[method] = `${MazeEngine.prototype[method].length} argument(s)`;
+                    }
+                });
+                console.table(signatures);
+            }
+            console.groupEnd();
+
+            console.groupEnd();
+        }
+
+        // Initialize WebAssembly runtime and start the application
+        async function run() {
+            const wasmModule = await init();
+
+            // Inspect exports BEFORE instantiating App
+            // inspectWasm(wasmModule);
+
+            new App(wasmModule);
+        }
+
+        run();
+    </script>
+</body>
+</html>
