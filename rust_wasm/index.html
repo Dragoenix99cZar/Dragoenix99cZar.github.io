@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Wasm Calculator</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Rust Wasm Adder</h2>
+
+    <p id="greeting-output">Loading Wasm...</p>
+
+    <div class="input-group">
+        <label for="input-a">Input A:</label>
+        <input type="number" id="input-a" placeholder="Enter first number" value="0">
+    </div>
+
+    <div class="input-group">
+        <label for="input-b">Input B:</label>
+        <input type="number" id="input-b" placeholder="Enter second number" value="0">
+    </div>
+
+    <button id="calc-btn" disabled>Loading Wasm...</button>
+
+    <div id="result">Sum will appear here</div>
+    <hr>
+
+    <h2>Prime Factorizer (Rust + Wasm)</h2>
+
+    <div class="input-group">
+        <label for="number-input">Enter N (Integer):</label>
+        <input type="text" id="number-input" placeholder="e.g. 1234569" value="1234569">
+    </div>
+
+    <button id="factr-btn" disabled>Loading Wasm...</button>
+
+    <div id="factor">Result will appear here</div>
+
+    <script type="module">
+        // Import your Wasm bindings (use relative path './')
+        import * as wasm from './pkg/rust_wasm.js';
+
+        async function inspect() {
+            await wasm.default(); // Initialize the module
+
+            // Log all exported functions
+            console.log("Exported functions:", Object.keys(wasm));
+        }
+
+        inspect();
+
+        async function setup() {
+            // Initialize WebAssembly runtime
+            // await wasm.initSync();
+
+            // // Call the exported Rust functions directly from JS
+            // const greeting = greet("Aman");
+            // document.getElementById('greeting-output').textContent = greeting;
+
+            const btn = document.getElementById('calc-btn');
+            const inputA = document.getElementById('input-a');
+            const inputB = document.getElementById('input-b');
+            const resultDiv = document.getElementById('result');
+
+            // Enable button once Wasm is ready
+            btn.textContent = 'Calculate Sum';
+            btn.disabled = false;
+
+            // Handle button click event
+            btn.addEventListener('click', () => {
+                const a = parseInt(inputA.value, 10) || 0;
+                const b = parseInt(inputB.value, 10) || 0;
+
+                // Call the Rust function
+                const sum = wasm.add(a, b);
+
+                resultDiv.textContent = `Result from Rust: ${a} + ${b} = ${sum}`;
+            });
+
+            const fbtn = document.getElementById('factr-btn');
+            const inputN = document.getElementById('number-input');
+            const factorDiv = document.getElementById('factor');
+
+            fbtn.textContent = 'Find Prime Factors';
+            fbtn.disabled = false;
+
+            fbtn.addEventListener('click', () => {
+                // Parse standard JS Number
+                const n = parseInt(inputN.value, 10);
+
+                if (isNaN(n)) {
+                    resultDiv.textContent = 'Please enter a valid integer.';
+                    return;
+                }
+
+                // Call Rust directly with a standard number (returns standard JS Array)
+                const factors = wasm.prime_factors(n);
+
+                // Output formatted result
+                factorDiv.textContent = `${n} : [${factors.join(', ')}]`;
+            });
+        }
+
+        setup();
+    </script>
+</body>
+</html>
