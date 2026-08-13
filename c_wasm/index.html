@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>C Wasm Demo</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h2>C + Wasm</h2>
+
+    <div class="input-group">
+        <label for="input-a">Input A:</label>
+        <input type="number" id="input-a" placeholder="Enter first number" value="0">
+    </div>
+
+    <div class="input-group">
+        <label for="input-b">Input B:</label>
+        <input type="number" id="input-b" placeholder="Enter second number" value="0">
+    </div>
+
+    <button id="sum-btn" disabled>Loading Wasm...</button>
+
+    <div id="result">Sum will appear here</div>
+    <hr>
+
+    <h2>Check Prime</h2>
+
+    <div class="input-group">
+        <label for="number-input">Enter N (Integer):</label>
+        <input type="text" id="number-input" placeholder="e.g. 1234569" value="1234569">
+    </div>
+
+    <button id="factr-btn" disabled>Loading Wasm...</button>
+
+    <div id="factor">Result will appear here</div>
+
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>
