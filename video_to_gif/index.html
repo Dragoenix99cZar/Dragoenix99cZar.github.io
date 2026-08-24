@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rust Wasm GIF Exporter | Aman Karn</title>
+  
+  <!-- PWA Metadata & Manifest -->
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="icons/icon.svg">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --bg-input: #0f172a;
+      --border-color: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.25);
+      --success: #10b981;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 2.5rem 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1400px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .status-badge {
+      display: inline-block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem 1rem;
+      border-radius: 9999px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: var(--text-main);
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .file-upload-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-input);
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .file-upload-label:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.6rem 0.75rem;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    input[type="number"]:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    fieldset {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    legend {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: 0 0.4rem;
+    }
+
+    .crop-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .preview-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .media-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .media-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .preview-card-large .media-viewport {
+      min-height: 550px;
+      padding: 1rem;
+      background: var(--bg-input);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-color);
+    }
+
+    .preview-card-large canvas {
+      width: 100%;
+      height: 100%;
+      max-height: 600px;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+
+    video {
+      width: 100%;
+      max-height: 300px;
+      border-radius: 6px;
+      background: var(--bg-input);
+    }
+
+    .output-card {
+      background: var(--bg-card);
+      border: 1px solid var(--success);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .output-card img {
+      max-width: 100%;
+      border-radius: 6px;
+      background: var(--bg-input);
+    }
+
+    .download-btn {
+      display: inline-block;
+      text-align: center;
+      background: var(--success);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+    }
+
+    .install-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: transparent;
+      border: 1px solid #ff9c2b;
+      color: #ff9c2b;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.4rem 0.9rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: all 0.2s ease;
+      position: absolute;
+      right: 20%;
+      top: 5px;
+    }
+
+    .install-btn:hover {
+      background: #754814;
+      color: #ffffff;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header>
+      <img src="icons/icon.svg" style="height:100px;">
+      <h2>Local Video to GIF Converter - by Aman Karn</h2>
+      <button id="install-btn" class="install-btn" hidden>
+        📲 Install App
+      </button>
+      <div id="status" class="status-badge">Loading Wasm module...</div>
+    </header>
+
+    <div class="main-grid">
+      <div class="card controls">
+        <div class="card-title">Settings & Output</div>
+        
+        <div class="file-upload-wrapper">
+          <label for="videoInput" class="file-upload-label">
+            📁 Choose Video File
+          </label>
+          <input type="file" id="videoInput" accept="video/*" style="display:none;">
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label for="widthInput">Width (px)</label>
+            <input type="number" id="widthInput" value="480" min="50" max="1920">
+          </div>
+          <div class="field-group">
+            <label for="skipInput">Frame Step</label>
+            <select id="skipInput">
+              <option value="1">Keep all (1x)</option>
+              <option value="2" selected>Skip 2nd (2x speed)</option>
+              <option value="3">Skip 3rd (3x speed)</option>
+            </select>
+          </div>
+        </div>
+
+        <fieldset>
+          <legend>Pixel Crop</legend>
+          <div class="crop-grid">
+            <div class="field-group">
+              <label for="cropTop">Top</label>
+              <input type="number" id="cropTop" value="0" min="0">
+            </div>
+            <div class="field-group">
+              <label for="cropRight">Right</label>
+              <input type="number" id="cropRight" value="0" min="0">
+            </div>
+            <div class="field-group">
+              <label for="cropBottom">Bottom</label>
+              <input type="number" id="cropBottom" value="0" min="0">
+            </div>
+            <div class="field-group">
+              <label for="cropLeft">Left</label>
+              <input type="number" id="cropLeft" value="0" min="0">
+            </div>
+          </div>
+        </fieldset>
+
+        <button id="convertBtn" class="btn-primary" disabled>Convert to GIF</button>
+      </div>
+
+      <div style="display: flex; flex-direction: column;">
+        <div class="preview-grid">
+          <div class="media-card">
+            <h4>Original Video</h4>
+            <video id="videoPlayer" controls></video>
+          </div>
+
+          <div class="media-card preview-card-large">
+            <h4>Live Cropped Frame Preview</h4>
+            <div class="media-viewport">
+              <canvas id="cropPreviewCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div id="outputContainer" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="offscreenCanvas" style="display: none;"></canvas>
+
+  <script type="module">
+  import init, { GifExporter } from './pkg/gif_wasm_rust.js';
+
+  
+  // Register PWA Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => console.log('SW Registered:', reg.scope))
+        .catch(err => console.error('SW Registration Failed:', err));
+    });
+  }
+
+  const installBtn = document.getElementById("install-btn");
+
+  const videoInput = document.getElementById('videoInput');
+  const widthInput = document.getElementById('widthInput');
+  const skipInput = document.getElementById('skipInput');
+  const convertBtn = document.getElementById('convertBtn');
+  const videoPlayer = document.getElementById('videoPlayer');
+
+  const cropTop = document.getElementById('cropTop');
+  const cropRight = document.getElementById('cropRight');
+  const cropBottom = document.getElementById('cropBottom');
+  const cropLeft = document.getElementById('cropLeft');
+
+  const previewCanvas = document.getElementById('cropPreviewCanvas');
+  const previewCtx = previewCanvas.getContext('2d');
+  const offscreenCanvas = document.getElementById('offscreenCanvas');
+  const offscreenCtx = offscreenCanvas.getContext('2d');
+
+  const status = document.getElementById('status');
+  const outputContainer = document.getElementById('outputContainer');
+
+  await init();
+  status.innerText = "Wasm Ready! Pick a video file.";
+
+  // ---------- Install prompt ----------
+
+  let deferredInstallPrompt = null;
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    installBtn.hidden = false;
+  });
+  installBtn.addEventListener("click", async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    installBtn.hidden = true;
+    console.log("Install");
+  });
+  window.addEventListener("appinstalled", () => {
+    installBtn.hidden = true;
+  });
+
+
+  function getCropDimensions() {
+    const desiredOutputWidth = parseInt(widthInput.value, 10) || 480;
+    
+    const nativeW = videoPlayer.videoWidth || 1920;
+    const nativeH = videoPlayer.videoHeight || 1080;
+
+    const top = parseInt(cropTop.value, 10) || 0;
+    const right = parseInt(cropRight.value, 10) || 0;
+    const bottom = parseInt(cropBottom.value, 10) || 0;
+    const left = parseInt(cropLeft.value, 10) || 0;
+
+    const rawCropW = Math.max(1, nativeW - left - right);
+    const rawCropH = Math.max(1, nativeH - top - bottom);
+
+    // Enforce target output width (e.g. 480px) after crop
+    const cropW = desiredOutputWidth;
+    const cropH = Math.round(rawCropH * (desiredOutputWidth / rawCropW));
+
+    return { nativeW, nativeH, top, left, rawCropW, rawCropH, cropW, cropH };
+  }
+
+  function renderLivePreview() {
+    if (!videoPlayer.videoWidth) return;
+
+    const { nativeW, nativeH, top, left, rawCropW, rawCropH, cropW, cropH } = getCropDimensions();
+
+    previewCanvas.width = cropW;
+    previewCanvas.height = cropH;
+
+    offscreenCanvas.width = nativeW;
+    offscreenCanvas.height = nativeH;
+
+    offscreenCtx.drawImage(videoPlayer, 0, 0, nativeW, nativeH);
+    previewCtx.drawImage(offscreenCanvas, left, top, rawCropW, rawCropH, 0, 0, cropW, cropH);
+  }
+
+  videoInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      videoPlayer.src = URL.createObjectURL(file);
+      convertBtn.disabled = false;
+    }
+  });
+
+  videoPlayer.addEventListener('seeked', renderLivePreview);
+  videoPlayer.addEventListener('timeupdate', renderLivePreview);
+  videoPlayer.addEventListener('loadedmetadata', renderLivePreview);
+
+  [cropTop, cropRight, cropBottom, cropLeft, widthInput].forEach(input => {
+    input.addEventListener('input', renderLivePreview);
+  });
+
+  convertBtn.addEventListener('click', async () => {
+    convertBtn.disabled = true;
+    outputContainer.style.display = "none";
+    videoPlayer.pause();
+    status.innerText = "Processing cropped frames...";
+
+    const targetFps = 10;
+    const step = parseInt(skipInput.value, 10) || 1;
+    const frameInterval = (1 / targetFps) * step;
+
+    const { cropW, cropH } = getCropDimensions();
+
+    const exporter = new GifExporter(cropW, cropH, targetFps);
+
+    let currentTime = 0;
+    const duration = videoPlayer.duration;
+
+    while (currentTime < duration) {
+      videoPlayer.currentTime = currentTime;
+
+      await new Promise(resolve => {
+        const onSeek = () => {
+          videoPlayer.removeEventListener('seeked', onSeek);
+          resolve();
+        };
+        videoPlayer.addEventListener('seeked', onSeek);
+      });
+
+      renderLivePreview();
+
+      const imageData = previewCtx.getImageData(0, 0, cropW, cropH);
+      exporter.add_frame(imageData.data);
+
+      currentTime += frameInterval;
+      status.innerText = `Extracted frame at ${currentTime.toFixed(1)}s / ${duration.toFixed(1)}s`;
+    }
+
+    status.innerText = "Encoding GIF in Rust Wasm...";
+    await new Promise(r => setTimeout(r, 50));
+
+    try {
+      const gifBytes = exporter.encode_gif();
+      const blob = new Blob([gifBytes], { type: 'image/gif' });
+      const imgUrl = URL.createObjectURL(blob);
+
+      outputContainer.className = "output-card";
+      outputContainer.innerHTML = `
+        <h4>Generated GIF (${cropW}x${cropH})</h4>
+        <img src="${imgUrl}" alt="Generated GIF">
+        <a href="${imgUrl}" download="output.gif" class="download-btn">Download GIF (${(gifBytes.length / 1024).toFixed(1)} KB)</a>
+      `;
+      status.innerText = "Done!";
+      outputContainer.style.display = "flex";
+    } catch (err) {
+      status.innerText = "Encoding failed: " + err;
+    } finally {
+      convertBtn.disabled = false;
+    }
+  });
+  </script>
+</body>
+</html>
