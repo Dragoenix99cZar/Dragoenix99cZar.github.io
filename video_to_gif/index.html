@@ -3,19 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rust Wasm GIF Exporter | Aman Karn</title>
-  
-  <!-- PWA Metadata & Manifest -->
-  <link rel="manifest" href="./manifest.json">
-  <link rel="icon" href="icons/icon.svg">
-  <meta name="theme-color" content="#6366f1">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
+  <title>Rust Wasm GIF Exporter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
   <style>
     :root {
       --bg-main: #0f172a;
@@ -45,7 +36,7 @@
 
     .app-container {
       width: 100%;
-      max-width: 1400px;
+      max-width: 1100px;
       display: flex;
       flex-direction: column;
       gap: 2rem;
@@ -53,11 +44,13 @@
 
     header {
       text-align: center;
+      margin-bottom: 0.5rem;
     }
 
     header h2 {
       font-size: 2rem;
       font-weight: 700;
+      letter-spacing: -0.025em;
       background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -99,12 +92,24 @@
       font-weight: 600;
       margin-bottom: 1.25rem;
       color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
+    /* Controls Panel */
     .controls {
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
+    }
+
+    .file-upload-wrapper {
+      position: relative;
+    }
+
+    .file-upload-wrapper input[type="file"] {
+      display: none;
     }
 
     .file-upload-label {
@@ -157,6 +162,7 @@
       color: var(--text-main);
       font-size: 0.9rem;
       outline: none;
+      transition: border-color 0.2s;
     }
 
     input[type="number"]:focus, select:focus {
@@ -175,6 +181,7 @@
       font-size: 0.8rem;
       font-weight: 600;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: var(--accent);
       padding: 0 0.4rem;
     }
@@ -195,18 +202,21 @@
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
-
+      box-shadow: 0 4px 12px var(--accent-glow);
     }
 
     .btn-primary:hover:not(:disabled) {
       background: var(--accent-hover);
+      transform: translateY(-1px);
     }
 
     .btn-primary:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+      box-shadow: none;
     }
 
+    /* Preview Layout */
     .preview-grid {
       display: flex;
       flex-direction: column;
@@ -229,30 +239,50 @@
       color: var(--text-muted);
     }
 
-    .preview-card-large .media-viewport {
-      min-height: 550px;
-      padding: 1rem;
+    .media-viewport {
+      width: 100%;
+      max-height: 480px;
+      object-fit: contain;
+      image-rendering: crisp-edges;
+      /*min-height: 200px;*/
       background: var(--bg-input);
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       border: 1px solid var(--border-color);
     }
 
+    .preview-card-large .media-viewport {
+      min-height: 550px; /* Expands height significantly */
+      padding: 1rem;
+      background: var(--bg-input);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Scale canvas up to fill the viewport */
     .preview-card-large canvas {
       width: 100%;
       height: 100%;
       max-height: 600px;
       object-fit: contain;
-      image-rendering: pixelated;
+      image-rendering: pixelated; /* Keeps zoomed frame elements crisp */
     }
 
     video {
       width: 100%;
+      height: auto;
       max-height: 300px;
       border-radius: 6px;
-      background: var(--bg-input);
+    }
+
+    canvas {
+      max-width: 100%;
+      max-height: 300px;
+      object-fit: contain;
     }
 
     .output-card {
@@ -281,31 +311,11 @@
       font-weight: 600;
       padding: 0.75rem 1.25rem;
       border-radius: 8px;
+      transition: opacity 0.2s;
     }
 
-    .install-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: transparent;
-      border: 1px solid #ff9c2b;
-      color: #ff9c2b;
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 0.4rem 0.9rem;
-      border-radius: 9999px;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      transition: all 0.2s ease;
-      position: absolute;
-      right: 20%;
-      top: 5px;
-    }
-
-    .install-btn:hover {
-      background: #754814;
-      color: #ffffff;
-      box-shadow: 0 0 10px var(--accent-glow);
+    .download-btn:hover {
+      opacity: 0.9;
     }
   </style>
 </head>
@@ -314,28 +324,26 @@
   <div class="app-container">
     <header>
       <img src="icons/icon.svg" style="height:100px;">
-      <h2>Local Video to GIF Converter - by Aman Karn</h2>
-      <button id="install-btn" class="install-btn" hidden>
-        📲 Install App
-      </button>
+      <h2>Local Video to GIF Converter</h2>
       <div id="status" class="status-badge">Loading Wasm module...</div>
     </header>
 
     <div class="main-grid">
+      <!-- Controls Panel -->
       <div class="card controls">
         <div class="card-title">Settings & Output</div>
-        
+
         <div class="file-upload-wrapper">
           <label for="videoInput" class="file-upload-label">
             📁 Choose Video File
           </label>
-          <input type="file" id="videoInput" accept="video/*" style="display:none;">
+          <input type="file" id="videoInput" accept="video/*">
         </div>
 
         <div class="field-row">
           <div class="field-group">
             <label for="widthInput">Width (px)</label>
-            <input type="number" id="widthInput" value="480" min="50" max="1920">
+            <input type="number" id="widthInput" value="320" min="50" max="1920">
           </div>
           <div class="field-group">
             <label for="skipInput">Frame Step</label>
@@ -355,10 +363,6 @@
               <input type="number" id="cropTop" value="0" min="0">
             </div>
             <div class="field-group">
-              <label for="cropRight">Right</label>
-              <input type="number" id="cropRight" value="0" min="0">
-            </div>
-            <div class="field-group">
               <label for="cropBottom">Bottom</label>
               <input type="number" id="cropBottom" value="0" min="0">
             </div>
@@ -366,17 +370,24 @@
               <label for="cropLeft">Left</label>
               <input type="number" id="cropLeft" value="0" min="0">
             </div>
+            <div class="field-group">
+              <label for="cropRight">Right</label>
+              <input type="number" id="cropRight" value="0" min="0">
+            </div>
           </div>
         </fieldset>
 
         <button id="convertBtn" class="btn-primary" disabled>Convert to GIF</button>
       </div>
 
+      <!-- Live Previews -->
       <div style="display: flex; flex-direction: column;">
         <div class="preview-grid">
           <div class="media-card">
             <h4>Original Video</h4>
-            <video id="videoPlayer" controls></video>
+            <div class="media-viewport">
+              <video id="videoPlayer" controls></video>
+            </div>
           </div>
 
           <div class="media-card preview-card-large">
@@ -396,18 +407,6 @@
 
   <script type="module">
   import init, { GifExporter } from './pkg/gif_wasm_rust.js';
-
-  
-  // Register PWA Service Worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(reg => console.log('SW Registered:', reg.scope))
-        .catch(err => console.error('SW Registration Failed:', err));
-    });
-  }
-
-  const installBtn = document.getElementById("install-btn");
 
   const videoInput = document.getElementById('videoInput');
   const widthInput = document.getElementById('widthInput');
@@ -431,42 +430,24 @@
   await init();
   status.innerText = "Wasm Ready! Pick a video file.";
 
-  // ---------- Install prompt ----------
-
-  let deferredInstallPrompt = null;
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredInstallPrompt = e;
-    installBtn.hidden = false;
-  });
-  installBtn.addEventListener("click", async () => {
-    if (!deferredInstallPrompt) return;
-    deferredInstallPrompt.prompt();
-    await deferredInstallPrompt.userChoice;
-    deferredInstallPrompt = null;
-    installBtn.hidden = true;
-    console.log("Install");
-  });
-  window.addEventListener("appinstalled", () => {
-    installBtn.hidden = true;
-  });
-
-
   function getCropDimensions() {
     const desiredOutputWidth = parseInt(widthInput.value, 10) || 480;
-    
+
+    // 1. Get original video native dimensions
     const nativeW = videoPlayer.videoWidth || 1920;
     const nativeH = videoPlayer.videoHeight || 1080;
 
+    // 2. Read raw crop offsets (assuming offsets are given relative to scaled preview)
     const top = parseInt(cropTop.value, 10) || 0;
     const right = parseInt(cropRight.value, 10) || 0;
     const bottom = parseInt(cropBottom.value, 10) || 0;
     const left = parseInt(cropLeft.value, 10) || 0;
 
+    // 3. Calculate cropped dimensions at base scale
     const rawCropW = Math.max(1, nativeW - left - right);
     const rawCropH = Math.max(1, nativeH - top - bottom);
 
-    // Enforce target output width (e.g. 480px) after crop
+    // 4. Force output width to user input (480px) and scale height to preserve cropped aspect ratio
     const cropW = desiredOutputWidth;
     const cropH = Math.round(rawCropH * (desiredOutputWidth / rawCropW));
 
@@ -478,14 +459,21 @@
 
     const { nativeW, nativeH, top, left, rawCropW, rawCropH, cropW, cropH } = getCropDimensions();
 
+    // Set preview canvas directly to the enforced output size (480x...)
     previewCanvas.width = cropW;
     previewCanvas.height = cropH;
 
+    // Draw full native video to offscreen buffer
     offscreenCanvas.width = nativeW;
     offscreenCanvas.height = nativeH;
-
     offscreenCtx.drawImage(videoPlayer, 0, 0, nativeW, nativeH);
-    previewCtx.drawImage(offscreenCanvas, left, top, rawCropW, rawCropH, 0, 0, cropW, cropH);
+
+    // Crop from full-resolution offscreen canvas and scale into the 480px target preview canvas
+    previewCtx.drawImage(
+      offscreenCanvas,
+      left, top, rawCropW, rawCropH, // Source sub-rectangle
+      0, 0, cropW, cropH            // Destination scaled bounds (480px width)
+    );
   }
 
   videoInput.addEventListener('change', (e) => {
