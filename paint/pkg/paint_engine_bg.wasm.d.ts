@@ -1,0 +1,30 @@
+/* tslint:disable */
+/* eslint-disable */
+export const memory: WebAssembly.Memory;
+export const __wbg_imageprocessor_free: (a: number, b: number) => void;
+export const imageprocessor_canvas_to_image_x: (a: number, b: number, c: number) => number;
+export const imageprocessor_canvas_to_image_y: (a: number, b: number, c: number) => number;
+export const imageprocessor_clear_mask_selection: (a: number, b: number, c: number) => void;
+export const imageprocessor_clear_selection: (a: number, b: number, c: number, d: number, e: number) => void;
+export const imageprocessor_crop: (a: number, b: number, c: number, d: number, e: number) => void;
+export const imageprocessor_encode: (a: number, b: number, c: number) => [number, number, number, number];
+export const imageprocessor_flip_horizontal: (a: number) => void;
+export const imageprocessor_flip_vertical: (a: number) => void;
+export const imageprocessor_get_rgba_pixels: (a: number) => [number, number];
+export const imageprocessor_height: (a: number) => number;
+export const imageprocessor_new: (a: number, b: number) => [number, number, number];
+export const imageprocessor_pan: (a: number, b: number, c: number) => void;
+export const imageprocessor_render_viewport: (a: number, b: number, c: number) => [number, number];
+export const imageprocessor_reset_to_original: (a: number) => void;
+export const imageprocessor_reset_transform: (a: number) => void;
+export const imageprocessor_rotate_90: (a: number) => void;
+export const imageprocessor_select_color_range: (a: number, b: number, c: number, d: number) => [number, number];
+export const imageprocessor_select_flood_fill: (a: number, b: number, c: number, d: number) => [number, number];
+export const imageprocessor_set_zoom: (a: number, b: number) => void;
+export const imageprocessor_width: (a: number) => number;
+export const __wbindgen_externrefs: WebAssembly.Table;
+export const __wbindgen_malloc: (a: number, b: number) => number;
+export const __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
+export const __externref_table_dealloc: (a: number) => void;
+export const __wbindgen_free: (a: number, b: number, c: number) => void;
+export const __wbindgen_start: () => void;

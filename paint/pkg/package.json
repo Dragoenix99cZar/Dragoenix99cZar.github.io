@@ -1,0 +1,15 @@
+{
+  "name": "paint-engine",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "paint_engine_bg.wasm",
+    "paint_engine.js",
+    "paint_engine.d.ts"
+  ],
+  "main": "paint_engine.js",
+  "types": "paint_engine.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
