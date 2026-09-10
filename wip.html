@@ -7,123 +7,175 @@
   <style>
 
     :root {
-        --bg-color: #0d1117;        /* Very dark charcoal */
-        --card-bg: #161b22;        /* Dark gray card */
-        --card-border: #30363d;    /* Subtle gray border */
-        --primary-color: #3fb950;   /* Bright emerald green */
-        --text-main: #f0f6fc;      /* Bright white */
-        --text-muted: #8b949e;     /* Muted gray */
-        --accent-color: #238636;    /* Deep green */
-        --tag-bg: #0d1117;         /* Matching dark tag bg */
-    }
+        /* High-Contrast Dark Neo-Brutalist Palette */
+        --bg-color: #0d0f12;         /* Dark background */
+        --card-bg: #16191e;         /* Stark dark card surface */
+        --card-border: #000000;     /* Pure black border */
+        --primary-color: #ff3366;   /* Hot pink accent */
+        --text-main: #ffffff;      /* Pure white text */
+        --text-muted: #a0a6b2;     /* Readable gray */
+        --accent-color: #00ff66;    /* Electric green accent */
+        --tag-bg: #1a161e8f;         /* Neon yellow tags */
+        --tag-text: #ff6a33;       /* High-contrast text on yellow */
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+        /* Hard Brutalist Shadows for Dark Theme */
+        --shadow-hard: 4px 4px 0px #0000008c;
+        --shadow-hard-lg: 6px 6px 0px #0000008c;
+        --shadow-active: 2px 2px 0px #0000008c;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      line-height: 1.6;
+        font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    main {
+      max-width: 1000px; /* Reduced from 1080px for better readability */
+      margin: 0 auto;
+      padding: 40px 20px;
     }
 
     header {
-      background: #020617;
-      padding: 60px 20px;
+      background: #12151a;
+      padding: 50px 20px;
       text-align: center;
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 4px solid #000000;
     }
 
     header h1 {
       font-size: 2.75rem;
-      font-weight: 800;
-      letter-spacing: -0.025em;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
       margin-bottom: 8px;
     }
 
     header .subtitle {
-      font-size: 1.25rem;
-      color: var(--primary-color);
-      font-weight: 600;
+      font-size: 1.15rem;
+      color: var(--accent-color);
+      font-weight: 800;
+      text-transform: uppercase;
       margin-bottom: 12px;
     }
 
-    header .tagline {
-      font-size: 1rem;
-      color: var(--text-muted);
-      max-width: 650px;
-      margin: 0 auto 24px auto;
-    }
-
-    .cta-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
+    /* Hard-Edged Brutalist Buttons */
     .btn {
       display: inline-block;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.9rem;
+      padding: 10px 18px;
+      border-radius: 0; /* Sharp edges */
+      font-weight: 800;
+      font-size: 0.85rem;
       text-decoration: none;
-      transition: all 0.2s ease;
+      text-transform: uppercase;
+      border: 3px solid #000000;
+      box-shadow: var(--shadow-hard);
+      transition: all 0.1s ease-out;
     }
 
     .btn-primary {
-      background-color: var(--accent-color);
+      background-color: var(--primary-color);
       color: #ffffff;
     }
 
     .btn-primary:hover {
-      background-color: var(--primary-color);
-      color: var(--bg-color);
+      background-color: var(--accent-color);
+      color: #000000;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #000000;
     }
 
     .btn-outline {
-      border: 1px solid var(--card-border);
       color: var(--text-main);
       background-color: var(--card-bg);
     }
 
     .btn-outline:hover {
-      border-color: var(--primary-color);
-      color: var(--primary-color);
+      background-color: var(--tag-bg);
+      color: var(--accent-color);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #000000;
     }
 
-    main {
-      max-width: 1080px;
-      margin: auto;
-      padding: 50px 20px;
+    .btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: var(--shadow-active);
     }
 
-    section {
-      margin-bottom: 50px;
+    /* Flat Card Styling */
+    .project-card, .skill-category, .experiment-card {
+      background-color: var(--card-bg);
+      border: 3px solid #000000;
+      border-radius: 0;
+      box-shadow: var(--shadow-hard-lg);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
+    .experiment-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0px #000000;
+    }
+
+    .project-card h3, .skill-category h3, .experiment-card-body h3 {
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    /* Tags with Hard Flat Borders */
+    .tag {
+      background-color: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 0;
+      border: 2px solid #000000;
+      font-weight: 800;
+      box-shadow: 2px 2px 0px #000000;
+    }
+
+    /* Section Dividers */
     h2 {
       font-size: 1.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
       color: var(--text-main);
-      border-bottom: 2px solid var(--card-border);
+      border-bottom: 3px solid #000000;
       padding-bottom: 8px;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    h2 span {
+        padding-left: 15px;
     }
 
     h2::before {
       content: "";
       display: inline-block;
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       background-color: var(--primary-color);
-      border-radius: 2px;
+      border: 2px solid #000000;
+      border-radius: 0;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1fr; /* Single column stack for clean narrow flow */
+      gap: 20px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .experiment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
     }
 
     p {
@@ -242,6 +294,7 @@
 
     .skill-category ul {
       list-style: none;
+      padding-left: 0px;
     }
 
     .skill-category li {
@@ -347,12 +400,12 @@
   <h1>Aman Karn</h1>
   <div class="subtitle">Senior Game & Software Engineer</div>
   <div class="tagline">
-    Architecting scalable 2D/3D games, XR (VR/AR/MR) applications, and real-time simulations across Unity3D and Unreal Engine 5.
+    <h3>Architecting scalable 2D/3D games, XR (VR/AR/MR) applications, and real-time simulations across Unity3D and Unreal Engine 5.</h3>
   </div>
   <div class="cta-buttons">
-      <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank" class="btn btn-primary">LinkedIn Profile</a>
+      <span class="btn btn-primary">For CV: ak99professional_[at]_gmail_[dot]_com</span>
       <a href="https://github.com/Dragoenix99cZar" target="_blank" class="btn btn-outline">GitHub Profile</a>
-      <span class="btn btn-outline">For CV: ak99professional_[at]_gmail_[dot]_com</span>
+      <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank" class="btn btn-outline">LinkedIn Profile</a>
     </div>
 </header>
 
@@ -360,15 +413,15 @@
 
   <!-- About Section -->
   <section id="about">
-    <h2>Professional Overview</h2>
+      <h2><span>Professional Overview</span></h2>
     <p>
-      Senior Game & Software Engineer with over 5 years of professional experience developing commercial titles, cross-platform spatial applications, and technical simulations. Specialized in deep Unity3D architecture (C#) and Unreal Engine 5 development (C++ / Blueprints), having shipped and contributed to over 30 interactive applications across PC, Mobile, and XR platforms.
+      Senior Game & Software Engineer with over <strong>Five</strong> years of professional experience developing commercial titles, cross-platform spatial applications, and technical simulations. Specialized in deep Unity3D architecture (C#) and Unreal Engine 5 development (C++ / Blueprints), having shipped and contributed to over 30 interactive applications across PC, Mobile, and XR platforms.
     </p>
   </section>
 
   <!-- Featured Professional Projects -->
   <section id="featured-projects">
-    <h2>Featured Work & Case Studies</h2>
+    <h2><span>Featured Work & Case Studies</span></h2>
     <div class="project-grid">
 
       <!-- Sandbox Game -->
@@ -399,7 +452,7 @@
         <div>
           <h3>VR Board Game Suite</h3>
           <div class="role">Unity Game Developer | Multi-Platform XR</div>
-          <p>Adapted 9 classic 2D board games into spatial 3D/VR experiences, re-engineering gameplay mechanics, input systems, and spatial UI for immersive headsets.</p>
+          <p>Adapted <b>Nine</b> classic 2D board games into spatial 3D/VR experiences, re-engineering gameplay mechanics, input systems, and spatial UI for immersive headsets.</p>
           <ul>
             <li>Converted titles including Snakes & Ladders, Tic-Tac-Toe, Jenga, Bingo, Call Break, Gin Rummy, Ludo, Mancala, and Backgammon.</li>
             <li>Optimized performance and framerates across low-power and standalone headsets.</li>
@@ -421,7 +474,7 @@
             <a href="https://drive.google.com/file/d/1QykkooHNzNZPC3kOEOfgPEPerkC1uni1/view" target="_blank">Magic Leap Showreel →</a>
             <a href="https://sidequestvr.com/app/11580/first-resort-early-access" target="_blank">First Resort →</a>
             <a href="https://cdn.sidequestvr.com/file/2976727/39035446_1269829243591406_491985611762102591_n.mp4" target="_blank">First Resort Video →</a>
-            
+
           </div> -->
         </div>
       </div>
@@ -476,7 +529,7 @@
 
   <!-- Technical Taxonomy Section -->
   <section id="skills">
-    <h2>Technical Capabilities</h2>
+  <h2><span>Technical Capabilities</span></h2>
     <div class="skills-grid">
       <div class="skill-category">
         <h3>Game Engines</h3>
@@ -523,7 +576,7 @@
 
   <!-- Visual Experiments & Prototypes Section -->
     <section id="experiments">
-      <h2>Prototypes & Technical Experiments</h2>
+      <h2><span>Prototypes & Technical Experiments</span></h2>
       <p>A collection of minor technical explorations, algorithmic studies, and personal gameplay prototypes:</p>
 
       <div class="experiment-grid">
@@ -616,7 +669,7 @@
             <p>PWA for Basic Utility Tools like color-picker, qr-code, word-count, bim, number-system.</p>
             <a href="PWA-tools/" target="_blank">Launch Experiment →</a>
           </div>
-        </div>        
+        </div>
 
         <!-- Video2Gif Tools -->
         <div class="experiment-card">
@@ -636,13 +689,13 @@
             <p>A Rust/WASM lightweight, ultra-fast web-based image editor inspired by MS Paint and Paint.NET.</p>
             <a href="paint/" target="_blank">Launch Experiment →</a>
           </div>
-        </div>        
+        </div>
       </div>
     </section>
 
     <!-- Publications Section -->
       <section id="publications">
-        <h2>Research & Publications</h2>
+        <h2><span>Research & Publications</span></h2>
         <div class="project-card">
           <div>
             <h3>Statistic based Sentiment Analysis of Social Media Data</h3>
