@@ -1,0 +1,15 @@
+{
+  "name": "py-in-browser",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "py_in_browser_bg.wasm",
+    "py_in_browser.js",
+    "py_in_browser.d.ts"
+  ],
+  "main": "py_in_browser.js",
+  "types": "py_in_browser.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
