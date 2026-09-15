@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RustPython in the Browser</title>
+<style>
+  :root {
+    --bg: #1e1e1e;
+    --panel: #101010;
+    --border: #3c3c3c;
+    --text: #9efff2;
+    --accent: #0e7490;
+    --accent-hover: #0891b2;
+    --err: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  header h1 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: 600;
+  }
+  #status {
+    font-size: 13px;
+    color: #9ca3af;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    min-width: 0;
+  }
+  .panel-header {
+    padding: 8px 14px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #9ca3af;
+    border-bottom: 1px solid var(--border);
+  }
+  .editor-wrap {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+  }
+  #editor,
+  #editor-backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: none;
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 14px;
+    tab-size: 4;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow: auto;
+  }
+  #editor-backdrop {
+    z-index: 1;
+    color: var(--text);
+    background: var(--panel);
+    pointer-events: none;
+    /* pre elements collapse a trailing blank line by default; the
+       textarea doesn't, so this keeps the two in sync visually. */
+    overflow-wrap: break-word;
+  }
+  .ws-dot {
+    opacity: 0.5;
+  }
+  #editor {
+    z-index: 2;
+    resize: none;
+    outline: none;
+    background: transparent;
+    color: transparent;
+    caret-color: var(--text);
+  }
+  #editor::selection {
+    background: rgba(14, 116, 144, 0.45);
+    color: transparent;
+  }
+  #output {
+    flex: 1;
+    margin: 0;
+    padding: 14px;
+    overflow: auto;
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #52c3ff;
+  }
+  #output.error { color: var(--err); }
+  footer {
+    padding: 10px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  button:hover:not(:disabled) { background: var(--accent-hover); }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .hint {
+    font-size: 12px;
+    color: #6b7280;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>RustPython &middot; WASM</h1>
+  <span id="status">Loading interpreter&hellip;</span>
+</header>
+
+<main>
+  <div class="panel">
+    <div class="panel-header">Python source</div>
+    <div class="editor-wrap">
+      <pre id="editor-backdrop" aria-hidden="true"></pre>
+      <textarea id="editor" spellcheck="false">print("Hello from RustPython running in your browser!")
+
+for i in range(5):
+    print(i, i * i)</textarea>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-header">Output</div>
+    <pre id="output"></pre>
+  </div>
+</main>
+
+<footer>
+  <button id="run" disabled>Run (Ctrl+Enter)</button>
+  <span class="hint">Loads <code>./pkg/py_in_browser.js</code> — rebuild with <code>wasm-pack build --target web</code> if you rename the crate.</span>
+</footer>
+
+<script type="module">
+  // Adjust this import if your crate name (and therefore the generated
+  // file name) is different from "py_in_browser".
+  import init, { run_python } from "./pkg/py_in_browser.js";
+
+  const statusEl = document.getElementById("status");
+  const runBtn = document.getElementById("run");
+  const editor = document.getElementById("editor");
+  const backdrop = document.getElementById("editor-backdrop");
+  const output = document.getElementById("output");
+
+  function escapeHtml(text) {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function renderBackdrop() {
+    // Escape first, THEN swap spaces for the styled dot span — doing
+    // it the other way round would let the escaping step mangle the
+    // span's own angle brackets.
+    let html = escapeHtml(editor.value).replace(/ /g, '<span class="ws-dot">&#8226;</span>');
+    // A trailing newline needs a trailing blank line to render at the
+    // same height in a <pre> as it takes up in a <textarea>.
+    if (html.endsWith("\n")) html += " ";
+    backdrop.innerHTML = html;
+    syncScroll();
+  }
+
+  function syncScroll() {
+    backdrop.scrollTop = editor.scrollTop;
+    backdrop.scrollLeft = editor.scrollLeft;
+  }
+
+  editor.addEventListener("input", renderBackdrop);
+  editor.addEventListener("scroll", syncScroll);
+  renderBackdrop(); // render the initial sample code immediately
+
+  function setOutput(text, isError) {
+    output.textContent = text;
+    output.classList.toggle("error", !!isError);
+  }
+
+  function runCode() {
+    const code = editor.value;
+    const start = performance.now();
+    try {
+      const result = run_python(code);
+      const ms = (performance.now() - start).toFixed(1);
+      // run_python returns either captured stdout/"ok", or a formatted
+      // Python traceback string on error — treat non-empty tracebacks
+      // as errors for styling purposes.
+      const looksLikeError = /Traceback|Error:/.test(result);
+      setOutput(result || `(no output) — ran in ${ms}ms`, looksLikeError);
+    } catch (e) {
+      setOutput(`JS/WASM panic: ${e}`, true);
+    }
+  }
+
+  async function main() {
+    try {
+      await init();
+      statusEl.textContent = "Ready";
+      runBtn.disabled = false;
+    } catch (e) {
+      statusEl.textContent = "Failed to load";
+      setOutput(`Failed to initialize the wasm module:\n${e}`, true);
+      console.error(e);
+      return;
+    }
+
+    runBtn.addEventListener("click", runCode);
+    editor.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        runCode();
+      }
+    });
+  }
+
+  main();
+</script>
+
+</body>
+</html>
