@@ -7,172 +7,123 @@
   <style>
 
     :root {
-        /* High-Contrast Dark Neo-Brutalist Palette */
-        --bg-color: #0d0f12;         /* Dark background */
-        --card-bg: #16191e;         /* Stark dark card surface */
-        --card-border: #000000;     /* Pure black border */
-        --primary-color: #00ff66;   /* Hot pink accent */
-        --text-main: #ffffff;      /* Pure white text */
-        --text-muted: #e6f3ff;     /* Readable gray */
-        --accent-color: #00ff66;    /* Electric green accent */
-        --tag-bg: #1a161e8f;         /* Neon yellow tags */
-        --tag-text: #ff6a33;       /* High-contrast text on yellow */
-
-        /* Hard Brutalist Shadows for Dark Theme */
-        --shadow-hard: 4px 4px 0px #0000008c;
-        --shadow-hard-lg: 6px 6px 0px #0000008c;
-        --shadow-active: 2px 2px 0px #0000008c;
+        --bg-color: #0d1117;        /* Very dark charcoal */
+        --card-bg: #161b22;        /* Dark gray card */
+        --card-border: #30363d;    /* Subtle gray border */
+        --primary-color: #3fb950;   /* Bright emerald green */
+        --text-main: #f0f6fc;      /* Bright white */
+        --text-muted: #8b949e;     /* Muted gray */
+        --accent-color: #238636;    /* Deep green */
+        --tag-bg: #0d1117;         /* Matching dark tag bg */
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-        font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-main);
-        line-height: 1.5;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-    }
-
-    main {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 40px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
     }
 
     header {
-      background: #12151a;
-      padding: 40px 16px;
+      background: #020617;
+      padding: 60px 20px;
       text-align: center;
-      border-bottom: 4px solid #000000;
-      margin: 10px 10px;
-      border-radius: 10px;
+      border-bottom: 1px solid var(--card-border);
     }
 
     header h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: -0.03em;
-      color: var(--text-main);
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
       margin-bottom: 8px;
     }
 
     header .subtitle {
-      font-size: clamp(1rem, 3vw, 1.15rem);
-      color: var(--accent-color);
-      font-weight: 800;
-      text-transform: uppercase;
+      font-size: 1.25rem;
+      color: var(--primary-color);
+      font-weight: 600;
       margin-bottom: 12px;
     }
 
     header .tagline {
-      max-width: 700px;
-      margin: 0 auto 20px auto;
-      font-size: 0.95rem;
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 24px auto;
     }
 
     .cta-buttons {
       display: flex;
-      justify-content: center; 
-      align-items: center;     
-      gap: 12px;               
+      justify-content: center;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
-    /* Hard-Edged Brutalist Buttons */
     .btn {
       display: inline-block;
-      padding: 10px 18px;
-      border-radius: 0;
-      font-weight: 800;
-      font-size: 0.85rem;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
       text-decoration: none;
-      text-transform: uppercase;
-      border: 3px solid #000000;
-      box-shadow: var(--shadow-hard);
-      transition: all 0.1s ease-out;
-      word-break: break-word;
+      transition: all 0.2s ease;
     }
 
     .btn-primary {
-      background-color: var(--primary-color);
-      color: #180e0e;
+      background-color: var(--accent-color);
+      color: #ffffff;
     }
 
     .btn-primary:hover {
-      background-color: var(--accent-color);
-      color: #000000;
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #000000;
+      background-color: var(--primary-color);
+      color: var(--bg-color);
     }
 
     .btn-outline {
-      color: var(--primary-color);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
       background-color: var(--card-bg);
     }
 
     .btn-outline:hover {
-      background-color: var(--tag-bg);
-      color: var(--accent-color);
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #000000;
+      border-color: var(--primary-color);
+      color: var(--primary-color);
     }
 
-    .btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: var(--shadow-active);
+    main {
+      max-width: 1080px;
+      margin: auto;
+      padding: 50px 20px;
     }
 
-    /* Flat Card Styling */
-    .project-card, .skill-category, .experiment-card {
-      background-color: var(--card-bg);
-      border: 3px solid #000000;
-      border-radius: 0;
-      box-shadow: var(--shadow-hard-lg);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    section {
+      margin-bottom: 50px;
     }
 
-    .experiment-card:hover {
-      transform: translate(-3px, -3px);
-      box-shadow: 9px 9px 0px #000000;
-    }
-
-    .project-card h3, .skill-category h3, .experiment-card-body h3 {
-        font-weight: 800;
-        text-transform: uppercase;
-    }
-
-    /* Section Dividers */
     h2 {
-      font-size: 1.35rem;
-      font-weight: 900;
-      text-transform: uppercase;
+      font-size: 1.5rem;
       color: var(--text-main);
-      border-bottom: 3px solid #000000;
+      border-bottom: 2px solid var(--card-border);
       padding-bottom: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    h2 span {
-        padding-left: 5px;
-    }
-
     h2::before {
       content: "";
       display: inline-block;
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       background-color: var(--primary-color);
-      border: 2px solid #000000;
-      flex-shrink: 0;
+      border-radius: 2px;
     }
 
     p {
@@ -183,22 +134,28 @@
     /* Grid Layout for Featured Projects */
     .project-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 63px;
+      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 24px;
+    }
+
+    @media (max-width: 560px) {
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .project-card {
       background-color: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      padding: 20px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
     .project-card h3 {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       color: var(--text-main);
       margin-bottom: 8px;
     }
@@ -218,7 +175,7 @@
     }
 
     .project-card ul {
-      padding-left: 20px;
+      margin-left: 20px;
       margin-bottom: 16px;
       color: var(--text-muted);
       font-size: 0.9rem;
@@ -248,7 +205,6 @@
 
     .card-links {
       display: flex;
-      flex-wrap: wrap;
       gap: 12px;
       margin-top: auto;
     }
@@ -286,8 +242,6 @@
 
     .skill-category ul {
       list-style: none;
-      padding-left: 0px;
-      margin: 0;
     }
 
     .skill-category li {
@@ -300,7 +254,7 @@
     .experiment-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 15px;
+      gap: 20px;
     }
 
     .experiment-card {
@@ -318,7 +272,6 @@
       border-color: var(--primary-color);
     }
 
-    .experiment-card img, 
     .experiment-card video {
       width: 100%;
       height: 140px;
@@ -375,74 +328,36 @@
     footer a:hover {
       text-decoration: underline;
     }
-
-    #canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: -1;        
-        pointer-events: none; 
-        object-fit: cover;  
-    }
-
-    .copy-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        background-color: var(--card-bg);
-        border: 3px solid #000000;
-        box-shadow: var(--shadow-hard);
-        padding: 10px 16px;
-        max-width: 500px;
-        margin: 20px auto;
-        flex-wrap: wrap;
-    }
-    
-    #copy-btn {
-        color: var(--primary-color);
-        font-weight: bold;
-        font-size: 0.9rem;
-        word-break: break-all;
-        font-family: monospace;
-        padding: 15px 20px;
-        margin-top: 10px;
-        cursor: pointer;
-    }
   </style>
 </head>
 <body>
-<canvas id="canvas"></canvas>
 
 <header>
   <h1>Aman Karn</h1>
   <div class="subtitle">Senior Game & Software Engineer</div>
   <div class="tagline">
-    <h3>Architecting scalable 2D/3D games, XR (VR/AR/MR) applications, and real-time simulations across Unity3D and Unreal Engine 5.</h3>
+    Architecting scalable 2D/3D games, XR (VR/AR/MR) applications, and real-time simulations across Unity3D and Unreal Engine 5.
   </div>
   <div class="cta-buttons">
-      <span class="btn btn-primary">For CV: ak99professional_[at]_gmail_[dot]_com</span>
+      <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank" class="btn btn-primary">LinkedIn Profile</a>
       <a href="https://github.com/Dragoenix99cZar" target="_blank" class="btn btn-outline">GitHub Profile</a>
-      <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank" class="btn btn-outline">LinkedIn Profile</a>
-  </div>
-    <span id="copy-btn" class="btn btn-outline" onclick="copyToClipboard()">curl https://dragoenix99czar.github.io/ak</span>
+      <span class="btn btn-outline">For CV: ak99professional_[at]_gmail_[dot]_com</span>
+    </div>
 </header>
 
 <main>
 
   <!-- About Section -->
   <section id="about">
-      <h2><span>Professional Overview</span></h2>
+    <h2>Professional Overview</h2>
     <p>
-      Senior Game & Software Engineer with over <strong>Five</strong> years of professional experience developing commercial titles, cross-platform spatial applications, and technical simulations. Specialized in deep Unity3D architecture (C#) and Unreal Engine 5 development (C++ / Blueprints), having shipped and contributed to over 30 interactive applications across PC, Mobile, and XR platforms.
+      Senior Game & Software Engineer with over 5 years of professional experience developing commercial titles, cross-platform spatial applications, and technical simulations. Specialized in deep Unity3D architecture (C#) and Unreal Engine 5 development (C++ / Blueprints), having shipped and contributed to over 30 interactive applications across PC, Mobile, and XR platforms.
     </p>
   </section>
 
   <!-- Featured Professional Projects -->
   <section id="featured-projects">
-    <h2><span>Featured Work & Case Studies</span></h2>
+    <h2>Featured Work & Case Studies</h2>
     <div class="project-grid">
 
       <!-- Sandbox Game -->
@@ -473,7 +388,7 @@
         <div>
           <h3>VR Board Game Suite</h3>
           <div class="role">Unity Game Developer | Multi-Platform XR</div>
-          <p>Adapted <b>Nine</b> classic 2D board games into spatial 3D/VR experiences, re-engineering gameplay mechanics, input systems, and spatial UI for immersive headsets.</p>
+          <p>Adapted 9 classic 2D board games into spatial 3D/VR experiences, re-engineering gameplay mechanics, input systems, and spatial UI for immersive headsets.</p>
           <ul>
             <li>Converted titles including Snakes & Ladders, Tic-Tac-Toe, Jenga, Bingo, Call Break, Gin Rummy, Ludo, Mancala, and Backgammon.</li>
             <li>Optimized performance and framerates across low-power and standalone headsets.</li>
@@ -488,16 +403,16 @@
             <span class="tag">Magic Leap One</span>
             <span class="tag">Spatial UI</span>
           </div>
-        </div>
-        <!-- <div class="card-links">
+          <!-- <div class="card-links">
             <a href="https://drive.google.com/file/d/1CMe6diSIvcyHNH_Xnu1gr7QtZbVd-Kg3/view" target="_blank">Brain Games Video →</a>
             <a href="https://home.paracosma.com/assets/vr-development/casual-games/video/CasualGames.mp4" target="_blank">Paracosma Brain Games Video →</a>
             <a href="https://home.paracosma.com/vr-development" target="_blank">Paracosma Works →</a>
             <a href="https://drive.google.com/file/d/1QykkooHNzNZPC3kOEOfgPEPerkC1uni1/view" target="_blank">Magic Leap Showreel →</a>
             <a href="https://sidequestvr.com/app/11580/first-resort-early-access" target="_blank">First Resort →</a>
             <a href="https://cdn.sidequestvr.com/file/2976727/39035446_1269829243591406_491985611762102591_n.mp4" target="_blank">First Resort Video →</a>
-
-        </div> -->
+            
+          </div> -->
+        </div>
       </div>
 
       <!-- Medical VR -->
@@ -550,7 +465,7 @@
 
   <!-- Technical Taxonomy Section -->
   <section id="skills">
-  <h2><span>Technical Capabilities</span></h2>
+    <h2>Technical Capabilities</h2>
     <div class="skills-grid">
       <div class="skill-category">
         <h3>Game Engines</h3>
@@ -597,7 +512,7 @@
 
   <!-- Visual Experiments & Prototypes Section -->
     <section id="experiments">
-      <h2><span>Prototypes & Technical Experiments</span></h2>
+      <h2>Prototypes & Technical Experiments</h2>
       <p>A collection of minor technical explorations, algorithmic studies, and personal gameplay prototypes:</p>
 
       <div class="experiment-grid">
@@ -677,7 +592,7 @@
           <video src="images/unit-convert.webm" autoplay muted loop playsinline></video>
           <div class="experiment-card-body">
             <h3>Nepali Units Converter</h3>
-            <p>PWA for Nepali units conversion like length, mass, volume, etc.</p>
+            <p>PWA for Nepali units conversion like length, mass, volumm, etc.</p>
             <a href="unit_converter_pwa/" target="_blank">Launch Experiment →</a>
           </div>
         </div>
@@ -690,7 +605,7 @@
             <p>PWA for Basic Utility Tools like color-picker, qr-code, word-count, bim, number-system.</p>
             <a href="PWA-tools/" target="_blank">Launch Experiment →</a>
           </div>
-        </div>
+        </div>        
         
         <!-- 10. Video2Gif Tools -->
         <div class="experiment-card">
@@ -711,8 +626,8 @@
             <a href="paint/" target="_blank">Launch Experiment →</a>
           </div>
         </div>
-        
-        <!-- 12. Python Web -->
+
+        <!-- 12. Paint Engine -->
         <div class="experiment-card">
           <video src="images/python-web.webm" autoplay muted loop playsinline></video>
           <div class="experiment-card-body">
@@ -726,7 +641,7 @@
 
     <!-- Publications Section -->
       <section id="publications">
-        <h2><span>Research & Publications</span></h2>
+        <h2>Research & Publications</h2>
         <div class="project-card">
           <div>
             <h3>Statistic based Sentiment Analysis of Social Media Data</h3>
@@ -740,14 +655,14 @@
             <details style="margin-top: 12px; font-size: 0.8rem; color: var(--text-muted);">
               <summary style="cursor: pointer; color: var(--primary-color); font-weight: 600;">Show BibTeX Citation</summary>
               <pre style="background-color: var(--tag-bg); border: 1px solid var(--card-border); padding: 12px; border-radius: 6px; margin-top: 8px; overflow-x: auto; color: var(--text-main); font-family: monospace;">
-@article{karn2018statistic,
-    title={Statistic based Sentiment Analysis of Social Media Data},
-    author={Karn, Aman and Shrestha, Anish and Pudasaini, Anil and Mahara, Binay and Jaiswal, Anku},
-    journal={Int. Res. J. Innov. Eng. Technol.},
-    volume={2},
-    pages={28--32},
-    year={2018}
-}</pre>
+    @article{karn2018statistic,
+      title={Statistic based Sentiment Analysis of Social Media Data},
+      author={Karn, Aman and Shrestha, Anish and Pudasaini, Anil and Mahara, Binay and Jaiswal, Anku},
+      journal={Int. Res. J. Innov. Eng. Technol.},
+      volume={2},
+      pages={28--32},
+      year={2018}
+    }</pre>
             </details>
           </div>
           <div>
@@ -769,96 +684,8 @@
 
 <footer>
   <p>© Aman Karn | Senior Game & Software Engineer</p>
-  <p>Email: <b>ak99professional_[at]_gmail_[dot]_com</b> | <a href="https://github.com/Dragoenix99cZar" target="_blank">GitHub</a> | <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank">LinkedIn</a> | <a href="./rindex.html" target="_blank">In-Rust</a></p>
-  <p>Profile: <a href="index_v2.html" target="_blank">pV2</a> | <a href="index_v3.html" target="_blank">pV3</a> | <a href="index_v4.html" target="_blank">pV4</a></p>
+  <p>Email: <b>ak99professional_[at]_gmail_[dot]_com</b> | <a href="https://github.com/Dragoenix99cZar" target="_blank">GitHub</a> | <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank">LinkedIn</a> | <a href="./rindex.html" target="_blank">In-Rust</a> | <a href="./wip.html" target="_blank">Wip</a></p>
 </footer>
-
-<script>
-  const width = 1024;
-  const height = 1024;
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-
-  function copyToClipboard() {
-    const commandText = document.getElementById('cli-command').innerText;
-    const btn = document.getElementById('copy-btn');  
-    navigator.clipboard.writeText(commandText).then(() => {
-        btn.innerText = 'Copied!';
-        btn.style.backgroundColor = '#ffffff';
-        
-        setTimeout(() => {
-        btn.innerText = 'Copy';
-        btn.style.backgroundColor = '';
-        }, 2000);
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-    });
-  }
-
-  function make_environment(...envs) {
-    return new Proxy(envs, {
-      get(target, prop, receiver) {
-        for (let env of envs) {
-          if (env.hasOwnProperty(prop)) {
-            return env[prop];
-          }
-        }
-        return (...args) => { console.error("NOT IMPLEMENTED: " + prop, args); }
-      }
-    });
-  }
-
-  async function init(wasmInstance) {
-    const exports = wasmInstance.exports;
-
-    const effects = [
-        exports.compute_waves,
-        exports.compute_plasma,
-        exports.compute_matrix,
-        exports.compute_warped,
-        exports.compute_starfield,
-        exports.compute_tunnel,
-        //exports.compute_julia,
-    ];
-
-    const activeRenderEffect = effects[Math.floor(Math.random() * effects.length)];
-    console.log("Effect: ", activeRenderEffect);
-
-    const bufferPtr = exports.get_buffer_pointer();
-    const byteLength = width * height * 4;
-    const pixelArray = new Uint8ClampedArray(
-        exports.memory.buffer,      // Raw Wasm linear memory
-        bufferPtr,                  // Memory offset/pointer
-        byteLength                  // Data size
-    );
-
-    const imageData = new ImageData(pixelArray, width, height);
-
-    let frame = 0;
-    function loop() {
-        activeRenderEffect(frame++);
-        ctx.putImageData(imageData, 0, 0);
-        requestAnimationFrame(loop);
-    }
-
-    loop();
-  }
-
-  const libm = {
-      "atan2f": Math.atan2,
-      "cosf": Math.cos,
-      "sinf": Math.sin,
-      "sqrtf": Math.sqrt,
-  };
-
-  let w = null;
-  WebAssembly.instantiateStreaming(fetch('./c_renderer/renderer.wasm'), {
-    "env": make_environment(libm)
-  }).then(w0 => {
-    w = w0;
-    if (w) init(w0.instance);
-  });
-</script>
 
 </body>
 </html>

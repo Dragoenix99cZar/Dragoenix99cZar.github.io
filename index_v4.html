@@ -13,7 +13,7 @@
         --card-border: #000000;     /* Pure black border */
         --primary-color: #00ff66;   /* Hot pink accent */
         --text-main: #ffffff;      /* Pure white text */
-        --text-muted: ##e6f3ff;     /* Readable gray */
+        --text-muted: #e6f3ff;     /* Readable gray */
         --accent-color: #00ff66;    /* Electric green accent */
         --tag-bg: #1a161e8f;         /* Neon yellow tags */
         --tag-text: #ff6a33;       /* High-contrast text on yellow */
@@ -773,19 +773,6 @@
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
 
-  function make_environment(...envs) {
-    return new Proxy(envs, {
-      get(target, prop, receiver) {
-        for (let env of envs) {
-          if (env.hasOwnProperty(prop)) {
-            return env[prop];
-          }
-        }
-        return (...args) => { console.error("NOT IMPLEMENTED: " + prop, args); }
-      }
-    });
-  }
-
   async function init(wasmInstance) {
 
     const exports = wasmInstance.exports;
@@ -855,7 +842,7 @@
   }
 
   let w = null;
-  WebAssembly.instantiateStreaming(fetch('./renderer.wasm'), {
+  WebAssembly.instantiateStreaming(fetch('./c_renderer/renderer.wasm'), {
     "env": make_environment(libm)
   }).then(w0 => {
     w = w0;
