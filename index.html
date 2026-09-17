@@ -853,7 +853,7 @@
   };
 
   let w = null;
-  WebAssembly.instantiateStreaming(fetch('./c_renderer/renderer.wasm'), {
+  WebAssembly.instantiateStreaming(fetch('./renderer_in_c/renderer.wasm'), {
     "env": make_environment(libm)
   }).then(w0 => {
     w = w0;
