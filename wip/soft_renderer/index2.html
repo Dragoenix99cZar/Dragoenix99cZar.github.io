@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WASM Batch Process Renderer</title>
+    <style>
+        body { margin: 0; background: #111; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; color: #fff; font-family: sans-serif; gap: 10px; }
+        canvas { background: #000; border: 1px solid #333; cursor: grab; }
+        canvas:active { cursor: grabbing; }
+        input { background: #222; color: #fff; border: 1px solid #444; padding: 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <input type="file" id="fileInput" accept=".obj">
+    <canvas id="canvas3d" width="800" height="800"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas3d');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        const camera = { x: 0, y: 3, z: -8.0, rotX: 0.2, rotY: 0, rotZ: 0 };
+        const MOVE_SPEED = 0.15;
+        const activeKeys = new Set();
+
+        window.addEventListener('keydown', (e) => activeKeys.add(e.code));
+        window.addEventListener('keyup', (e) => activeKeys.delete(e.code));
+
+        function handleInput() {
+            const cosY = Math.cos(camera.rotY);
+            const sinY = Math.sin(camera.rotY);
+
+            if (activeKeys.has('KeyW') /*|| activeKeys.has('ArrowUp')*/)    { camera.z += MOVE_SPEED; }
+            if (activeKeys.has('KeyS') /*|| activeKeys.has('ArrowDown')*/)  { camera.z -= MOVE_SPEED; }
+            if (activeKeys.has('KeyA') /*|| activeKeys.has('ArrowLeft')*/)  { camera.x -= MOVE_SPEED; }
+            if (activeKeys.has('KeyD') /*|| activeKeys.has('ArrowRight')*/) { camera.x += MOVE_SPEED; }
+            if (activeKeys.has('KeyE'))                                 { camera.y += MOVE_SPEED; }
+            if (activeKeys.has('KeyQ'))                                 { camera.y -= MOVE_SPEED; }
+        }
+
+        // Generate Floor Grid Tiles Data
+        const floorTiles = [];
+        const tileSize = 1;
+        const tileCount = 50;
+
+        for (let x = -tileCount; x < tileCount; x++) {
+            for (let z = -tileCount; z < tileCount; z++) {
+                const color = (x + z) % 2 === 0 ? '#1e1e1e' : '#262626';
+                floorTiles.push({
+                    color: color,
+                    corners: [
+                        x * tileSize, 0, z * tileSize,
+                        (x + 1) * tileSize, 0, z * tileSize,
+                        (x + 1) * tileSize, 0, (z + 1) * tileSize,
+                        x * tileSize, 0, (z + 1) * tileSize
+                    ]
+                });
+            }
+        }
+
+        const imports = {
+            env: {
+                sinf: Math.sin,
+                cosf: Math.cos,
+                hypotf: (x, y, z) => Math.hypot(x, y, z)
+            }
+        };
+
+        WebAssembly.instantiateStreaming(fetch('engine2.wasm'), imports).then(results => {
+            const wasm = results.instance.exports;
+            const memory = wasm.memory.buffer;
+
+            const MAX_VERTICES = (1024*4);
+
+            // Typed Views to Shared WASM Memory
+            const inVertices = new Float32Array(memory, wasm.get_in_vertices_ptr(), MAX_VERTICES * 3);
+            const outPointsView = new Float32Array(memory, wasm.get_out_points_ptr(), MAX_VERTICES * 3);
+
+            let facesList = [];
+            let meshVertexCount = 0;
+
+            // Exact batch point extraction method requested
+            function getProjectedPoints(count) {
+                const points = [];
+                for (let i = 0; i < count; i++) {
+                    const isVisible = outPointsView[i * 3 + 2] === 1.0;
+                    if (!isVisible) {
+                        points.push(null);
+                    } else {
+                        points.push({
+                            x: outPointsView[i * 3],
+                            y: outPointsView[i * 3 + 1]
+                        });
+                    }
+                }
+                return points;
+            }
+
+            function drawFloor() {
+                ctx.strokeStyle = '#2d2d2d';
+                ctx.lineWidth = 1;
+
+                floorTiles.forEach(tile => {
+                    inVertices.set(tile.corners, 0);
+
+                    wasm.transform_and_project_batch(4, width, height);
+                    const pts = getProjectedPoints(4);
+
+                    if (pts.some(p => p === null)) return;
+
+                    ctx.fillStyle = tile.color;
+                    ctx.beginPath();
+                    ctx.moveTo(pts[0].x, pts[0].y);
+                    for (let i = 1; i < 4; i++) ctx.lineTo(pts[i].x, pts[i].y);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                });
+            }
+
+            function drawShadow(vertexCount) {
+                if (vertexCount === 0 || facesList.length === 0) return;
+
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+
+                // Copy active mesh vertices into inVertices input buffer
+                const rawModelVertices = new Float32Array(memory, wasm.get_parsed_vertices_ptr(), vertexCount * 3);
+                inVertices.set(rawModelVertices);
+
+                wasm.project_shadow_batch(vertexCount, width, height);
+                const pts = getProjectedPoints(vertexCount);
+
+                facesList.forEach(face => {
+                    const facePts = face.map(i => pts[i]);
+                    if (facePts.some(p => p === null)) return;
+
+                    ctx.beginPath();
+                    ctx.moveTo(facePts[0].x, facePts[0].y);
+                    for (let i = 1; i < facePts.length; i++) ctx.lineTo(facePts[i].x, facePts[i].y);
+                    ctx.closePath();
+                    ctx.fill();
+                });
+            }
+
+            function drawModelMesh(faceCount, vertexCount) {
+                if (faceCount === 0 || vertexCount === 0) return;
+
+                // Project model vertices into outPoints
+                const rawModelVertices = new Float32Array(memory, wasm.get_parsed_vertices_ptr(), vertexCount * 3);
+                inVertices.set(rawModelVertices);
+
+                wasm.transform_and_project_batch(vertexCount, width, height);
+                const pts = getProjectedPoints(vertexCount);
+
+                const depthsView = new Float32Array(memory, wasm.get_face_depths_ptr(), faceCount);
+                const lightingView = new Float32Array(memory, wasm.get_face_lighting_ptr(), faceCount);
+
+                const faceIndices = Array.from({ length: faceCount }, (_, i) => i);
+                faceIndices.sort((a, b) => depthsView[b] - depthsView[a]);
+
+                faceIndices.forEach(idx => {
+                    const face = facesList[idx];
+                    const facePts = face.map(i => pts[i]);
+
+                    if (facePts.some(p => p === null)) return;
+
+                    const shade = Math.floor(lightingView[idx] * 220);
+                    ctx.fillStyle = `rgb(${Math.floor(shade * 0.2)}, ${Math.floor(shade * 0.6)}, ${shade})`;
+                    ctx.strokeStyle = '#000';
+                    ctx.lineWidth = 0.5;
+
+                    ctx.beginPath();
+                    ctx.moveTo(facePts[0].x, facePts[0].y);
+                    for (let i = 1; i < facePts.length; i++) ctx.lineTo(facePts[i].x, facePts[i].y);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                });
+            }
+
+            // Handle Input File
+            document.getElementById('fileInput').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const byteView = new Uint8Array(event.target.result);
+                    const wasmBuffer = new Uint8Array(memory, wasm.get_obj_buffer_ptr(), byteView.length);
+                    wasmBuffer.set(byteView);
+
+                    wasm.parse_obj_data(byteView.length);
+
+                    const loadedFaceCount = wasm.prepare_model_faces();
+                    meshVertexCount = wasm.get_vertex_count();
+
+                    // Reconstruct face index lists
+                    const rawFacesView = new Int32Array(memory, wasm.get_parsed_faces_ptr(), loadedFaceCount * 9);
+                    facesList = [];
+
+                    for (let i = 0; i < loadedFaceCount; i++) {
+                        const offset = i * 9;
+                        const vCount = rawFacesView[offset + 8];
+                        const faceVerts = [];
+                        for (let k = 0; k < vCount; k++) {
+                            faceVerts.push(rawFacesView[offset + k * 2]);
+                        }
+                        facesList.push(faceVerts);
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            });
+
+            function render() {
+                handleInput();
+                ctx.clearRect(0, 0, width, height);
+
+                wasm.set_camera(camera.x, camera.y, camera.z, camera.rotX, camera.rotY, camera.rotZ);
+
+                // Render pipeline sequence
+                drawFloor();
+                drawShadow(meshVertexCount);
+                drawModelMesh(facesList.length, meshVertexCount);
+
+                requestAnimationFrame(render);
+            }
+
+            // Mouse Look Controls
+            let isMouseDown = false, lastMouseX = 0, lastMouseY = 0;
+            canvas.addEventListener('mousedown', (e) => { isMouseDown = true; lastMouseX = e.clientX; lastMouseY = e.clientY; });
+            window.addEventListener('mouseup', () => isMouseDown = false);
+            canvas.addEventListener('mousemove', (e) => {
+                if (!isMouseDown) return;
+                camera.rotY += (e.clientX - lastMouseX) * 0.005;
+                camera.rotX += (e.clientY - lastMouseY) * 0.005;
+                const maxPitch = Math.PI / 2 - 0.01;
+                camera.rotX = Math.max(-maxPitch, Math.min(maxPitch, camera.rotX));
+                lastMouseX = e.clientX; lastMouseY = e.clientY;
+            });
+
+            render();
+        });
+    </script>
+</body>
+</html>

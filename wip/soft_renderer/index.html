@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3D Projection - Pure WASM</title>
+    <style>
+        body { margin: 0; background: #111; display: flex; justify-content: center; align-items: center; }
+        canvas { background: #000; border: 1px solid #333; cursor: grab; }
+        canvas:active { cursor: grabbing; }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas3d" width="800" height="800"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas3d');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        const MOVE_SPEED = 0.1;
+        const SPIN_Y_RATE = 0.015;
+
+        // Camera State
+        const camera = {
+            x: 0, y: 0, z: -4.0,
+            rotX: 0, rotY: 0, rotZ: 0
+        };
+
+        let isSpinning = false;
+        let cubeSpinAngleY = 0;
+
+        let isMouseDown = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+
+        const activeKeys = new Set();
+
+        // Event Listeners
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                isSpinning = !isSpinning;
+                return;
+            }
+            activeKeys.add(e.code);
+        });
+
+        window.addEventListener('keyup', (e) => activeKeys.delete(e.code));
+
+        canvas.addEventListener('mousedown', (e) => {
+            isMouseDown = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+
+        window.addEventListener('mouseup', () => isMouseDown = false);
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isMouseDown) return;
+
+            const deltaX = e.clientX - lastMouseX;
+            const deltaY = e.clientY - lastMouseY;
+            const sensitivity = 0.003;
+
+            camera.rotY += deltaX * sensitivity;
+            camera.rotX += deltaY * sensitivity;
+
+            const maxPitch = Math.PI / 2 - 0.01;
+            camera.rotX = Math.max(-maxPitch, Math.min(maxPitch, camera.rotX));
+
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+
+        function handleInput() {
+            const cosY = Math.cos(camera.rotY);
+            const sinY = Math.sin(camera.rotY);
+
+            if (activeKeys.has('KeyW') || activeKeys.has('ArrowUp')) { camera.x += sinY * MOVE_SPEED; camera.z += cosY * MOVE_SPEED; }
+            if (activeKeys.has('KeyS') || activeKeys.has('ArrowDown')) { camera.x -= sinY * MOVE_SPEED; camera.z -= cosY * MOVE_SPEED; }
+            if (activeKeys.has('KeyA') || activeKeys.has('ArrowLeft')) { camera.x -= cosY * MOVE_SPEED; camera.z += sinY * MOVE_SPEED; }
+            if (activeKeys.has('KeyD') || activeKeys.has('ArrowRight')) { camera.x += cosY * MOVE_SPEED; camera.z -= sinY * MOVE_SPEED; }
+            if (activeKeys.has('KeyQ')) camera.y -= MOVE_SPEED;
+            if (activeKeys.has('KeyE')) camera.y += MOVE_SPEED;
+        }
+
+        // Geometry Data
+        const cubeVertices = [
+            -1, -1, -1,   1, -1, -1,   1,  1, -1,  -1,  1, -1,
+            -1, -1,  1,   1, -1,  1,   1,  1,  1,  -1,  1,  1
+        ];
+
+        const edges = [
+            [0, 1], [1, 2], [2, 3], [3, 0],
+            [4, 5], [5, 6], [6, 7], [7, 4],
+            [0, 4], [1, 5], [2, 6], [3, 7]
+        ];
+
+        const faces = [
+            [0, 1, 2, 3], [4, 5, 6, 7], [0, 3, 7, 4],
+            [1, 2, 6, 5], [3, 2, 6, 7], [0, 1, 5, 4]
+        ];
+
+        const FLOOR_Y = 1.0;
+        const GRID_SIZE = 12;
+        const GRID_STEP = 1;
+
+        function createCheckeredFloor() {
+            const tiles = [];
+            for (let x = -GRID_SIZE; x < GRID_SIZE; x += GRID_STEP) {
+                for (let z = -GRID_SIZE; z < GRID_SIZE; z += GRID_STEP) {
+                    const isEven = (Math.abs(x + z) % 2) === 0;
+                    tiles.push({
+                        color: isEven ? '#1e3320' : '#181818',
+                        corners: [
+                            x, FLOOR_Y, z,
+                            x + GRID_STEP, FLOOR_Y, z,
+                            x + GRID_STEP, FLOOR_Y, z + GRID_STEP,
+                            x, FLOOR_Y, z + GRID_STEP
+                        ]
+                    });
+                }
+            }
+            return tiles;
+        }
+
+        const floorTiles = createCheckeredFloor();
+
+        // Load WASM Module
+        const imports = {
+            env: {
+                sinf: Math.sin,
+                cosf: Math.cos
+            }
+        };
+
+        WebAssembly.instantiateStreaming(fetch('engine.wasm'), imports).then(results => {
+            const wasm = results.instance.exports;
+            const memory = wasm.memory.buffer;
+
+            // Direct Memory Access Views
+            const inVertices = new Float32Array(memory, wasm.get_in_vertices_ptr(), 256 * 3);
+            const outPoints = new Int32Array(memory, wasm.get_out_points_ptr(), 256 * 3); // struct Point2D { float x, float y, int visible }
+
+            function getProjectedPoints(count) {
+                const points = [];
+                const floatView = new Float32Array(memory, wasm.get_out_points_ptr(), 256 * 3);
+
+                for (let i = 0; i < count; i++) {
+                    const isVisible = outPoints[i * 3 + 2] === 1;
+                    if (!isVisible) {
+                        points.push(null);
+                    } else {
+                        points.push({
+                            x: floatView[i * 3],
+                            y: floatView[i * 3 + 1]
+                        });
+                    }
+                }
+                return points;
+            }
+
+            function drawFloor() {
+                ctx.strokeStyle = '#2d2d2d';
+                ctx.lineWidth = 1;
+
+                floorTiles.forEach(tile => {
+                    // Copy tile corners into WASM input buffer
+                    inVertices.set(tile.corners, 0);
+
+                    wasm.transform_and_project_batch(4, width, height);
+                    const pts = getProjectedPoints(4);
+
+                    if (pts.some(p => p === null)) return;
+
+                    ctx.fillStyle = tile.color;
+                    ctx.beginPath();
+                    ctx.moveTo(pts[0].x, pts[0].y);
+                    for (let i = 1; i < 4; i++) ctx.lineTo(pts[i].x, pts[i].y);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                });
+            }
+
+            function drawShadow(vertexCount) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+
+                wasm.project_shadow_batch(vertexCount, width, height);
+                const pts = getProjectedPoints(vertexCount);
+
+                faces.forEach(face => {
+                    const facePts = face.map(i => pts[i]);
+                    if (facePts.some(p => p === null)) return;
+
+                    ctx.beginPath();
+                    ctx.moveTo(facePts[0].x, facePts[0].y);
+                    for (let i = 1; i < facePts.length; i++) ctx.lineTo(facePts[i].x, facePts[i].y);
+                    ctx.closePath();
+                    ctx.fill();
+                });
+            }
+
+            function drawCube(pts) {
+                // Draw Faces
+                ctx.fillStyle = '#00559955';
+                faces.forEach(face => {
+                    const facePts = face.map(i => pts[i]);
+                    if (facePts.some(p => p === null)) return;
+
+                    ctx.beginPath();
+                    ctx.moveTo(facePts[0].x, facePts[0].y);
+                    for (let i = 1; i < facePts.length; i++) ctx.lineTo(facePts[i].x, facePts[i].y);
+                    ctx.closePath();
+                    ctx.fill();
+                });
+
+                // Draw Edges
+                ctx.strokeStyle = '#aa2200';
+                ctx.lineWidth = 3;
+                edges.forEach(([a, b]) => {
+                    const start = pts[a];
+                    const end = pts[b];
+                    if (!start || !end) return;
+
+                    ctx.beginPath();
+                    ctx.moveTo(start.x, start.y);
+                    ctx.lineTo(end.x, end.y);
+                    ctx.stroke();
+                });
+            }
+
+            function render() {
+                ctx.clearRect(0, 0, width, height);
+
+                handleInput();
+
+                if (isSpinning) cubeSpinAngleY += SPIN_Y_RATE;
+
+                // Sync camera parameters to WASM engine
+                wasm.set_camera(camera.x, camera.y, camera.z, camera.rotX, camera.rotY, camera.rotZ);
+
+                // 1. Draw Checkered Floor
+                drawFloor();
+
+                // 2. Prepare local cube vertices & rotate on Y axis via WASM
+                inVertices.set(cubeVertices, 0);
+                wasm.rotate_y_batch(8, cubeSpinAngleY);
+
+                // 3. Render Shadow
+                drawShadow(8);
+
+                // 4. Project Cube Vertices and Render
+                wasm.transform_and_project_batch(8, width, height);
+                const projectedCube = getProjectedPoints(8);
+                drawCube(projectedCube);
+
+                requestAnimationFrame(render);
+            }
+
+            render();
+        });
+    </script>
+
+</body>
+</html>

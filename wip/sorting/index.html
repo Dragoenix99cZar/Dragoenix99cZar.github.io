@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wasm Software Rendered Sorting Visualizer</title>
+    <style>
+        body {
+            background-color: #121214; color: #e2e8f0; font-family: system-ui, sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; margin: 0;
+        }
+        canvas { border: 2px solid #3f3f46; box-shadow: 0 10px 25px rgba(0,0,0,0.5); background: #1e1e24; }
+        .controls { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 800px; }
+        button {
+            background: #3b82f6; color: white; border: none; padding: 10px 16px;
+            font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 6px; transition: background 0.2s;
+        }
+        button:hover { background: #2563eb; }
+        button.secondary { background: #4b5563; }
+        button.secondary:hover { background: #374151; }
+        button:disabled { background: #27272a; color: #71717a; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+    <h1>Sorting Visualizer (C + WASM Engine)</h1>
+    <canvas id="canvas" width="1000" height="400"></canvas>
+
+    <div class="controls">
+        <button id="btnShuffle" class="secondary" onclick="wasmInitArray()" disabled>Shuffle Array</button>
+        <button id="btnReverse" class="secondary" onclick="wasmReverseArray()" disabled>Reverse Array</button>
+        <button class="sort-btn" onclick="wasmStartSort(0)" disabled>Bubble</button>
+        <button class="sort-btn" onclick="wasmStartSort(1)" disabled>Selection</button>
+        <button class="sort-btn" onclick="wasmStartSort(2)" disabled>Insertion</button>
+        <button class="sort-btn" onclick="wasmStartSort(3)" disabled>Heap</button>
+        <button class="sort-btn" onclick="wasmStartSort(4)" disabled>Quicksort</button>
+        <button class="sort-btn" onclick="wasmStartSort(5)" disabled>Merge</button>
+        <button class="sort-btn" onclick="wasmStartSort(6)" disabled>Timsort</button>
+    </div>
+    <br>
+    <div class="speedSlider">
+        <span>Speed:</span>
+      <input type="range" min="1" max="100" value="4" class="slider" id="fps">
+    </div>
+
+    <script>
+        function make_environment(...envs) {
+          return new Proxy(envs, {
+            get(target, prop, receiver) {
+              for (let env of envs) {
+                if (env.hasOwnProperty(prop)) {
+                  return env[prop];
+                }
+              }
+              return (...args) => {
+                throw new Error("NOT IMPLEMENTED: " + prop, args);
+                // console.error("NOT IMPLEMENTED: " + prop, args);
+              }
+            }
+          });
+        }
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const WIDTH = 1000, HEIGHT = 400;
+
+        WebAssembly.instantiateStreaming(fetch('renderer.wasm'), {
+          "env": make_environment()
+        }).then(results => {
+                const exports = results.instance.exports;
+
+                // Secure function mapping assignments
+                window.wasmInitArray = exports.init_array;
+                window.wasmReverseArray = exports.reverse_array;
+                window.wasmStartSort = exports.start_sort;
+
+                // Open control structures
+                document.getElementById('btnShuffle').disabled = false;
+                document.getElementById('btnReverse').disabled = false;
+                document.querySelectorAll('.sort-btn').forEach(btn => btn.disabled = false);
+
+                exports.init_array();
+
+                const memory = exports.memory;
+                const bufferPtr = exports.get_buffer_pointer();
+                const pixelView = new Uint8ClampedArray(memory.buffer, bufferPtr, WIDTH * HEIGHT * 4);
+                const imgData = new ImageData(pixelView, WIDTH, HEIGHT);
+
+                const fpsSlider = document.getElementById("fps");
+
+                function loop() {
+                    fps = fpsSlider.value;
+                    // Controls operational frames execution velocity steps per loop tick
+                    for(let k = 0; k < fps; k++) {
+                        exports.update_and_render();
+                    }
+                    ctx.putImageData(imgData, 0, 0);
+                    requestAnimationFrame(loop);
+                }
+                loop();
+            })
+            .catch(err => console.error("Initialization Interrupted:", err));
+    </script>
+</body>
+</html>
