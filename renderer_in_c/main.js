@@ -70,11 +70,13 @@ async function init(wasmInstance) {
     ];
 
     // 2. Select one at random to run for this page session
-    const activeRenderEffect = effects[Math.floor(Math.random() * effects.length)];
-  console.log("Effect: ", activeRenderEffect);
+    let activeRenderEffect = effects[Math.floor(Math.random() * effects.length)];
+    console.log("Effect: ", activeRenderEffect);
 
     // 2. Get the memory address where the C buffer starts
     const bufferPtr = exports.get_buffer_pointer();
+
+    exports.set_alpha(100);
 
     // 3. Create a view directly inside the Wasm linear memory
     const byteLength = width * height * 4;
@@ -98,6 +100,14 @@ async function init(wasmInstance) {
 
         requestAnimationFrame(loop);
     }
+
+    let animIdx = 0;
+    window.addEventListener('keydown', (e) => {    
+      if (e.code === 'Backquote') {
+        e.preventDefault();
+        activeRenderEffect = effects[(animIdx++) % effects.length];
+      }
+    });
 
     loop();
 }

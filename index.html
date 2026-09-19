@@ -427,7 +427,7 @@
       <a href="https://github.com/Dragoenix99cZar" target="_blank" class="btn btn-outline">GitHub Profile</a>
       <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank" class="btn btn-outline">LinkedIn Profile</a>
   </div>
-    <span id="copy-btn" class="btn btn-outline" onclick="copyToClipboard()">curl https://dragoenix99czar.github.io/ak</span>
+    <span id="copy-btn" class="btn btn-outline"><code>curl https://dragoenix99czar.github.io/ak</code></span>
 </header>
 
 <main>
@@ -780,22 +780,6 @@
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
 
-  function copyToClipboard() {
-    const commandText = document.getElementById('cli-command').innerText;
-    const btn = document.getElementById('copy-btn');  
-    navigator.clipboard.writeText(commandText).then(() => {
-        btn.innerText = 'Copied!';
-        btn.style.backgroundColor = '#ffffff';
-        
-        setTimeout(() => {
-        btn.innerText = 'Copy';
-        btn.style.backgroundColor = '';
-        }, 2000);
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-    });
-  }
-
   function make_environment(...envs) {
     return new Proxy(envs, {
       get(target, prop, receiver) {
@@ -822,34 +806,44 @@
         //exports.compute_julia,
     ];
 
-    const activeRenderEffect = effects[Math.floor(Math.random() * effects.length)];
+    let activeRenderEffect = effects[Math.floor(Math.random() * effects.length)];
     console.log("Effect: ", activeRenderEffect);
 
     const bufferPtr = exports.get_buffer_pointer();
+    exports.set_alpha(38);
     const byteLength = width * height * 4;
     const pixelArray = new Uint8ClampedArray(
-        exports.memory.buffer,      // Raw Wasm linear memory
-        bufferPtr,                  // Memory offset/pointer
-        byteLength                  // Data size
+      exports.memory.buffer,      // Raw Wasm linear memory
+      bufferPtr,                  // Memory offset/pointer
+      byteLength                  // Data size
     );
-
+    
     const imageData = new ImageData(pixelArray, width, height);
-
+    
     let frame = 0;
     function loop() {
-        activeRenderEffect(frame++);
-        ctx.putImageData(imageData, 0, 0);
-        requestAnimationFrame(loop);
-    }
+      activeRenderEffect(frame++);
+      ctx.putImageData(imageData, 0, 0);
+      requestAnimationFrame(loop);
+    }    
+    
+    let animIdx = 0;
+    window.addEventListener('keyup', (e) => {    
+      if (e.code === 'Backquote') {
+        e.preventDefault();
+        activeRenderEffect = effects[(animIdx++) % effects.length];
+        console.log("Effect: ", activeRenderEffect);
+      }
+    });
 
     loop();
   }
 
   const libm = {
       "atan2f": Math.atan2,
-      "cosf": Math.cos,
-      "sinf": Math.sin,
-      "sqrtf": Math.sqrt,
+      "cosf":   Math.cos,
+      "sinf":   Math.sin,
+      "sqrtf":  Math.sqrt,
   };
 
   let w = null;

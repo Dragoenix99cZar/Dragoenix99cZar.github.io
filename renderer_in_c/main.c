@@ -1,7 +1,8 @@
 #define WIDTH 1024
 #define HEIGHT 1024
 
-#define ALPHA_VALUE 30
+
+#define WASM_EXPORT __attribute__((visibility("default")))
 
 float sinf(float x);
 float cosf(float x);
@@ -12,22 +13,25 @@ typedef struct {
     float x, y, z;
 } Star;
 
-#define MAX_STARS 150
+#define MAX_STARS 300
 Star stars[MAX_STARS];
 int initialized = 0;
+int ALPHA_VALUE = 30;
 
 // Allocate the buffer statically in Wasm memory
 // Size = Width * Height * 4 bytes (RGBA)
 unsigned char pixel_buffer[WIDTH * HEIGHT * 4];
 
 // Attribute tells Clang to export these functions to Wasm
-__attribute__((visibility("default")))
-unsigned char* get_buffer_pointer() {
+WASM_EXPORT unsigned char* get_buffer_pointer() {
     return pixel_buffer;
 }
 
-__attribute__((visibility("default")))
-void compute_waves(int frame_count) {
+WASM_EXPORT void set_alpha(int _alpha) {
+    ALPHA_VALUE = _alpha;
+}
+
+WASM_EXPORT void compute_waves(int frame_count) {
     float time = frame_count * 0.05f;
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
@@ -43,8 +47,7 @@ void compute_waves(int frame_count) {
     }
 }
 
-__attribute__((visibility("default")))
-void compute_plasma(int frame_count) {
+WASM_EXPORT void compute_plasma(int frame_count) {
     float time = frame_count * 0.03f;
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
@@ -71,8 +74,7 @@ void compute_plasma(int frame_count) {
     }
 }
 
-__attribute__((visibility("default")))
-void compute_julia(int frame_count) {
+WASM_EXPORT void compute_julia(int frame_count) {
     float time = frame_count * 0.01f;
 
     // Constant parameters that change over time to mutate the fractal shape
@@ -109,8 +111,7 @@ void compute_julia(int frame_count) {
     }
 }
 
-__attribute__((visibility("default")))
-void compute_matrix(int frame_count) {
+WASM_EXPORT void compute_matrix(int frame_count) {
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
             int idx = (y * WIDTH + x) * 4;
@@ -148,8 +149,7 @@ void compute_matrix(int frame_count) {
     }
 }
 
-__attribute__((visibility("default")))
-void compute_warped(int frame_count) {
+WASM_EXPORT void compute_warped(int frame_count) {
     float time = frame_count * 0.02f;
 
     for (int y = 0; y < HEIGHT; y++) {
@@ -179,8 +179,7 @@ void compute_warped(int frame_count) {
     }
 }
 
-__attribute__((visibility("default")))
-void compute_starfield(int frame_count) {
+WASM_EXPORT void compute_starfield(int frame_count) {
     // 1. Clear the canvas to a dark fading trail space look
     for (int i = 0; i < WIDTH * HEIGHT * 4; i += 4) {
         pixel_buffer[i + 0] = (unsigned char)(pixel_buffer[i + 0] * 0.7f); // Fade Red
@@ -229,8 +228,7 @@ void compute_starfield(int frame_count) {
 }
 
 // EFFECT 2: Concentric Tunnel Rings
-__attribute__((visibility("default")))
-void compute_tunnel(int frame_count) {
+WASM_EXPORT void compute_tunnel(int frame_count) {
     float time = frame_count * 0.1f;
     float cx = WIDTH / 2.0f;
     float cy = HEIGHT / 2.0f;
