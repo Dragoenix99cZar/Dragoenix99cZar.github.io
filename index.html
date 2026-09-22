@@ -79,9 +79,9 @@
 
     .cta-buttons {
       display: flex;
-      justify-content: center; 
-      align-items: center;     
-      gap: 12px;               
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
@@ -319,7 +319,7 @@
       border-color: var(--primary-color);
     }
 
-    .experiment-card img, 
+    .experiment-card img,
     .experiment-card video {
       width: 100%;
       height: 140px;
@@ -383,9 +383,9 @@
         left: 0;
         width: 100vw;
         height: 100vh;
-        z-index: -1;        
-        pointer-events: none; 
-        object-fit: cover;  
+        z-index: -1;
+        pointer-events: none;
+        object-fit: cover;
     }
 
     .copy-container {
@@ -401,7 +401,7 @@
         margin: 20px auto;
         flex-wrap: wrap;
     }
-    
+
     #copy-btn {
         color: var(--primary-color);
         font-weight: bold;
@@ -622,7 +622,7 @@
             <a href="video_to_gif/" target="_blank">Launch Experiment →</a>
           </div>
         </div>
-        
+
         <!-- 3. Python Web -->
         <div class="experiment-card">
           <video src="images/python-web.webm" autoplay muted loop playsinline></video>
@@ -672,7 +672,7 @@
             <a href="recall/index.html" target="_blank">Launch Experiment →</a>
           </div>
         </div>
-        
+
         <!-- 8. Maze Bot - Rust+Wasm -->
         <div class="experiment-card">
           <video src="images/rust-maze-bot.webm" autoplay muted loop playsinline></video>
@@ -682,7 +682,7 @@
             <a href="rust_maze_bot/" target="_blank">Launch Experiment →</a>
           </div>
         </div>
-        
+
         <!-- 9. Software Renderer -->
         <div class="experiment-card">
           <video src="images/software-renderer.webm" autoplay muted loop playsinline></video>
@@ -712,7 +712,7 @@
             <a href="unit_converter_pwa/" target="_blank">Launch Experiment →</a>
           </div>
         </div>
-        
+
         <!-- 12. Basic Utility Tools -->
         <div class="experiment-card">
           <video src="images/basic-utility.webm" autoplay muted loop playsinline></video>
@@ -721,8 +721,8 @@
             <p>PWA for Basic Utility Tools like color-picker, qr-code, word-count, bim, number-system.</p>
             <a href="PWA-tools/" target="_blank">Launch Experiment →</a>
           </div>
-        </div>        
-        
+        </div>
+
       </div>
     </section>
 
@@ -773,6 +773,7 @@
   <p>© Aman Karn | Senior Game & Software Engineer</p>
   <p>Email: <b>ak99professional_[at]_gmail_[dot]_com</b> | <a href="https://github.com/Dragoenix99cZar" target="_blank">GitHub</a> | <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank">LinkedIn</a> | <a href="./rindex.html" target="_blank">In-Rust</a> | <a href="./sitemap.html" target="_blank">Sitemap</a></p>
   <p>Profile: <a href="index_v2.html" target="_blank">pV2</a> | <a href="index_v3.html" target="_blank">pV3</a> | <a href="index_v4.html" target="_blank">pV4</a></p>
+  <p align="center"> <img src="https://komarev.com/ghpvc/?username=dragoenix99czar&label=Profile%20views&color=0e75b6&style=flat" alt="dragoenix99czar" /> </p>
 </footer>
 
 <script>
@@ -818,18 +819,18 @@
       bufferPtr,                  // Memory offset/pointer
       byteLength                  // Data size
     );
-    
+
     const imageData = new ImageData(pixelArray, width, height);
-    
+
     let frame = 0;
     function loop() {
       activeRenderEffect(frame++);
       ctx.putImageData(imageData, 0, 0);
       requestAnimationFrame(loop);
-    }    
-    
+    }
+
     let animIdx = 0;
-    window.addEventListener('keyup', (e) => {    
+    window.addEventListener('keyup', (e) => {
       if (e.code === 'Backquote') {
         e.preventDefault();
         activeRenderEffect = effects[(animIdx++) % effects.length];
