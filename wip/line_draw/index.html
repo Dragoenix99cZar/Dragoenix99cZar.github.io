@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Line Drawing Algorithms — WASM + Canvas</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #161922;
+    --text: #e8eaf0;
+    --muted: #9aa2b1;
+    --accent: #5fb0ff;
+    --border: #262b38;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 24px;
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 4px; }
+  p.sub { color: var(--muted); margin: 0 0 20px; font-size: 0.9rem; }
+  .layout { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+  canvas {
+    background: #05060a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    image-rendering: pixelated;
+    max-width: 100%;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    min-width: 220px;
+  }
+  .panel h2 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0 0 10px; }
+  label { display: block; font-size: 0.8rem; color: var(--muted); margin-top: 10px; }
+  input[type=number] {
+    width: 100%; padding: 6px 8px; margin-top: 3px;
+    background: #0f1119; border: 1px solid var(--border); border-radius: 5px;
+    color: var(--text); font-size: 0.85rem;
+  }
+  .row { display: flex; gap: 8px; }
+  .row > div { flex: 1; }
+  select {
+    width: 100%; margin-top: 4px; padding: 6px 8px;
+    background: #0f1119; border: 1px solid var(--border); border-radius: 5px;
+    color: var(--text); font-size: 0.85rem;
+  }
+  button {
+    margin-top: 14px; width: 100%; padding: 9px;
+    background: var(--accent); border: none; border-radius: 6px;
+    color: #05060a; font-weight: 600; cursor: pointer; font-size: 0.85rem;
+  }
+  button.secondary {
+    background: transparent; border: 1px solid var(--border); color: var(--text);
+  }
+  .legend { display: flex; gap: 14px; margin-top: 14px; flex-wrap: wrap; font-size: 0.78rem; color: var(--muted); }
+  .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  #status { margin-top: 14px; font-size: 0.78rem; color: var(--muted); min-height: 1.2em; }
+</style>
+</head>
+<body>
+  <h1>Line Drawing Algorithms — compiled C → WASM → Canvas</h1>
+  <p class="sub">Direct, DDA and Bresenham, run from a freestanding (no-libc) WebAssembly module.</p>
+
+  <div class="layout">
+    <!--<canvas id="cv" width="640" height="480"></canvas>-->
+    <canvas id="cv" width="1000" height="800"></canvas>
+
+    <div class="panel">
+      <div class="legend">
+          <h2>Draw a line</h2>
+        <div><span class="swatch" style="background:#5fb0ff"></span>Direct</div>
+        <div><span class="swatch" style="background:#ff8a5f"></span>DDA</div>
+        <div><span class="swatch" style="background:#7dff8f"></span>Bresenham</div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>x1 (0–99)</label>
+          <input id="x1" type="number" value="2" min="0" max="63">
+        </div>
+        <div>
+          <label>y1 (0–79)</label>
+          <input id="y1" type="number" value="2" min="0" max="47">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>x2 (0–99)</label>
+          <input id="x2" type="number" value="98" min="0" max="63">
+        </div>
+        <div>
+          <label>y2 (0–79)</label>
+          <input id="y2" type="number" value="72" min="0" max="47">
+        </div>
+      </div>
+
+      <label>Algorithm</label>
+      <select id="algo">
+        <option value="direct">Direct / Incremental</option>
+        <option value="dda">DDA</option>
+        <option value="bresenham" selected>Bresenham</option>
+      </select>
+
+      <label style="display:flex; align-items:center; gap:6px; margin-top:12px;">
+        <input id="showGrid" type="checkbox" checked style="width:auto; margin:0;">
+        Show grid lines
+      </label>
+
+      <button id="drawBtn">Draw line</button>
+      <button id="compareBtn" class="secondary">Compare all three</button>
+      <button id="clearBtn" class="secondary">Clear canvas</button>
+
+      <div id="status">Loading line_draw.wasm…</div>
+    </div>
+  </div>
+
+<script>
+let wasm = null;
+let mem8 = null;
+
+const COLORS = {
+  direct:     [0x5f, 0xb0, 0xff],
+  dda:        [0xff, 0x8a, 0x5f],
+  bresenham:  [0x7d, 0xff, 0x8f],
+};
+
+async function loadWasm() {
+  const res = await fetch('line_draw.wasm');
+  if (!res.ok) throw new Error('line_draw.wasm not found next to this page');
+  const { instance } = await WebAssembly.instantiateStreaming(res, {});
+  wasm = instance.exports;
+  mem8 = new Uint8Array(wasm.memory.buffer);
+
+  const gw = wasm.get_grid_width();
+  const gh = wasm.get_grid_height();
+  for (const id of ['x1', 'x2']) document.getElementById(id).max = gw - 1;
+  for (const id of ['y1', 'y2']) document.getElementById(id).max = gh - 1;
+
+  resetCanvas();
+}
+
+function resetCanvas() {
+  wasm.clear(0x05, 0x06, 0x0a, 0xff);
+  if (document.getElementById('showGrid').checked) {
+    wasm.draw_grid_lines(0x1a, 0x1e, 0x28, 0xff);
+  }
+  blit();
+}
+
+function blit() {
+  const w = wasm.get_width();
+  const h = wasm.get_height();
+  const ptr = wasm.get_buffer();
+  // memory can be detached/regrown; re-view each time
+  const view = new Uint8ClampedArray(wasm.memory.buffer, ptr, w * h * 4);
+  const imgData = new ImageData(new Uint8ClampedArray(view), w, h);
+  const ctx = document.getElementById('cv').getContext('2d');
+  ctx.putImageData(imgData, 0, 0);
+}
+
+function drawWith(algo, x1, y1, x2, y2, rgb) {
+  const [r, g, b] = rgb;
+  if (algo === 'direct')     wasm.draw_line_direct(x1, y1, x2, y2, r, g, b, 255);
+  if (algo === 'dda')        wasm.draw_line_dda(x1, y1, x2, y2, r, g, b, 255);
+  if (algo === 'bresenham')  wasm.draw_line_bresenham(x1, y1, x2, y2, r, g, b, 255);
+}
+
+function readInputs() {
+  return {
+    x1: parseInt(document.getElementById('x1').value, 10) || 0,
+    y1: parseInt(document.getElementById('y1').value, 10) || 0,
+    x2: parseInt(document.getElementById('x2').value, 10) || 0,
+    y2: parseInt(document.getElementById('y2').value, 10) || 0,
+  };
+}
+
+document.getElementById('drawBtn').addEventListener('click', () => {
+  const { x1, y1, x2, y2 } = readInputs();
+  const algo = document.getElementById('algo').value;
+  drawWith(algo, x1, y1, x2, y2, COLORS[algo]);
+  blit();
+});
+
+document.getElementById('compareBtn').addEventListener('click', () => {
+  const gh = wasm.get_grid_height();
+  const { x1, y1, x2, y2 } = readInputs();
+  // Offset each line a few grid rows so all three are visible at once
+  // (clamped so they don't run off the bottom of a 48-row grid).
+  const off = (v) => Math.min(v, gh - 1);
+  drawWith('direct',    x1, y1,             x2, y2,             COLORS.direct);
+  drawWith('dda',       x1, off(y1 + 3),    x2, off(y2 + 3),    COLORS.dda);
+  drawWith('bresenham', x1, off(y1 + 6),    x2, off(y2 + 6),    COLORS.bresenham);
+  blit();
+});
+
+document.getElementById('clearBtn').addEventListener('click', resetCanvas);
+document.getElementById('showGrid').addEventListener('change', resetCanvas);
+
+loadWasm()
+  .then(() => { document.getElementById('status').textContent = 'Ready.'; })
+  .catch(err => {
+    document.getElementById('status').textContent =
+      'Could not load line_draw.wasm — build it first (see comment at the bottom of line_draw.c), then place it next to index.html.';
+    console.error(err);
+  });
+</script>
+</body>
+</html>
