@@ -4,57 +4,30 @@
   <meta charset="UTF-8">
   <title>Pixel-Art Graphics Engine Workbench</title>
   <style>
-    :root {
-      --grid-size: 0.5vw; /* Corresponds with your canvas zoom multiplier layout */
-    }
-    body { 
-      background: #0f0f13; 
-      color: #e2e2e9; 
-      font-family: ui-monospace, monospace; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      height: 100vh; 
-      margin: 0; 
-      overflow: hidden;
-      padding: 2vh 0;
-      box-sizing: border-box;
-    }
-    
-    /* Top Toolbar (uses remaining 20-25% height budget alongside header text) */
-    .header-group {
-      text-align: center;
-      margin-bottom: 10px;
-    }
+    body { background: #0f0f13; color: #e2e2e9; font-family: ui-monospace, monospace; display: flex; flex-direction: column; align-items: center; height: 100vh; margin: 0; overflow: hidden; padding: 2vh 0; box-sizing: border-box; }
+    .header-group { text-align: center; margin-bottom: 10px; }
     h1 { font-size: 1.5rem; margin: 0 0 5px 0; color: #fff; letter-spacing: 1px; }
-    .toolbar { 
-      display: flex; 
-      gap: 20px; 
-      align-items: center; 
-      background: #1a1a24; 
-      padding: 10px 25px; 
-      border-radius: 8px; 
-      border: 1px solid #2d2d3d;
-      margin-bottom: 15px;
-    }
+    .toolbar { display: flex; gap: 20px; align-items: center; background: #1a1a24; padding: 10px 25px; border-radius: 8px; border: 1px solid #2d2d3d; margin-bottom: 15px; }
     select, input[type="range"] { background: #0b0b0f; color: #00ffaa; border: 1px solid #3c3c4f; font-family: inherit; font-size: 13px; border-radius: 4px; }
     select { padding: 6px 12px; cursor: pointer; }
     .slider-group { display: flex; align-items: center; gap: 8px; }
-
-    /* Canvas: Covers ~75-80% viewport width/height dynamically */
     .canvas-container {
-      width: 80vw;
-      height: 60vh;
+      /* 200 * 6.75 = 1350px width | 120 * 6.75 = 810px height */
+      width: 1350px;
+      height: 810px;
+      
       position: relative;
       box-shadow: 0 20px 50px rgba(0,0,0,0.8);
       border: 3px solid #252533;
       border-radius: 4px;
-      /* CSS Blueprint Grid Background layout directly beneath the transparent canvas memory */
+      
       background-color: #050508;
       background-image: 
         linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: calc(80vw / 160) calc(60vh / 120);
+      
+      /* 800px / 160 = exactly 5px grid squares */
+      background-size: 5px 5px; 
     }
     
     canvas { 
@@ -62,12 +35,9 @@
       height: 100%;
       display: block;
       cursor: crosshair;
-
-      /* CRITICAL CSS: Prevents browser blur/smoothing when scaling small image arrays up */
-      image-rendering: -moz-crisp-edges;
-      image-rendering: -webkit-crisp-edges;
+      
+      /* Keeps your 1:1 scaled pixels super blocky and crisp */
       image-rendering: pixelated;
-      image-rendering: crisp-edges;
     }
   </style>
 </head>
@@ -77,11 +47,12 @@
     <h1>Raster Algorithm Lab</h1>
     <div class="toolbar">
       <div>
-        <label for="algoSelect">METHOD: </label>
+        <label for="algoSelect">DRAW TARGET: </label>
         <select id="algoSelect">
-          <option value="draw_line_direct">y = mx + b (Direct Rounding)</option>
-          <option value="draw_line_dda">DDA (Floating Point Accumulator)</option>
-          <option value="draw_line_bresenham" selected>Bresenham (Pure Integer)</option>
+          <option value="draw_line_direct">Line: y = mx + b</option>
+          <option value="draw_line_dda">Line: DDA</option>
+          <option value="draw_line_bresenham">Line: Bresenham Integer</option>
+          <option value="draw_circle_bresenham" selected>Circle: Bresenham Midpoint</option>
         </select>
       </div>
       
@@ -93,10 +64,8 @@
     </div>
   </div>
 
-  <!-- Centered Scaled Framework Viewport Container -->
   <div class="canvas-container">
-    <!-- Internal pixel resolution kept tiny to enforce jagged scaling blocks -->
-    <canvas id="canvas" width="160" height="120"></canvas>
+    <canvas id="canvas" width="200" height="120"></canvas>
   </div>
 
   <script>
@@ -113,19 +82,6 @@
     let isDrawing = false;
     let startPoint = { x: 0, y: 0 };
 
-    function make_environment(...envs) {
-        return new Proxy(envs, {
-            get(target, prop, receiver) {
-            for (let env of envs) {
-                if (env.hasOwnProperty(prop)) {
-                return env[prop];
-                }
-            }
-            return (...args) => { console.error("NOT IMPLEMENTED: " + prop, args); }
-            }
-        });
-    }
-
     thickSelect.addEventListener('input', (e) => {
       thickVal.textContent = e.target.value + 'px';
     });
@@ -133,22 +89,16 @@
     async function initWasm() {
       const response = await fetch('engine2.wasm');
       const buffer = await response.arrayBuffer();
-      
-      // FIX: Explicitly providing an empty imports object runtime configuration mapping
-      const obj = await WebAssembly.instantiate(buffer, {
-        "env": make_environment()
-      });
-      
+      const obj = await WebAssembly.instantiate(buffer, {});
       wasmEngine = obj.instance.exports;
       wasmEngine.clear_screen();
       renderBuffer();
     }
 
     function renderBuffer() {
-      if (!wasmEngine) return; // Safeguard if buffer hasn't mounted
+      if (!wasmEngine) return;
       const bufferPointer = wasmEngine.get_buffer_ptr();
       const bufferLength = WIDTH * HEIGHT * 4;
-      
       const wasmPixels = new Uint8ClampedArray(wasmEngine.memory.buffer, bufferPointer, bufferLength);
       const imageData = new ImageData(wasmPixels, WIDTH, HEIGHT);
       ctx.putImageData(imageData, 0, 0);
@@ -165,13 +115,13 @@
     }
 
     canvas.addEventListener('mousedown', (e) => {
-      if (!wasmEngine) return; // FIX: Safeguard against early clicks before load completes
+      if (!wasmEngine) return;
       startPoint = getCanvasCoords(e);
       isDrawing = true;
     });
 
     canvas.addEventListener('mousemove', (e) => {
-      if (!isDrawing || !wasmEngine) return; // FIX: Safeguard mouse moves
+      if (!isDrawing || !wasmEngine) return;
       const currentPoint = getCanvasCoords(e);
 
       wasmEngine.clear_screen();
@@ -179,12 +129,28 @@
       const targetAlgo = algoSelect.value;
       const thickness = parseInt(thickSelect.value, 10);
       
-      wasmEngine[targetAlgo](
-        startPoint.x, startPoint.y, 
-        currentPoint.x, currentPoint.y, 
-        thickness,
-        0, 255, 170, 255
-      );
+      if (targetAlgo === "draw_circle_bresenham") {
+        // Calculate radius using Euclidean distance formula from center click point
+        const dx = currentPoint.x - startPoint.x;
+        const dy = currentPoint.y - startPoint.y;
+        const radius = Math.floor(Math.sqrt(dx * dx + dy * dy));
+
+        // Call your new circle routine: xc, yc, radius, thickness, r, g, b, a
+        wasmEngine.draw_circle_bresenham(
+          startPoint.x, startPoint.y, 
+          radius, 
+          thickness,
+          255, 100, 180, 255 // Hot Pink Circle
+        );
+      } else {
+        // Handle line options normally
+        wasmEngine[targetAlgo](
+          startPoint.x, startPoint.y, 
+          currentPoint.x, currentPoint.y, 
+          thickness,
+          0, 255, 170, 255 // Cyan Lines
+        );
+      }
 
       renderBuffer();
     });
@@ -192,7 +158,6 @@
     canvas.addEventListener('mouseup', () => isDrawing = false);
 
     initWasm();
-
   </script>
 </body>
 </html>

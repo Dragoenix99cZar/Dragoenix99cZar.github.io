@@ -1,5 +1,5 @@
 // Define a lower internal simulation resolution to make pixels big and blocky
-#define WIDTH 160
+#define WIDTH 200
 #define HEIGHT 120
 
 typedef int int32_t;
@@ -36,17 +36,6 @@ void clear_screen(void) {
         pixel_buffer[i + 3] = 255; // A
     }
 }
-// void clear_screen(void) {
-//     // Casting the pointer to volatile tells Clang not to replace this with an unlinked memset
-//     volatile u8* memory = (volatile u8*)pixel_buffer;
-    
-//     for (i32 i = 0; i < WIDTH * HEIGHT * 4; i += 4) {
-//         memory[i]     = 0;   // R
-//         memory[i + 1] = 0;   // G
-//         memory[i + 2] = 0;   // B
-//         memory[i + 3] = 0;   // A (Transparent for your CSS grid background layout)
-//     }
-// }
 
 static void put_pixel(i32 x, i32 y, u8 r, u8 g, u8 b, u8 a) {
     if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
@@ -163,5 +152,48 @@ void draw_line_bresenham(
         i32 e2 = 2 * err;
         if (e2 >= dy) { err += dy; x += sx; }
         if (e2 <= dx) { err += dx; y += sy; }
+    }
+}
+
+/* 
+ * 4) Bresenham's Midpoint Circle Algorithm:
+ *    Uses 8-way symmetry to plot all octants from a single 45-degree arc.
+ */
+__attribute__((export_name("draw_circle_bresenham")))
+void draw_circle_bresenham(i32 xc, i32 yc, i32 r_radius, i32 thickness, u8 r, u8 g, u8 b, u8 a) {
+    i32 x = 0;
+    i32 y = r_radius;
+    i32 d = 3 - 2 * r_radius; // Initial decision parameter
+
+    // Plot initial 8 cardinal points
+    put_thick_pixel(xc + x, yc + y, thickness, r, g, b, a);
+    put_thick_pixel(xc - x, yc + y, thickness, r, g, b, a);
+    put_thick_pixel(xc + x, yc - y, thickness, r, g, b, a);
+    put_thick_pixel(xc - x, yc - y, thickness, r, g, b, a);
+    put_thick_pixel(xc + y, yc + x, thickness, r, g, b, a);
+    put_thick_pixel(xc - y, yc + x, thickness, r, g, b, a);
+    put_thick_pixel(xc + y, yc - x, thickness, r, g, b, a);
+    put_thick_pixel(xc - y, yc - x, thickness, r, g, b, a);
+
+    while (y >= x) {
+        x++;
+
+        // Check decision parameter to update next pixel step position
+        if (d > 0) {
+            y--;
+            d = d + 4 * (x - y) + 10;
+        } else {
+            d = d + 4 * x + 6;
+        }
+
+        // Apply 8-way symmetry reflections around center point (xc, yc)
+        put_thick_pixel(xc + x, yc + y, thickness, r, g, b, a);
+        put_thick_pixel(xc - x, yc + y, thickness, r, g, b, a);
+        put_thick_pixel(xc + x, yc - y, thickness, r, g, b, a);
+        put_thick_pixel(xc - x, yc - y, thickness, r, g, b, a);
+        put_thick_pixel(xc + y, yc + x, thickness, r, g, b, a);
+        put_thick_pixel(xc - y, yc + x, thickness, r, g, b, a);
+        put_thick_pixel(xc + y, yc - x, thickness, r, g, b, a);
+        put_thick_pixel(xc - y, yc - x, thickness, r, g, b, a);
     }
 }

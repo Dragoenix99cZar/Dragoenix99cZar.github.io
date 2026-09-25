@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Turbo C (graphics.h) WebAssembly Sandbox</title>
+  <style>
+    body { 
+      background: #0f0f13; 
+      color: #e2e2e9; 
+      font-family: ui-monospace, monospace; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      height: 100vh; 
+      margin: 0; 
+      overflow: hidden;
+      padding: 2vh 0;
+      box-sizing: border-box;
+    }
+    
+    .header-group {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    h1 { 
+      font-size: 1.4rem; 
+      margin: 0 0 5px 0; 
+      color: #ffffff; 
+      letter-spacing: 1px; 
+    }
+    .info-bar {
+      font-size: 13px;
+      color: #00ffaa;
+      background: #1a1a24;
+      padding: 6px 20px;
+      border-radius: 4px;
+      border: 1px solid #2d2d3d;
+      margin-bottom: 15px;
+    }
+
+    /* Enforces a strict pixel scale using a fixed multiplier */
+    .canvas-container {
+      /* 160 * 5 = 800px width | 120 * 5 = 600px height */
+      width: 800px;
+      height: 600px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      border: 3px solid #252533;
+      border-radius: 4px;
+      background-color: #050508;
+      
+      /* Subtle guide grid lines tracking 1:1 pixel limits */
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 5px 5px; 
+    }
+    
+    canvas { 
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+      
+      /* CRITICAL: Disables browser pixel filtering to preserve clean jagged steps */
+      image-rendering: pixelated;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-group">
+    <h1>Turbo C Compatibility Matrix</h1>
+    <div class="info-bar">
+      Active Environment: 160x120 Workspace (5x Integer Pixel Scale)
+    </div>
+  </div>
+
+  <div class="canvas-container">
+    <canvas id="canvas" width="160" height="120"></canvas>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+
+    let wasmEngine = null;
+
+    // Load and compile standalone WASM binary
+    async function initWasm() {
+      try {
+        const response = await fetch('engine.wasm');
+        const buffer = await response.arrayBuffer();
+        
+        // Provide empty imports configuration parameter required by -nostdlib
+        const obj = await WebAssembly.instantiate(buffer, {});
+        
+        wasmEngine = obj.instance.exports;
+        
+        // Render initial static scene layout frame
+        wasmEngine.draw_textbook_scene(-10, -10); // Pass out-of-bounds coordinates initially
+        renderBuffer();
+      } catch (err) {
+        console.error("WASM Instantiation Failed:", err);
+      }
+    }
+
+    // Direct buffer write targeting canvas graphic contexts
+    function renderBuffer() {
+      if (!wasmEngine) return;
+      
+      const bufferPointer = wasmEngine.get_buffer_ptr();
+      const bufferLength = WIDTH * HEIGHT * 4;
+      
+      // Map view onto raw WebAssembly shared linear memory array heap 
+      const wasmPixels = new Uint8ClampedArray(wasmEngine.memory.buffer, bufferPointer, bufferLength);
+      const imageData = new ImageData(wasmPixels, WIDTH, HEIGHT);
+      
+      ctx.putImageData(imageData, 0, 0);
+    }
+
+    // Convert client coordinates back to relative 160x120 space offsets
+    function getCanvasCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = WIDTH / rect.width;
+      const scaleY = HEIGHT / rect.height;
+      return {
+        x: Math.floor((e.clientX - rect.left) * scaleX),
+        y: Math.floor((e.clientY - rect.top) * scaleY)
+      };
+    }
+
+    // Track frame mutations on mouse movement
+    canvas.addEventListener('mousemove', (e) => {
+      if (!wasmEngine) return;
+      
+      const currentPoint = getCanvasCoords(e);
+
+      // Invoke custom logic routine parsing standard coordinates
+      wasmEngine.draw_textbook_scene(currentPoint.x, currentPoint.y);
+
+      // Synchronize changes to active canvas layer
+      renderBuffer();
+    });
+
+    initWasm();
+  </script>
+</body>
+</html>

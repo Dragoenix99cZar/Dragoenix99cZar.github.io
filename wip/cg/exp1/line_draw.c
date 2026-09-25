@@ -27,8 +27,8 @@ typedef __SIZE_TYPE__      usize;
  * CELL real pixels, drawn with a 1px gap so adjacent cells stay visually
  * distinct instead of blurring into a solid diagonal.
  */
-#define GRID_W   100
-#define GRID_H   80
+#define GRID_W   96
+#define GRID_H   72
 #define CELL     10                 /* 64*10 = 640, 48*10 = 480 */
 #define CANVAS_W (GRID_W * CELL)
 #define CANVAS_H (GRID_H * CELL)
