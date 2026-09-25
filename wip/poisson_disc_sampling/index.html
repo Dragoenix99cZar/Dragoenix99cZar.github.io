@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poisson Disc Sampling (Fast + Hues)</title>
+<style>
+  body {
+    background: #0b0b0b;
+    color: #ddd;
+    font-family: system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 1em;
+  }
+  h2 { margin: 0.3em; }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 1em;
+  }
+  .control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 13px;
+  }
+  input[type=range] {
+    width: 120px;
+  }
+  button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    align-self: center;
+  }
+  button:hover { background: #555; }
+  canvas {
+    border: 1px solid #444;
+    background: #151515;
+  }
+</style>
+</head>
+<body>
+<h2>Poisson Disc Sampling (Fast Animation + Random Hue)</h2>
+
+<div class="controls">
+  <div class="control">
+    <label>Radius: <span id="rVal">20</span></label>
+    <input type="range" id="radius" min="6" max="100" value="20" step="1">
+  </div>
+  <div class="control">
+    <label>Region W: <span id="rwVal">500</span></label>
+    <input type="range" id="regionX" min="100" max="6000" value="500" step="10">
+  </div>
+  <div class="control">
+    <label>Region H: <span id="rhVal">500</span></label>
+    <input type="range" id="regionY" min="100" max="6000" value="500" step="10">
+  </div>
+  <div class="control">
+    <label>Rejection Samples: <span id="rejVal">30</span></label>
+    <input type="range" id="rejection" min="5" max="60" value="30" step="1">
+  </div>
+  <div class="control">
+    <label>Display Radius: <span id="drVal">2</span></label>
+    <input type="range" id="displayRadius" min="1" max="10" value="2" step="0.5">
+  </div>
+  <div class="control">
+    <label>Speed: <span id="spVal">40</span></label>
+    <input type="range" id="speed" min="1" max="100" value="40" step="1">
+  </div>
+  <button id="generate">Generate</button>
+</div>
+
+<canvas id="canvas" width="500" height="500"></canvas>
+
+<script>
+// ---------- Poisson Disc Sampling with step capture ----------
+function generatePointsStep(radius, regionSize, numSamplesBeforeRejection = 30) {
+  const cellSize = radius / Math.sqrt(2);
+  const gridWidth = Math.ceil(regionSize.x / cellSize);
+  const gridHeight = Math.ceil(regionSize.y / cellSize);
+  const grid = Array.from({ length: gridWidth }, () => Array(gridHeight).fill(-1));
+
+  const points = [];
+  const spawnPoints = [{ x: regionSize.x / 2, y: regionSize.y / 2, color: randomHue() }];
+  const steps = [];
+
+  while (spawnPoints.length > 0) {
+    const spawnIndex = Math.floor(Math.random() * spawnPoints.length);
+    const spawnCentre = spawnPoints[spawnIndex];
+    let candidateAccepted = false;
+
+    for (let i = 0; i < numSamplesBeforeRejection; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dir = { x: Math.sin(angle), y: Math.cos(angle) };
+      const mag = radius + Math.random() * radius;
+      const candidate = {
+        x: spawnCentre.x + dir.x * mag,
+        y: spawnCentre.y + dir.y * mag,
+        color: randomHue()
+      };
+
+      if (isValid(candidate, regionSize, cellSize, radius, points, grid)) {
+        points.push(candidate);
+        spawnPoints.push(candidate);
+        const cellX = Math.floor(candidate.x / cellSize);
+        const cellY = Math.floor(candidate.y / cellSize);
+        grid[cellX][cellY] = points.length - 1;
+        candidateAccepted = true;
+        steps.push([...points]);
+        break;
+      }
+    }
+
+    if (!candidateAccepted) spawnPoints.splice(spawnIndex, 1);
+  }
+  return steps;
+}
+
+function isValid(candidate, regionSize, cellSize, radius, points, grid) {
+  if (candidate.x >= 0 && candidate.x < regionSize.x &&
+      candidate.y >= 0 && candidate.y < regionSize.y) {
+    const cellX = Math.floor(candidate.x / cellSize);
+    const cellY = Math.floor(candidate.y / cellSize);
+    const searchStartX = Math.max(0, cellX - 2);
+    const searchEndX = Math.min(cellX + 2, grid.length - 1);
+    const searchStartY = Math.max(0, cellY - 2);
+    const searchEndY = Math.min(cellY + 2, grid[0].length - 1);
+
+    for (let x = searchStartX; x <= searchEndX; x++) {
+      for (let y = searchStartY; y <= searchEndY; y++) {
+        const pointIndex = grid[x][y];
+        if (pointIndex !== -1) {
+          const p = points[pointIndex];
+          const dx = candidate.x - p.x;
+          const dy = candidate.y - p.y;
+          if (dx * dx + dy * dy < radius * radius) return false;
+        }
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+function randomHue() {
+  const hue = Math.floor(Math.random() * 360);
+  const sat = 70 + Math.random() * 30;
+  const light = 40 + Math.random() * 20;
+  return `hsl(${hue}, ${sat}%, ${light}%)`;
+}
+
+// ---------- Drawing ----------
+function draw(points, regionSize, displayRadius) {
+  ctx.fillStyle = "#151515";
+  ctx.fillRect(0, 0, regionSize.x, regionSize.y);
+  for (const p of points) {
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, displayRadius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// ---------- Controls ----------
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+const controls = {
+  radius: document.getElementById('radius'),
+  regionX: document.getElementById('regionX'),
+  regionY: document.getElementById('regionY'),
+  rejection: document.getElementById('rejection'),
+  displayRadius: document.getElementById('displayRadius'),
+  speed: document.getElementById('speed'),
+  generate: document.getElementById('generate'),
+  rVal: document.getElementById('rVal'),
+  rwVal: document.getElementById('rwVal'),
+  rhVal: document.getElementById('rhVal'),
+  rejVal: document.getElementById('rejVal'),
+  drVal: document.getElementById('drVal'),
+  spVal: document.getElementById('spVal')
+};
+
+// --- Individual slider bindings ---
+controls.radius.oninput = () => controls.rVal.textContent = controls.radius.value;
+controls.regionX.oninput = () => {
+    controls.rwVal.textContent = controls.regionX.value;
+    canvas.width = controls.regionX.value;
+    cancelAnimationFrame(animationFrame);
+};
+
+controls.regionY.oninput = () => {
+    controls.rhVal.textContent = controls.regionY.value;
+    canvas.height = controls.regionY.value;
+    cancelAnimationFrame(animationFrame);
+};
+controls.rejection.oninput = () => controls.rejVal.textContent = controls.rejection.value;
+controls.displayRadius.oninput = () => controls.drVal.textContent = controls.displayRadius.value;
+controls.speed.oninput = () => controls.spVal.textContent = controls.speed.value;
+
+// ---------- Animation ----------
+let animationFrame, steps, stepIndex = 0;
+controls.generate.onclick = () => {
+  cancelAnimationFrame(animationFrame);
+  const radius = parseFloat(controls.radius.value);
+  const regionSize = { x: parseFloat(controls.regionX.value), y: parseFloat(controls.regionY.value) };
+  const rejectionSamples = parseInt(controls.rejection.value);
+  const displayRadius = parseFloat(controls.displayRadius.value);
+  const speed = parseInt(controls.speed.value);
+
+  canvas.width = regionSize.x;
+  canvas.height = regionSize.y;
+
+  steps = generatePointsStep(radius, regionSize, rejectionSamples);
+  stepIndex = 0;
+
+  function animate() {
+    if (stepIndex >= steps.length) return;
+    const stepCount = Math.min(speed, steps.length - stepIndex);
+    draw(steps[stepIndex + stepCount - 1], regionSize, displayRadius);
+    stepIndex += stepCount;
+    animationFrame = requestAnimationFrame(animate);
+  }
+  animate();
+};
+
+// ---------- Auto-generate on load ----------
+controls.generate.click();
+</script>
+</body>
+</html>
