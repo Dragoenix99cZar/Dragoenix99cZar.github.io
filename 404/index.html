@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pure Clang Wasm Demo</title>
+</head>
+<body>
+    <div id="wasm-app">Loading app from WebAssembly...</div>
+
+    <script>
+        function readWasmString(memory, ptr) {
+            const view = new Uint8Array(memory.buffer, ptr);
+            let end = ptr;
+            while (view[end - ptr] !== 0) {
+                end++;
+            }
+            const strBuffer = new Uint8Array(memory.buffer, ptr, end - ptr);
+            return new TextDecoder('utf-8').decode(strBuffer);
+        }
+
+        const libm = {
+            "atan2f": Math.atan2,
+            "cosf"  : Math.cos,
+            "sinf"  : Math.sin,
+            "sqrtf" : Math.sqrt,
+        };
+
+        function make_environment(...envs) {
+            return new Proxy(envs, {
+                get(target, prop, receiver) {
+                for (let env of envs) {
+                    if (env.hasOwnProperty(prop)) {
+                    return env[prop];
+                    }
+                }
+                return (...args) => { console.error("NOT IMPLEMENTED: " + prop, args); }
+                }
+            });
+        }
+
+        // WebAssembly.instantiateStreaming(fetch('app.wasm'), {})
+        WebAssembly.instantiateStreaming(fetch('app.wasm'), {
+            "env": make_environment(libm)
+        })
+            .then(result => {
+                const exports = result.instance.exports;
+                
+                // FIX: Expose exports globally so the C-injected script can read it
+                window.wasmExports = exports;
+                
+                const stringPtr = exports.get_html_content();
+                const htmlPayload = readWasmString(exports.memory, stringPtr);
+                
+                const container = document.getElementById('wasm-app');
+                container.innerHTML = htmlPayload;
+
+                // Execute embedded script tags manually
+                const scripts = container.querySelectorAll("script");
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement("script");
+                    newScript.text = oldScript.text;
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+            })
+            .catch(err => console.error("Error loading Wasm:", err));
+    </script>
+</body>
+</html>
