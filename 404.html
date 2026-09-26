@@ -39,18 +39,18 @@
         }
 
         // WebAssembly.instantiateStreaming(fetch('app.wasm'), {})
-        WebAssembly.instantiateStreaming(fetch('app.wasm'), {
+        WebAssembly.instantiateStreaming(fetch('./404/app.wasm'), {
             "env": make_environment(libm)
         })
             .then(result => {
                 const exports = result.instance.exports;
-                
+
                 // FIX: Expose exports globally so the C-injected script can read it
                 window.wasmExports = exports;
-                
+
                 const stringPtr = exports.get_html_content();
                 const htmlPayload = readWasmString(exports.memory, stringPtr);
-                
+
                 const container = document.getElementById('wasm-app');
                 container.innerHTML = htmlPayload;
 
