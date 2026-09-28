@@ -1,0 +1,15 @@
+{
+  "name": "post_calc",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "post_calc_bg.wasm",
+    "post_calc.js",
+    "post_calc.d.ts"
+  ],
+  "main": "post_calc.js",
+  "types": "post_calc.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
