@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacky Compiler Pipeline Visualizer</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --code-bg: #090d16;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+        .input-group {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--accent-color);
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        .pipeline-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .stage-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px 20px;
+        }
+        .stage-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        pre {
+            background: var(--code-bg);
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+        }
+        .tree-view {
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.4;
+            white-space: pre;
+        }
+        .highlight-result {
+            font-size: 1.2rem;
+            color: #4ade80;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Stacky Pipeline Visualizer</h1>
+    <p class="subtitle">Interactive Compiler Design Learning Tool</p>
+
+    <div class="input-group">
+        <label for="expressionInput">Infix Expression Source Code:</label>
+        <input type="text" id="expressionInput" value="-5 * (1.3 * 2) + 21.1 /7 + 2^8" oninput="compileAndRun()">
+    </div>
+
+    <div class="pipeline-grid">
+        <div class="stage-card">
+            <div class="stage-title">1. Lexer (Tokens)</div>
+            <pre id="outTokens">--</pre>
+        </div>
+
+        <div class="stage-card">
+            <div class="stage-title">2. Shunting Yard (Postfix Translation)</div>
+            <pre id="outPostfix">--</pre>
+        </div>
+
+        <div class="stage-card">
+            <div class="stage-title">3. Parser (AST Tree Visualization)</div>
+            <pre id="outAst" class="tree-view">--</pre>
+        </div>
+
+        <div class="stage-card">
+            <div class="stage-title">4. Compiler (Bytecode Instructions)</div>
+            <pre id="outBytecode">--</pre>
+        </div>
+
+        <div class="stage-card">
+            <div class="stage-title">5. Virtual Machine (Execution Result)</div>
+            <pre><span id="outResult" class="highlight-result">--</span></pre>
+        </div>
+    </div>
+</div>
+
+<script>
+// --- COMPILER PIPELINE JAVASCRIPT IMPLEMENTATION ---
+
+const PRECEDENCE = { '+': 1, '-': 1, '*': 2, '/': 2, '^': 3 };
+const RIGHT_ASSIG = new Set(['^']);
+
+function tokenize(expression) {
+    const regex = /[a-zA-Z][a-zA-Z0-9]*|\d+(?:\.\d+)?|[\+\-\*\/\^\(\),]/g;
+    const rawTokens = expression.match(regex) || [];
+    let refined = [];
+    
+    for (let i = 0; i < rawTokens.length; i++) {
+        let token = rawTokens[i];
+        if (token === '-') {
+            let isUnary = refined.length === 0 || 
+                          ['(', ',', '+', '-', '*', '/', '^'].includes(refined[refined.length - 1]);
+            if (isUnary && i + 1 < rawTokens.length && !isNaN(rawTokens[i+1])) {
+                refined.push("-" + rawTokens[i+1]);
+                i++;
+                continue;
+            } else if (isUnary) {
+                refined.push('neg');
+                continue;
+            }
+        }
+        refined.push(token);
+    }
+    return refined;
+}
+
+function infixToPostfix(tokens) {
+    let outputQueue = [];
+    let opStack = [];
+
+    for (let token of tokens) {
+        let isNumeric = !isNaN(token);
+        if (isNumeric) {
+            outputQueue.push(token);
+        } else if (token in PRECEDENCE) {
+            while (opStack.length > 0 && opStack[opStack.length - 1] in PRECEDENCE) {
+                let topOp = opStack[opStack.length - 1];
+                let higher = PRECEDENCE[topOp] > PRECEDENCE[token];
+                let equal = PRECEDENCE[topOp] === PRECEDENCE[token];
+                let leftAssoc = !RIGHT_ASSIG.has(token);
+                if (higher || (equal && leftAssoc)) {
+                    outputQueue.push(opStack.pop());
+                } else {
+                    break;
+                }
+            }
+            opStack.push(token);
+        } else if (token === '(') {
+            opStack.push(token);
+        } else if (token === ')') {
+            while (opStack.length > 0 && opStack[opStack.length - 1] !== '(') {
+                outputQueue.push(opStack.pop());
+            }
+            if (opStack.length > 0 && opStack[opStack.length - 1] === '(') {
+                opStack.pop();
+            }
+        } else if (token === 'neg') {
+            opStack.push(token);
+        }
+    }
+    while (opStack.length > 0) {
+        outputQueue.push(opStack.pop());
+    }
+    return outputQueue;
+}
+
+function parse(postfixTokens) {
+    let stack = [];
+    for (let token of postfixTokens) {
+        if (!isNaN(token)) {
+            stack.push({ type: "integer", val: Number(token) });
+        } else if (['+', '-', '*', '/', '^'].includes(token)) {
+            if (stack.length < 2) throw new Error("Syntax Error: Stack underflow");
+            let right = stack.pop();
+            let left = stack.pop();
+            stack.push({ type: "binary", op: token, left, right });
+        } else if (token === 'neg') {
+            if (stack.length < 1) throw new Error("Syntax Error: Stack underflow");
+            let operand = stack.pop();
+            stack.push({ type: "unary", op: "neg", operand });
+        }
+    }
+    if (stack.length !== 1) throw new Error("Syntax Error: Incomplete expression");
+    return stack[0];
+}
+
+function formatAstTree(node, prefix = "", isLast = true, isRoot = true) {
+    if (!node) return "";
+    let label = "";
+    let children = [];
+
+    if (node.type === "integer") {
+        label = `integer(${node.val})`;
+    } else if (node.type === "unary") {
+        label = `unary(${node.op})`;
+        children = [node.operand];
+    } else if (node.type === "binary") {
+        label = `binary(${node.op})`;
+        children = [node.left, node.right];
+    }
+
+    let result = "";
+    if (isRoot) {
+        result += `Root: ${label}\n`;
+    } else {
+        let marker = isLast ? "└── " : "├── ";
+        result += `${prefix}${marker}${label}\n`;
+    }
+
+    for (let i = 0; i < children.length; i++) {
+        let extension = isLast ? "    " : "│   ";
+        let nextPrefix = isRoot ? "" : prefix + extension;
+        result += formatAstTree(children[i], nextPrefix, i === children.length - 1, false);
+    }
+    return result;
+}
+
+function compileNode(node, bytecode = []) {
+    if (node.type === "integer") {
+        bytecode.push(["PUSH", node.val]);
+    } else if (node.type === "unary") {
+        compileNode(node.operand, bytecode);
+        if (node.op === "neg") bytecode.push(["NEG"]);
+    } else if (node.type === "binary") {
+        compileNode(node.left, bytecode);
+        compileNode(node.right, bytecode);
+        const ops = { "+": "ADD", "-": "SUB", "*": "MUL", "/": "DIV", "^": "POW" };
+        bytecode.push([ops[node.op]]);
+    }
+    return bytecode;
+}
+
+function runVM(bytecode) {
+    let stack = [];
+    for (let instr of bytecode) {
+        let op = instr[0];
+        if (op === "PUSH") {
+            stack.push(instr[1]);
+        } else if (op === "ADD") {
+            let r = stack.pop(), l = stack.pop();
+            stack.push(l + r);
+        } else if (op === "SUB") {
+            let r = stack.pop(), l = stack.pop();
+            stack.push(l - r);
+        } else if (op === "MUL") {
+            let r = stack.pop(), l = stack.pop();
+            stack.push(l * r);
+        } else if (op === "DIV") {
+            let r = stack.pop(), l = stack.pop();
+            if (r === 0) throw new Error("Division by zero");
+            stack.push(l / r);
+        } else if (op === "POW") {
+            let r = stack.pop(), l = stack.pop();
+            stack.push(Math.pow(l, r));
+        } else if (op === "NEG") {
+            let val = stack.pop();
+            stack.push(-val);
+        }
+    }
+    return stack.length > 0 ? stack[stack.length - 1] : null;
+}
+
+function compileAndRun() {
+    const inputVal = document.getElementById("expressionInput").value;
+    try {
+        const tokens = tokenize(inputVal);
+        const postfixArray = infixToPostfix(tokens); // Returns an array of postfix tokens
+        const postfixString = postfixArray.join(" "); // For display purposes
+        
+        const ast = parse(postfixArray); // Pass the array directly to parse
+        const bytecode = compileNode(ast);
+        const result = runVM(bytecode);
+
+        document.getElementById("outPostfix").innerText = postfixString;
+        document.getElementById("outTokens").innerText = JSON.stringify(tokens).replaceAll('"', '');
+        document.getElementById("outAst").innerText = formatAstTree(ast);
+        document.getElementById("outBytecode").innerText = bytecode.map(i => JSON.stringify(i)).join("\n");
+        document.getElementById("outResult").innerText = result;
+    } catch (err) {
+        document.getElementById("outResult").innerText = "Error: " + err.message;
+    }
+}
+
+// Run on initial load
+compileAndRun();
+</script>
+
+</body>
+</html>
