@@ -1,0 +1,15 @@
+{
+  "name": "map_game",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "map_game_bg.wasm",
+    "map_game.js",
+    "map_game.d.ts"
+  ],
+  "main": "map_game.js",
+  "types": "map_game.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
