@@ -1,127 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO & Social Graph Metadata -->
   <title>Aman Karn | Senior Game & Software Engineer</title>
+  <meta name="description"
+    content="Portfolio of Aman Karn: Senior Game & Software Engineer specializing in scalable 2D/3D games, XR (VR/AR/MR) applications, and real-time simulations across Unity3D, Unreal Engine 5, C++, and Rust/WASM.">
+  <meta name="keywords"
+    content="Aman Karn, Game Developer, Software Engineer, Unity3D, Unreal Engine 5, XR, VR, AR, WebAssembly, Rust, C++, C#, Neo-Brutalist">
+  <meta name="author" content="Aman Karn">
+  <meta property="og:title" content="Aman Karn | Senior Game & Software Engineer">
+  <meta property="og:description"
+    content="Architecting scalable 2D/3D games, XR applications, and real-time graphics pipelines across Unity3D, Unreal Engine 5, and WebAssembly.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="./images/favicon.ico">
+
+  <!-- Modern Neo-Brutalist Google Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
   <style>
-
     :root {
-        /* High-Contrast Dark Neo-Brutalist Palette */
-        --bg-color: #0d0f12;         /* Dark background */
-        --card-bg: #16191e;         /* Stark dark card surface */
-        --card-border: #000000;     /* Pure black border */
-        --primary-color: #00ff66;   /* Hot pink accent */
-        --text-main: #ffffff;      /* Pure white text */
-        --text-muted: #e6f3ff;     /* Readable gray */
-        --accent-color: #00ff66;    /* Electric green accent */
-        --tag-bg: #1a161e8f;         /* Neon yellow tags */
-        --tag-text: #ff6a33;       /* High-contrast text on yellow */
+      /* High-Contrast Dark Neo-Brutalist Palette */
+      --bg: #0a0c10;
+      --card-bg: #12161f;
+      --card-inner: #181d28;
+      --border-color: #000000;
+      --border-light: #262d3d;
 
-        /* Hard Brutalist Shadows for Dark Theme */
-        --shadow-hard: 4px 4px 0px #0000008c;
-        --shadow-hard-lg: 6px 6px 0px #0000008c;
-        --shadow-active: 2px 2px 0px #0000008c;
+      /* Vibrant Accent Colors */
+      --primary: #00ff66;
+      /* Neon Matrix Green */
+      --accent-cyan: #00f0ff;
+      /* Cyberpunk Cyan */
+      --accent-amber: #ffb703;
+      /* High-Voltage Yellow */
+      --accent-pink: #ff0055a3;
+      /* Brutalist Pink */
+      --accent-rust: #f77f00;
+      /* Rust Orange */
+      --accent-purple: #b5179e;
+      /* Deep Magenta */
+
+      --text-main: #ffffff;
+      --text-muted: #b8c5d6;
+      --text-dim: #73849c;
+
+      /* Hard Unblurred Brutalist Shadows */
+      --shadow-sm: 3px 3px 0px #000000;
+      --shadow-md: 5px 5px 0px #000000;
+      --shadow-lg: 8px 8px 0px #000000;
+      --shadow-hover: 10px 10px 0px #000000;
+      --shadow-active: 2px 2px 0px #000000;
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-        font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-main);
-        line-height: 1.5;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-    }
-
-    main {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-
-    header {
-      background: #12151a;
-      padding: 40px 16px;
-      text-align: center;
-      border-bottom: 4px solid #000000;
-      margin: 10px 10px;
-      border-radius: 10px;
-    }
-
-    header h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: -0.03em;
+      font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
       color: var(--text-main);
-      margin-bottom: 8px;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
     }
 
-    header .subtitle {
-      font-size: clamp(1rem, 3vw, 1.15rem);
-      color: var(--accent-color);
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 12px;
+    /* Fixed Background WebAssembly Canvas */
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      object-fit: cover;
+      opacity: 0.32;
+      filter: contrast(1.2) brightness(0.85);
     }
 
-    header .tagline {
-      max-width: 700px;
-      margin: 0 auto 20px auto;
-      font-size: 0.95rem;
+    code,
+    pre,
+    .mono {
+      font-family: "JetBrains Mono", monospace;
     }
 
-    .cta-buttons {
+    /* Top Utility Header */
+    .top-nav {
+      background: #0f131a;
+      border-bottom: 3px solid var(--border-color);
+      padding: 12px 24px;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      gap: 12px;
       flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    /* Hard-Edged Brutalist Buttons */
-    .btn {
-      display: inline-block;
-      padding: 10px 18px;
-      border-radius: 0;
+    .brand-id {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
       font-weight: 800;
-      font-size: 0.85rem;
-      text-decoration: none;
       text-transform: uppercase;
-      border: 3px solid #000000;
-      box-shadow: var(--shadow-hard);
-      transition: all 0.1s ease-out;
-      word-break: break-word;
+      letter-spacing: 0.05em;
     }
 
-    .btn-primary {
-      background-color: var(--primary-color);
-      color: #180e0e;
+    .brand-badge {
+      background: var(--primary);
+      color: #000;
+      padding: 4px 8px;
+      border: 2px solid var(--border-color);
+      box-shadow: 2px 2px 0px #000000;
     }
 
-    .btn-primary:hover {
-      background-color: var(--accent-color);
-      color: #000000;
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* Neo-Brutalist Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .badge-primary {
+      background: var(--primary);
+      color: #000;
+    }
+
+    .badge-cyan {
+      background: var(--accent-cyan);
+      color: #000;
+    }
+
+    .badge-amber {
+      background: var(--accent-amber);
+      color: #000;
+    }
+
+    .badge-pink {
+      background: var(--accent-pink);
+      color: #fff;
+    }
+
+    .badge-rust {
+      background: var(--accent-rust);
+      color: #000;
+    }
+
+    .badge-dark {
+      background: #1c222e;
+      color: var(--text-main);
+    }
+
+    /* Neo-Brutalist Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border: 3px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.1s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
       transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #000000;
-    }
-
-    .btn-outline {
-      color: var(--primary-color);
-      background-color: var(--card-bg);
-    }
-
-    .btn-outline:hover {
-      background-color: var(--tag-bg);
-      color: var(--accent-color);
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #000000;
+      box-shadow: var(--shadow-md);
     }
 
     .btn:active {
@@ -129,732 +213,1850 @@
       box-shadow: var(--shadow-active);
     }
 
-    /* Flat Card Styling */
-    .project-card, .skill-category, .experiment-card {
-      background-color: var(--card-bg);
-      border: 3px solid #000000;
-      border-radius: 0;
-      box-shadow: var(--shadow-hard-lg);
+    .btn-primary {
+      background: var(--primary);
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      background: #2aff80;
+      color: #000;
+    }
+
+    .btn-cyan {
+      background: var(--accent-cyan);
+      color: #000;
+    }
+
+    .btn-cyan:hover {
+      background: #38f4ff;
+      color: #000;
+    }
+
+    .btn-sub {
+      background: var(--card-inner);
+      color: var(--text-main);
+    }
+
+    .btn-sub:hover {
+      background: #252e40;
+      color: var(--accent-cyan);
+    }
+
+    .btn-amber {
+      background: var(--accent-amber);
+      color: #000;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px 20px 80px 20px;
+    }
+
+    /* Hero / Header Section */
+    .hero-banner {
+      background: var(--card-bg);
+      border: 4px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      padding: 40px 32px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-banner::after {
+      content: "PORTFOLIO";
+      position: absolute;
+      right: -20px;
+      bottom: -30px;
+      font-size: clamp(4rem, 12vw, 8.5rem);
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.025);
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: 0.1em;
+    }
+
+    .hero-meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .hero-banner h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 10px;
+      color: var(--text-main);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-tagline {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 900px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    /* Terminal Curl Copy Bar */
+    .curl-bar {
+      display: inline-flex;
+      align-items: center;
+      background: #090c12;
+      border: 3px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 6px 12px;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      position: relative;
+    }
+
+    .curl-bar:hover {
+      border-color: var(--primary);
+      transform: translate(-2px, -2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .curl-prompt {
+      color: var(--accent-pink);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .curl-cmd {
+      color: var(--primary);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .curl-copy-badge {
+      background: #1c2536;
+      color: var(--accent-cyan);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border: 1px solid var(--border-color);
+      text-transform: uppercase;
+    }
+
+    .copy-toast {
+      position: absolute;
+      top: -36px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border: 2px solid #000;
+      box-shadow: 2px 2px 0px #000;
+      display: none;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    /* Metrics Summary Bar */
+    .metrics-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 24px;
+    }
+
+    .metric-card {
+      background: var(--card-inner);
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 16px 20px;
+    }
+
+    .metric-val {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 4px;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    /* WASM Visualizer Control Bar */
+    .visualizer-hud {
+      background: #0d1118;
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 10px 18px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.8rem;
+    }
+
+    .hud-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .hud-title span.pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
+      border: 2px solid #000;
+      display: inline-block;
+      box-shadow: 0 0 8px var(--primary);
+    }
+
+    .hud-active-effect {
+      color: var(--accent-cyan);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700;
+    }
+
+    /* Section Headings */
+    .section-header {
+      margin-top: 50px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 4px solid var(--primary);
+      padding-bottom: 12px;
+    }
+
+    .section-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-icon {
+      width: 18px;
+      height: 18px;
+      background: var(--primary);
+      border: 3px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    h2 {
+      font-size: clamp(1.4rem, 4vw, 1.85rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .section-subtitle {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Professional Overview Card */
+    .overview-card {
+      background: var(--card-bg);
+      border: 4px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      padding: 30px;
+      margin-bottom: 35px;
+    }
+
+    .overview-lead {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .overview-lead strong {
+      color: var(--text-main);
+      font-weight: 800;
+    }
+
+    .overview-highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .highlight-item {
+      background: var(--card-inner);
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 16px;
+      border-left: 5px solid var(--primary);
+    }
+
+    .highlight-item h3 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .highlight-item p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Featured Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 500px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Neo-Brutalist Project Card */
+    .project-card {
+      background: var(--card-bg);
+      border: 4px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
-    .experiment-card:hover {
-      transform: translate(-3px, -3px);
-      box-shadow: 9px 9px 0px #000000;
+    .project-card:hover {
+      transform: translate(-4px, -4px);
+      box-shadow: var(--shadow-hover);
     }
 
-    .project-card h3, .skill-category h3, .experiment-card-body h3 {
-        font-weight: 800;
-        text-transform: uppercase;
-    }
-
-    /* Section Dividers */
-    h2 {
-      font-size: 1.35rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      color: var(--text-main);
-      border-bottom: 3px solid var(--primary-color);
-      padding-bottom: 8px;
-      margin-bottom: 20px;
+    .card-header {
+      padding: 20px 22px 16px 22px;
+      border-bottom: 3px solid var(--border-color);
+      background: #151a24;
       display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-top-meta {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
       gap: 10px;
     }
 
-    h2 span {
-        padding-left: 5px;
+    .card-id {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--text-dim);
+      font-family: "JetBrains Mono", monospace;
     }
 
-    h2::before {
-      content: "";
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      background-color: var(--primary-color);
-      border: 2px solid #000000;
-      flex-shrink: 0;
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
     }
 
-    p {
-      color: var(--text-muted);
-      margin-bottom: 16px;
+    .card-subtitle {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
-    /* Grid Layout for Featured Projects */
-    .project-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 63px;
-    }
-
-    .project-card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 20px;
+    .card-body {
+      padding: 20px 22px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      gap: 18px;
+      flex-grow: 1;
     }
 
-    .project-card h3 {
-      font-size: 1.2rem;
+    .section-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .block-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-amber);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .block-title::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-amber);
+      border: 1px solid var(--border-color);
+    }
+
+    .block-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .card-bullets {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .card-bullets li {
+      position: relative;
+      padding-left: 20px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .card-bullets li::before {
+      content: "▪";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .tech-tag {
+      background: #090c12;
+      color: var(--primary);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 2px 2px 0px #000000;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      font-family: "JetBrains Mono", monospace;
+      text-transform: uppercase;
+    }
+
+    .tech-tag.tag-xr {
+      color: var(--accent-cyan);
+    }
+
+    .tech-tag.tag-ue5 {
+      color: var(--accent-amber);
+    }
+
+    .tech-tag.tag-ml {
+      color: var(--accent-pink);
+    }
+
+    .tech-tag.tag-c {
+      color: var(--accent-rust);
+    }
+
+    .card-footer {
+      padding: 16px 22px;
+      background: #0e121a;
+      border-top: 3px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    /* Skills Taxonomy Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      margin-bottom: 40px;
+    }
+
+    .skill-card {
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      border-top: 6px solid var(--primary);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .skill-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .skill-card:nth-child(2) {
+      border-top-color: var(--accent-cyan);
+    }
+
+    .skill-card:nth-child(3) {
+      border-top-color: var(--accent-pink);
+    }
+
+    .skill-card:nth-child(4) {
+      border-top-color: var(--accent-amber);
+    }
+
+    .skill-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .skill-list li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      padding: 6px 10px;
+      background: var(--card-inner);
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--primary);
+      font-weight: 600;
+    }
+
+    .skill-card:nth-child(2) .skill-list li {
+      border-left-color: var(--accent-cyan);
+    }
+
+    .skill-card:nth-child(3) .skill-list li {
+      border-left-color: var(--accent-pink);
+    }
+
+    .skill-card:nth-child(4) .skill-list li {
+      border-left-color: var(--accent-amber);
+    }
+
+    /* WIP Systems Callout Banner */
+    .wip-callout-banner {
+      background: linear-gradient(135deg, #151a26 0%, #1a1528 100%);
+      border: 4px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      padding: 28px 30px;
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .wip-callout-text h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: 6px;
+    }
+
+    .wip-callout-text p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 700px;
+    }
+
+    /* Experiments Toolbar */
+    .exp-toolbar {
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 16px 20px;
+      margin-bottom: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .exp-search-input {
+      width: 100%;
+      background: #090c12;
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 10px 14px;
+      color: var(--text-main);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+    }
+
+    .exp-search-input:focus {
+      border-color: var(--primary);
+    }
+
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .pill-btn {
+      background: var(--card-inner);
+      color: var(--text-muted);
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      font-family: inherit;
+    }
+
+    .pill-btn:hover {
+      background: #252d3d;
+      color: #fff;
+      transform: translate(-1px, -1px);
+    }
+
+    .pill-btn.active {
+      background: var(--primary);
+      color: #000;
+      box-shadow: 2px 2px 0px #000000;
+      transform: translate(1px, 1px);
+    }
+
+    /* Experiments Video Grid */
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 22px;
+      margin-bottom: 40px;
+    }
+
+    .exp-card {
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .exp-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .video-preview-wrapper {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      background: #000;
+      border-bottom: 3px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .video-preview-wrapper video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+    }
+
+    .exp-card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      gap: 10px;
+    }
+
+    .exp-card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .exp-card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      flex-grow: 1;
+    }
+
+    .exp-card-footer {
+      padding: 12px 18px;
+      background: #0d1118;
+      border-top: 2px solid var(--border-color);
+    }
+
+    /* Publications Card */
+    .publication-card {
+      background: var(--card-bg);
+      border: 4px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      padding: 30px;
+      margin-bottom: 40px;
+    }
+
+    .pub-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      text-transform: uppercase;
       color: var(--text-main);
       margin-bottom: 8px;
     }
 
-    .project-card .role {
+    .pub-role {
       font-size: 0.85rem;
-      color: var(--primary-color);
-      font-weight: 600;
+      font-weight: 700;
+      color: var(--primary);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: 12px;
     }
 
-    .project-card p {
+    .pub-citation-box {
+      background: var(--card-inner);
+      border: 2px solid var(--border-color);
+      border-left: 4px solid var(--accent-cyan);
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .pub-desc {
       font-size: 0.95rem;
-      flex-grow: 1;
-    }
-
-    .project-card ul {
-      padding-left: 20px;
-      margin-bottom: 16px;
       color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .project-card ul li {
-      margin-bottom: 6px;
-    }
-
-    .tag-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
+      line-height: 1.6;
       margin-bottom: 16px;
     }
 
-    .tag {
-      background-color: var(--tag-bg);
-      color: var(--primary-color);
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: 4px;
-      border: 1px solid var(--card-border);
-      font-weight: 500;
+    /* BibTeX Details Disclosure */
+    details.bibtex-toggle {
+      background: #0d1118;
+      border: 2px solid var(--border-color);
+      padding: 12px 16px;
+      margin-top: 14px;
     }
 
-    .card-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: auto;
-    }
-
-    .card-links a {
+    details.bibtex-toggle summary {
+      font-weight: 800;
       font-size: 0.85rem;
-      color: var(--primary-color);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .card-links a:hover {
-      text-decoration: underline;
-    }
-
-    /* Skills Grid */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    .skill-category {
-      background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 20px;
-    }
-
-    .skill-category h3 {
-      font-size: 1rem;
-      color: var(--primary-color);
-      margin-bottom: 12px;
-    }
-
-    .skill-category ul {
-      list-style: none;
-      padding-left: 0px;
-      margin: 0;
-    }
-
-    .skill-category li {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    /* Card Grid for Experiments */
-    .experiment-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 15px;
-    }
-
-    .experiment-card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      overflow: hidden;
+      color: var(--accent-amber);
+      text-transform: uppercase;
+      cursor: pointer;
       display: flex;
-      flex-direction: column;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
     }
 
-    .experiment-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--primary-color);
+    .bibtex-pre-container {
+      position: relative;
+      margin-top: 10px;
     }
 
-    .experiment-card img,
-    .experiment-card video {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-bottom: 1px solid var(--card-border);
-      background-color: #000;
+    pre.bibtex-code {
+      background: #06080c;
+      border: 1px solid var(--border-color);
+      padding: 14px;
+      color: var(--primary);
+      font-size: 0.8rem;
+      overflow-x: auto;
+      font-family: "JetBrains Mono", monospace;
+      line-height: 1.4;
     }
 
-    .experiment-card-body {
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
+    .btn-copy-bib {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #1e2636;
+      color: #fff;
+      border: 1px solid var(--border-color);
+      padding: 4px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
     }
 
-    .experiment-card-body h3 {
-      font-size: 1rem;
-      color: var(--text-main);
-      margin-bottom: 6px;
+    .btn-copy-bib:hover {
+      background: var(--primary);
+      color: #000;
     }
 
-    .experiment-card-body p {
-      font-size: 0.825rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      flex-grow: 1;
-    }
-
-    .experiment-card-body a {
-      font-size: 0.85rem;
-      color: var(--primary-color);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .experiment-card-body a:hover {
-      text-decoration: underline;
-    }
-
+    /* Footer */
     footer {
+      border-top: 4px solid var(--border-color);
+      background: #080a0e;
+      padding: 50px 20px;
       text-align: center;
-      padding: 30px 20px;
-      background-color: #020617;
-      border-top: 1px solid var(--card-border);
-      color: var(--text-muted);
-      font-size: 0.85rem;
+    }
+
+    footer p {
+      color: var(--text-dim);
+      font-size: 0.88rem;
+      margin-bottom: 10px;
     }
 
     footer a {
-      color: var(--primary-color);
+      color: var(--primary);
       text-decoration: none;
+      font-weight: 700;
     }
 
     footer a:hover {
       text-decoration: underline;
     }
 
-    #canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: -1;
-        pointer-events: none;
-        object-fit: cover;
+    .footer-links-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 14px 0;
+      font-size: 0.85rem;
     }
 
-    .copy-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        background-color: var(--card-bg);
-        border: 3px solid #000000;
-        box-shadow: var(--shadow-hard);
-        padding: 10px 16px;
-        max-width: 500px;
-        margin: 20px auto;
-        flex-wrap: wrap;
-    }
-
-    #copy-btn {
-        color: var(--primary-color);
-        font-weight: bold;
-        font-size: 0.9rem;
-        word-break: break-all;
-        font-family: monospace;
-        padding: 15px 20px;
-        margin-top: 10px;
-        cursor: pointer;
+    /* Empty state */
+    .empty-state {
+      display: none;
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 50px 20px;
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      box-shadow: var(--shadow-md);
     }
   </style>
 </head>
+
 <body>
-<canvas id="canvas"></canvas>
 
-<header>
-  <h1>Aman Karn</h1>
-  <div class="subtitle">Senior Game & Software Engineer</div>
-  <div class="tagline">
-    <h3>Architecting scalable 2D/3D games, XR (VR/AR/MR) applications, and real-time simulations across Unity3D and Unreal Engine 5.</h3>
-  </div>
-  <div class="cta-buttons">
-      <span class="btn btn-primary">For CV: ak99professional_[at]_gmail_[dot]_com</span>
-      <a href="https://github.com/Dragoenix99cZar" target="_blank" class="btn btn-outline">GitHub Profile</a>
-      <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank" class="btn btn-outline">LinkedIn Profile</a>
-  </div>
-    <span id="copy-btn" class="btn btn-outline"><code>curl https://dragoenix99czar.github.io/ak</code></span>
-</header>
+  <!-- WebAssembly Background Procedural Graphics Canvas -->
+  <canvas id="canvas" width="1024" height="1024"></canvas>
 
-<main>
-
-  <!-- About Section -->
-  <section id="about">
-      <h2><span>Professional Overview</span></h2>
-    <p>
-      Senior Game & Software Engineer with over <strong>Five</strong> years of professional experience developing commercial titles, cross-platform spatial applications, and technical simulations. Specialized in deep Unity3D architecture (C#) and Unreal Engine 5 development (C++ / Blueprints), having shipped and contributed to over 30 interactive applications across PC, Mobile, and XR platforms.
-    </p>
-  </section>
-
-  <!-- Featured Professional Projects -->
-  <section id="featured-projects">
-    <h2><span>Featured Work & Case Studies</span></h2>
-    <div class="project-grid">
-
-      <!-- Sandbox Game -->
-      <div class="project-card">
-        <div>
-          <h3>Real-World Terrain Sandbox Game</h3>
-          <div class="role">Senior Developer | Unity3D & Unreal Engine 5</div>
-          <p>A procedural sandbox environment enabling players to create and build custom worlds rendered on top of real-world terrain generated from satellite-fetched building data.</p>
-          <ul>
-            <li>Engineered mesh generation and streaming pipelines for real-world elevation and satellite datasets.</li>
-            <li>Connected in-game player progression and achievements with a dedicated companion web application.</li>
-            <li>Utilized Unreal Engine 5 workflows for environmental content rendering and video production.</li>
-          </ul>
-        </div>
-        <div>
-          <div class="tag-container">
-            <span class="tag">Unity3D</span>
-            <span class="tag">Unreal Engine 5</span>
-            <span class="tag">C#</span>
-            <span class="tag">Satellite GIS</span>
-            <span class="tag">Web API Integration</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- VR Board Games -->
-      <div class="project-card">
-        <div>
-          <h3>VR Board Game Suite</h3>
-          <div class="role">Unity Game Developer | Multi-Platform XR</div>
-          <p>Adapted <b>Nine</b> classic 2D board games into spatial 3D/VR experiences, re-engineering gameplay mechanics, input systems, and spatial UI for immersive headsets.</p>
-          <ul>
-            <li>Converted titles including Snakes & Ladders, Tic-Tac-Toe, Jenga, Bingo, Call Break, Gin Rummy, Ludo, Mancala, and Backgammon.</li>
-            <li>Optimized performance and framerates across low-power and standalone headsets.</li>
-            <li>Showreel includes VR interaction patterns and custom hand-tracking mechanics.</li>
-          </ul>
-        </div>
-        <div>
-          <div class="tag-container">
-            <span class="tag">Unity3D</span>
-            <span class="tag">VR / MR</span>
-            <span class="tag">Oculus Quest 1/2</span>
-            <span class="tag">Magic Leap One</span>
-            <span class="tag">Spatial UI</span>
-          </div>
-        </div>
-        <!-- <div class="card-links">
-            <a href="https://drive.google.com/file/d/1CMe6diSIvcyHNH_Xnu1gr7QtZbVd-Kg3/view" target="_blank">Brain Games Video →</a>
-            <a href="https://home.paracosma.com/assets/vr-development/casual-games/video/CasualGames.mp4" target="_blank">Paracosma Brain Games Video →</a>
-            <a href="https://home.paracosma.com/vr-development" target="_blank">Paracosma Works →</a>
-            <a href="https://drive.google.com/file/d/1QykkooHNzNZPC3kOEOfgPEPerkC1uni1/view" target="_blank">Magic Leap Showreel →</a>
-            <a href="https://sidequestvr.com/app/11580/first-resort-early-access" target="_blank">First Resort →</a>
-            <a href="https://cdn.sidequestvr.com/file/2976727/39035446_1269829243591406_491985611762102591_n.mp4" target="_blank">First Resort Video →</a>
-
-        </div> -->
-      </div>
-
-      <!-- Medical VR -->
-      <div class="project-card">
-        <div>
-          <h3>Psycho-Education & Healthcare VR Platform</h3>
-          <div class="role">XR Developer | Clinical VR Collaboration</div>
-          <p>Collaborated with medical personnel, psychiatrists, artists, and programmers to develop therapy and psycho-education VR courses aimed at supporting social interaction challenges.</p>
-          <ul>
-            <li>Built immersive interactive environments tailored to specific therapeutic scenarios.</li>
-            <li>Iteratively refined user interactions to accommodate non-gamer patient demographics.</li>
-            <li>Maintained strict performance stability required for clinical usability.</li>
-          </ul>
-        </div>
-        <div>
-          <div class="tag-container">
-            <span class="tag">Unity3D</span>
-            <span class="tag">Virtual Reality</span>
-            <span class="tag">Healthcare / XR</span>
-            <span class="tag">Cross-Disciplinary</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Synthetic ML Data -->
-      <div class="project-card">
-        <div>
-          <h3>Synthetic Image Dataset Generator</h3>
-          <div class="role">Simulation Engineer | Unity & Machine Learning</div>
-          <p>Developed high-fidelity synthetic image dataset generation environments within Unity3D targeting safety-critical computer vision models.</p>
-          <ul>
-            <li>Constructed realistic procedural environments and lighting variations.</li>
-            <li>Authored custom Python scripts for automated dataset validation and quality checking.</li>
-            <li>Provided reliable, annotated datasets for downstream machine learning training workflows.</li>
-          </ul>
-        </div>
-        <div>
-          <div class="tag-container">
-            <span class="tag">Unity3D</span>
-            <span class="tag">Python</span>
-            <span class="tag">Synthetic Data</span>
-            <span class="tag">Computer Vision</span>
-            <span class="tag">Automation</span>
-          </div>
-        </div>
-      </div>
-
+  <!-- Sticky Top Utility Header -->
+  <nav class="top-nav" aria-label="Quick Navigation">
+    <div class="brand-id">
+      <span class="brand-badge">AMAN KARN</span>
+      <span>SENIOR GAME & SOFTWARE ENGINEER</span>
     </div>
-  </section>
-
-  <!-- Technical Taxonomy Section -->
-  <section id="skills">
-  <h2><span>Technical Capabilities</span></h2>
-    <div class="skills-grid">
-      <div class="skill-category">
-        <h3>Game Engines</h3>
-        <ul>
-          <li>Unity3D (5+ Years)</li>
-          <li>Unreal Engine 5 (1 Year)</li>
-          <li>System Architecture</li>
-          <li>Modular Code Design</li>
-          <li>3D Renderer</li>
-          <li>Simulation</li>
-        </ul>
-      </div>
-      <div class="skill-category">
-        <h3>Programming</h3>
-        <ul>
-          <li>C#</li>
-          <li>C++</li>
-          <li>Python</li>
-          <li>PowerShell</li>
-          <li>Blueprint Scripting</li>
-          <li>FFmpeg</li>
-        </ul>
-      </div>
-      <div class="skill-category">
-        <h3>XR Hardware</h3>
-        <ul>
-          <li>Meta Quest 1 & 2 / Rift</li>
-          <li>Oculus Go</li>
-          <li>Magic Leap One</li>
-          <li>HoloLens One</li>
-        </ul>
-      </div>
-      <div class="skill-category">
-        <h3>Tools & Infrastructure</h3>
-        <ul>
-          <li>Git / CodeCommit / GitLab</li>
-          <li>Jira / Agile Workflows</li>
-          <li>AWS / CDN Pipelines</li>
-          <li>Blender (Modeling+Procedural Generation)</li>
-        </ul>
-      </div>
+    <div class="nav-links">
+      <a href="#about" class="btn btn-sub">Overview</a>
+      <a href="#featured-projects" class="btn btn-sub">Case Studies</a>
+      <a href="#skills" class="btn btn-sub">Capabilities</a>
+      <a href="#experiments" class="btn btn-sub">Experiments</a>
+      <a href="./wip/index.html" class="btn btn-cyan">WIP Systems Lab →</a>
+      <a href="./index_v5.html" class="btn btn-sub">Classic View</a>
     </div>
-  </section>
+  </nav>
 
-  <!-- Visual Experiments & Prototypes Section -->
+  <main class="container">
+
+    <!-- Hero / Header Section -->
+    <header class="hero-banner">
+      <div class="hero-meta-strip">
+        <span class="badge badge-primary">Unity3D / C# Architect</span>
+        <span class="badge badge-cyan">Unreal Engine 5 / C++</span>
+        <span class="badge badge-amber">XR / Spatial Computing</span>
+        <span class="badge badge-rust">Rust + WebAssembly</span>
+      </div>
+
+      <h1>Aman Karn</h1>
+      <div class="hero-subtitle">Senior Game & Software Engineer</div>
+      <p class="hero-tagline">
+        Architecting scalable 2D/3D games, XR (VR/AR/MR) applications, and real-time simulations across Unity3D and
+        Unreal Engine 5. Shipped and contributed to 30+ interactive applications across PC, standalone VR headsets,
+        mobile, and browser runtimes.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="mailto:ak99professional@gmail.com" class="btn btn-primary">✉ ak99professional@gmail.com</a>
+        <a href="https://github.com/Dragoenix99cZar" target="_blank" class="btn btn-sub">GitHub Profile ↗</a>
+        <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank" class="btn btn-sub">LinkedIn Profile ↗</a>
+
+        <!-- Interactive Click-to-Copy Curl Snippet -->
+        <div class="curl-bar" id="curlBtn" title="Click to copy curl terminal CV command">
+          <span class="copy-toast" id="copyToast">Copied to Clipboard!</span>
+          <span class="curl-prompt">$</span>
+          <span class="curl-cmd">curl https://dragoenix99czar.github.io/ak</span>
+          <span class="curl-copy-badge">COPY</span>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Bar -->
+      <div class="metrics-bar">
+        <div class="metric-card">
+          <div class="metric-val">5+</div>
+          <div class="metric-label">Years Commercial Experience</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">30+</div>
+          <div class="metric-label">Shipped Interactive Apps</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">12</div>
+          <div class="metric-label">Visual Demos & Prototypes</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">9</div>
+          <div class="metric-label">WIP Research Engines</div>
+        </div>
+      </div>
+
+      <!-- Real-Time WebAssembly HUD -->
+      <div class="visualizer-hud">
+        <div class="hud-title">
+          <span class="pulse-dot"></span>
+          <span>Background WASM Procedural Shader:</span>
+          <span class="hud-active-effect" id="effectName">compute_waves</span>
+        </div>
+        <div>
+          <button id="cycleEffectBtn" class="btn btn-sub" style="padding: 4px 10px; font-size: 0.75rem;">
+            Cycle Effect (` key) ↻
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Professional Overview Section -->
+    <section id="about">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-icon"></div>
+          <h2>Professional Overview</h2>
+        </div>
+        <div class="section-subtitle">Executive Summary</div>
+      </div>
+
+      <div class="overview-card">
+        <p class="overview-lead">
+          Senior Game & Software Engineer with over <strong>five years</strong> of professional experience developing
+          commercial titles, cross-platform spatial applications, and technical simulations. Specialized in deep
+          <strong>Unity3D architecture (C#)</strong> and <strong>Unreal Engine 5 development (C++ /
+            Blueprints)</strong>, having shipped and contributed to over <strong>30 interactive applications</strong>
+          across PC, Mobile, and XR platforms.
+        </p>
+
+        <div class="overview-highlights">
+          <div class="highlight-item">
+            <h3>Engine Architecture</h3>
+            <p>Component-driven modular design, robust state machines, object-pooling memory managers, and scalable
+              networked gameplay loops.</p>
+          </div>
+          <div class="highlight-item">
+            <h3>XR & Spatial Interaction</h3>
+            <p>Deep expertise with Meta Quest 1/2, Magic Leap One, and HoloLens One deploying 6-DOF hand-tracking,
+              spatial UI, and high-framerate rendering.</p>
+          </div>
+          <div class="highlight-item">
+            <h3>Low-Level & Simulation</h3>
+            <p>Systems programming in C++ and Rust compiled to WebAssembly with zero-copy canvas memory pipelines,
+              procedural generation, and ML datasets.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Projects & Case Studies -->
+    <section id="featured-projects">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-icon"></div>
+          <h2>Featured Work & Case Studies</h2>
+        </div>
+        <div class="section-subtitle">Commercial & Clinical Titles</div>
+      </div>
+
+      <div class="projects-grid">
+
+        <!-- 1. Real-World Terrain Sandbox -->
+        <article class="project-card">
+          <header class="card-header">
+            <div class="card-top-meta">
+              <span class="badge badge-primary">Unity3D & UE5</span>
+              <span class="card-id">CASE_01</span>
+            </div>
+            <h3 class="card-title">Real-World Terrain Sandbox Game</h3>
+            <div class="card-subtitle">Senior Developer | Procedural World Building</div>
+          </header>
+          <div class="card-body">
+            <div class="section-block">
+              <div class="block-title">Premise & Scope</div>
+              <p class="block-desc">
+                A procedural sandbox environment enabling players to create and build custom worlds rendered on top of
+                real-world terrain generated from satellite-fetched building and elevation datasets.
+              </p>
+            </div>
+
+            <div class="section-block">
+              <div class="block-title">Key Contributions</div>
+              <ul class="card-bullets">
+                <li>Engineered mesh generation and streaming pipelines for real-world elevation and satellite datasets.
+                </li>
+                <li>Connected in-game player progression and achievements with a dedicated companion web application.
+                </li>
+                <li>Utilized Unreal Engine 5 workflows for environmental content rendering and video production.</li>
+              </ul>
+            </div>
+
+            <div class="section-block">
+              <div class="block-title">Tech Stack</div>
+              <div class="tech-stack">
+                <span class="tech-tag">Unity3D</span>
+                <span class="tech-tag tag-ue5">Unreal Engine 5</span>
+                <span class="tech-tag">C#</span>
+                <span class="tech-tag">Satellite GIS</span>
+                <span class="tech-tag">Web API Integration</span>
+              </div>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <span class="badge badge-dark">Production Shipped</span>
+          </footer>
+        </article>
+
+        <!-- 2. VR Board Game Suite -->
+        <article class="project-card">
+          <header class="card-header">
+            <div class="card-top-meta">
+              <span class="badge badge-cyan">Multi-Platform XR</span>
+              <span class="card-id">CASE_02</span>
+            </div>
+            <h3 class="card-title">VR Board Game Suite</h3>
+            <div class="card-subtitle">Unity Game Developer | Spatial Headsets</div>
+          </header>
+          <div class="card-body">
+            <div class="section-block">
+              <div class="block-title">Premise & Scope</div>
+              <p class="block-desc">
+                Adapted <strong>nine classic board games</strong> into spatial 3D/VR experiences, re-engineering
+                gameplay mechanics, physics interactions, and spatial UI for standalone headsets.
+              </p>
+            </div>
+
+            <div class="section-block">
+              <div class="block-title">Key Contributions</div>
+              <ul class="card-bullets">
+                <li>Converted titles including Snakes & Ladders, Tic-Tac-Toe, Jenga, Bingo, Call Break, Gin Rummy, Ludo,
+                  Mancala, and Backgammon.</li>
+                <li>Optimized framerates and memory budgets across standalone Meta Quest 1/2 and Magic Leap One.</li>
+                <li>Implemented custom VR interaction physics and responsive hand-tracking mechanics.</li>
+              </ul>
+            </div>
+
+            <div class="section-block">
+              <div class="block-title">Tech Stack</div>
+              <div class="tech-stack">
+                <span class="tech-tag">Unity3D</span>
+                <span class="tech-tag tag-xr">Oculus Quest 1/2</span>
+                <span class="tech-tag tag-xr">Magic Leap One</span>
+                <span class="tech-tag">Spatial UI</span>
+                <span class="tech-tag">Hand Tracking</span>
+              </div>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <a href="https://sidequestvr.com/app/11580/first-resort-early-access" target="_blank"
+              class="btn btn-sub">SideQuest Release ↗</a>
+          </footer>
+        </article>
+
+        <!-- 3. Medical VR Platform -->
+        <article class="project-card">
+          <header class="card-header">
+            <div class="card-top-meta">
+              <span class="badge badge-pink">Clinical XR</span>
+              <span class="card-id">CASE_03</span>
+            </div>
+            <h3 class="card-title">Psycho-Education & Healthcare VR</h3>
+            <div class="card-subtitle">XR Developer | Clinical VR Collaboration</div>
+          </header>
+          <div class="card-body">
+            <div class="section-block">
+              <div class="block-title">Premise & Scope</div>
+              <p class="block-desc">
+                Collaborated with medical personnel, psychiatrists, and 3D artists to develop interactive therapy and
+                psycho-education VR courses aimed at supporting social interaction challenges.
+              </p>
+            </div>
+
+            <div class="section-block">
+              <div class="block-title">Key Contributions</div>
+              <ul class="card-bullets">
+                <li>Built immersive interactive environments tailored to specific therapeutic scenarios and clinical
+                  trials.</li>
+                <li>Iteratively refined user interactions to accommodate non-gamer patient demographics.</li>
+                <li>Maintained strict performance and zero-latency stability required for clinical safety.</li>
+              </ul>
+            </div>
+
+            <div class="section-block">
+              <div class="block-title">Tech Stack</div>
+              <div class="tech-stack">
+                <span class="tech-tag">Unity3D</span>
+                <span class="tech-tag tag-xr">Virtual Reality</span>
+                <span class="tech-tag tag-ml">Healthcare / Clinical</span>
+                <span class="tech-tag">Cross-Disciplinary</span>
+              </div>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <span class="badge badge-dark">Clinical Collaboration</span>
+          </footer>
+        </article>
+
+        <!-- 4. Synthetic ML Data Generator -->
+        <article class="project-card">
+          <header class="card-header">
+            <div class="card-top-meta">
+              <span class="badge badge-amber">Simulation & AI</span>
+              <span class="card-id">CASE_04</span>
+            </div>
+            <h3 class="card-title">Synthetic Image Dataset Generator</h3>
+            <div class="card-subtitle">Simulation Engineer | Unity & Computer Vision</div>
+          </header>
+          <div class="card-body">
+            <div class="section-block">
+              <div class="block-title">Premise & Scope</div>
+              <p class="block-desc">
+                Developed high-fidelity synthetic image dataset generation environments within Unity3D targeting
+                safety-critical computer vision models and autonomous systems.
+              </p>
+            </div>
+
+            <div class="section-block">
+              <div class="block-title">Key Contributions</div>
+              <ul class="card-bullets">
+                <li>Constructed realistic procedural environments, dynamic weather patterns, and camera variations.</li>
+                <li>Authored custom Python automation tools for automated dataset validation and quality checking.</li>
+                <li>Supplied clean, multi-modal ground-truth annotated datasets for downstream deep learning models.
+                </li>
+              </ul>
+            </div>
+
+            <div class="section-block">
+              <div class="block-title">Tech Stack</div>
+              <div class="tech-stack">
+                <span class="tech-tag">Unity3D</span>
+                <span class="tech-tag tag-ml">Python Automation</span>
+                <span class="tech-tag">Synthetic Data</span>
+                <span class="tech-tag">Computer Vision</span>
+              </div>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <span class="badge badge-dark">Industrial Simulation</span>
+          </footer>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Technical Taxonomy Section -->
+    <section id="skills">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-icon"></div>
+          <h2>Technical Capabilities</h2>
+        </div>
+        <div class="section-subtitle">Core Engineering Matrix</div>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-title">🎮 Game Engines & Systems</div>
+          <ul class="skill-list">
+            <li>Unity3D (5+ Years Architecture)</li>
+            <li>Unreal Engine 5 (C++ / Blueprints)</li>
+            <li>Component Architecture & State Machines</li>
+            <li>Modular Object Pooling Systems</li>
+            <li>Software 3D Renderers from Scratch</li>
+            <li>Real-Time Physics Simulations</li>
+          </ul>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-title">💻 Programming Languages</div>
+          <ul class="skill-list">
+            <li>C# (Deep Unity API, Async, LINQ)</li>
+            <li>C++ (Unreal Engine 5, Systems)</li>
+            <li>C (WebAssembly, Graphics Algorithms)</li>
+            <li>Rust (wasm-bindgen, Systems Logic)</li>
+            <li>Python (Automation, Data Pipelines)</li>
+            <li>PowerShell & FFmpeg Scripting</li>
+          </ul>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-title">🕶️ XR Hardware & Spatial</div>
+          <ul class="skill-list">
+            <li>Meta Quest 1 & 2 / Oculus Rift</li>
+            <li>Magic Leap One (Spatial Computing)</li>
+            <li>Microsoft HoloLens One</li>
+            <li>Oculus Go & Standalone Headsets</li>
+            <li>Spatial UI Design & 6-DOF Hand Tracking</li>
+            <li>Low-Power Mobile VR Optimization</li>
+          </ul>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-title">🛠️ Tools & Infrastructure</div>
+          <ul class="skill-list">
+            <li>Git / CodeCommit / GitLab</li>
+            <li>Jira / Confluence / Agile Workflows</li>
+            <li>AWS Cloud Storage / CDN Delivery</li>
+            <li>Blender (Modeling & Procedural Generative)</li>
+            <li>WebAssembly Streaming Memory Runtimes</li>
+            <li>Progressive Web Apps (PWAs)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- WIP Systems Lab Feature Banner -->
+    <aside class="wip-callout-banner">
+      <div class="wip-callout-text">
+        <span class="badge badge-cyan" style="margin-bottom: 8px;">RESEARCH LAB LAUNCHED</span>
+        <h3>Explore the Dedicated WIP Systems Registry</h3>
+        <p>
+          Deep dive into 9 experimental low-level research modules including 3D software rasterizers, compiler
+          pipelines, Forth stack DSLs, and WebAssembly algorithm sandboxes.
+        </p>
+      </div>
+      <div>
+        <a href="./wip/index.html" class="btn btn-cyan">Open WIP Systems Lab →</a>
+      </div>
+    </aside>
+
+    <!-- Visual Experiments & Prototypes Section -->
     <section id="experiments">
-      <h2><span>Prototypes & Technical Experiments</span></h2>
-      <p>A collection of minor technical explorations, algorithmic studies, and personal gameplay prototypes:</p>
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-icon"></div>
+          <h2>Prototypes & Technical Experiments</h2>
+        </div>
+        <div class="section-subtitle">12 Interactive Demos</div>
+      </div>
 
-      <div class="experiment-grid">
+      <!-- Experiments Search & Filter Toolbar -->
+      <div class="exp-toolbar">
+        <input type="text" id="expSearchInput" class="exp-search-input"
+          placeholder="Filter experiments by keyword (e.g. 'Rust', 'Raycast', 'Pathfinding', 'WASM')...">
+        <div class="filter-pills" id="expPills">
+          <span style="font-size: 0.78rem; font-weight: 800; color: var(--text-dim);">FILTER:</span>
+          <button class="pill-btn active" data-filter="all">All (12)</button>
+          <button class="pill-btn" data-filter="wasm">Rust & WASM (4)</button>
+          <button class="pill-btn" data-filter="gameplay">Gameplay & Mechanics (4)</button>
+          <button class="pill-btn" data-filter="algorithms">Simulation & AI (2)</button>
+          <button class="pill-btn" data-filter="pwa">PWA & Tools (2)</button>
+        </div>
+      </div>
+
+      <!-- 12 Experiments Cards with Video Previews -->
+      <div class="experiments-grid" id="expGrid">
 
         <!-- 1. Paint Engine -->
-        <div class="experiment-card">
-          <video src="images/rust-paint.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Paint Engine</h3>
-            <p>A Rust/WASM lightweight, ultra-fast web-based image editor inspired by MS Paint and Paint.NET.</p>
-            <a href="paint/" target="_blank">Launch Experiment →</a>
+        <article class="exp-card" data-category="wasm" data-tags="rust wasm paint image editor drawing web assembly">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-rust video-badge">Rust + WASM</span>
+            <video src="images/rust-paint.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Paint Engine</h3>
+            <p class="exp-card-desc">A Rust/WASM lightweight, ultra-fast web-based image editor inspired by MS Paint and
+              Paint.NET.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="paint/" target="_blank" class="btn btn-primary" style="width: 100%;">Launch Experiment →</a>
+          </div>
+        </article>
 
-        <!-- 2. Video2Gif Tools -->
-        <div class="experiment-card">
-          <video src="images/video-to-gif.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Video To Gif</h3>
-            <p>Web app leveraging rust + wasm capability to handle video frame to encode to gif format.</p>
-            <a href="video_to_gif/" target="_blank">Launch Experiment →</a>
+        <!-- 2. Video To Gif -->
+        <article class="exp-card" data-category="wasm" data-tags="rust wasm video gif frame encoding converter">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-rust video-badge">Rust + WASM</span>
+            <video src="images/video-to-gif.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Video To Gif</h3>
+            <p class="exp-card-desc">Web app leveraging Rust + WASM capability to handle video frame decoding and
+              encoding to GIF format directly in the client.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="video_to_gif/" target="_blank" class="btn btn-primary" style="width: 100%;">Launch Experiment →</a>
+          </div>
+        </article>
 
         <!-- 3. Python Web -->
-        <div class="experiment-card">
-          <video src="images/python-web.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Python Web</h3>
-            <p>A lightweight, embeddable RustPython WebAssembly bridge</p>
-            <a href="py/" target="_blank">Launch Experiment →</a>
+        <article class="exp-card" data-category="wasm" data-tags="python rust wasm rustpython interpreter bridge">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-cyan video-badge">RustPython</span>
+            <video src="images/python-web.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Python Web</h3>
+            <p class="exp-card-desc">A lightweight, embeddable RustPython WebAssembly bridge executing Python script
+              inside the browser.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="py/" target="_blank" class="btn btn-primary" style="width: 100%;">Launch Experiment →</a>
+          </div>
+        </article>
 
-        <!-- 4. Wave Battle V2 -->
-        <div class="experiment-card">
-          <video src="images/wave-battle.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Wave Battle Prototypes</h3>
-            <p>Enemy wave spawner architecture and object pooling performance test.</p>
-            <a href="Wave2/index.html" target="_blank">Launch V2 Prototype →</a>
+        <!-- 4. Wave Battle Prototypes -->
+        <article class="exp-card" data-category="gameplay"
+          data-tags="game wave battle spawner pooling performance unity prototype">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-pink video-badge">Gameplay Architecture</span>
+            <video src="images/wave-battle.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Wave Battle Prototypes</h3>
+            <p class="exp-card-desc">Enemy wave spawner architecture and dynamic object pooling stress test evaluating
+              high entity counts.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="Wave2/index.html" target="_blank" class="btn btn-primary" style="width: 100%;">Launch V2 Prototype
+              →</a>
+          </div>
+        </article>
 
-        <!-- 5. FPS Mechanics -->
-        <div class="experiment-card">
-          <video src="images/fps-prototype.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>FPS Mechanics Study</h3>
-            <p>Raycast shooting mechanics, recoil modeling, and weapon handling logic.</p>
-            <a href="fps/index.html" target="_blank">Launch Experiment →</a>
+        <!-- 5. FPS Mechanics Study -->
+        <article class="exp-card" data-category="gameplay"
+          data-tags="fps mechanics raycast shooting recoil weapon handling shooter">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-amber video-badge">FPS Physics</span>
+            <video src="images/fps-prototype.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">FPS Mechanics Study</h3>
+            <p class="exp-card-desc">Raycast shooting mechanics, parametric recoil modeling, and weapon handling logic.
+            </p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="fps/index.html" target="_blank" class="btn btn-primary" style="width: 100%;">Launch Experiment
+              →</a>
+          </div>
+        </article>
 
-        <!-- 6. Stealth Game -->
-        <div class="experiment-card">
-          <video src="images/stealth-game.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Stealth Game Mechanics</h3>
-            <p>Line-of-sight cone detection, enemy perception states, and cover mechanics.</p>
-            <a href="stealth_game/index.html" target="_blank">Launch Experiment →</a>
+        <!-- 6. Stealth Game Mechanics -->
+        <article class="exp-card" data-category="gameplay"
+          data-tags="stealth game ai vision cone perception cover states">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-cyan video-badge">AI Perception</span>
+            <video src="images/stealth-game.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Stealth Game Mechanics</h3>
+            <p class="exp-card-desc">Line-of-sight cone detection, enemy perception states, and dynamic cover
+              obstruction mechanics.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="stealth_game/index.html" target="_blank" class="btn btn-primary" style="width: 100%;">Launch
+              Experiment →</a>
+          </div>
+        </article>
 
-        <!-- 7. Memory & Recall -->
-        <div class="experiment-card">
-          <video src="images/brain-game.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Memory & Recall Study</h3>
-            <p>Pattern recognition and memory tracking mechanics prototype.</p>
-            <a href="recall/index.html" target="_blank">Launch Experiment →</a>
+        <!-- 7. Memory & Recall Study -->
+        <article class="exp-card" data-category="gameplay"
+          data-tags="memory recall brain game pattern recognition tracking cognitive">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-pink video-badge">Cognitive Prototype</span>
+            <video src="images/brain-game.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Memory & Recall Study</h3>
+            <p class="exp-card-desc">Pattern recognition, spatial sequence verification, and memory tracking mechanics
+              prototype.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="recall/index.html" target="_blank" class="btn btn-primary" style="width: 100%;">Launch Experiment
+              →</a>
+          </div>
+        </article>
 
         <!-- 8. Maze Bot - Rust+Wasm -->
-        <div class="experiment-card">
-          <video src="images/rust-maze-bot.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Maze Bot - Rust+Wasm</h3>
-            <p>High-performance pathfinding engine in rust & wasm.</p>
-            <a href="rust_maze_bot/" target="_blank">Launch Experiment →</a>
+        <article class="exp-card" data-category="wasm"
+          data-tags="maze bot rust wasm pathfinding a-star algorithm navigation">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-rust video-badge">Rust + WASM</span>
+            <video src="images/rust-maze-bot.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Maze Bot - Rust+Wasm</h3>
+            <p class="exp-card-desc">High-performance pathfinding engine written in Rust and executed on WebAssembly
+              with real-time heuristic search.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="rust_maze_bot/" target="_blank" class="btn btn-primary" style="width: 100%;">Launch Experiment
+              →</a>
+          </div>
+        </article>
 
         <!-- 9. Software Renderer -->
-        <div class="experiment-card">
-          <video src="images/software-renderer.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Software Renderer Study</h3>
-            <p>3D software rendering study calculating rasterization and wireframes manually.</p>
-            <a href="simple_3d/index.html" target="_blank">Launch Experiment →</a>
+        <article class="exp-card" data-category="algorithms"
+          data-tags="software renderer 3d rasterization wireframe matrix projection math">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-amber video-badge">3D Graphics Math</span>
+            <video src="images/software-renderer.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Software Renderer Study</h3>
+            <p class="exp-card-desc">3D software rendering study calculating vertex projection, rasterization, and
+              wireframes manually without WebGL.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="simple_3d/index.html" target="_blank" class="btn btn-primary" style="width: 100%;">Launch
+              Experiment →</a>
+          </div>
+        </article>
 
-        <!-- 10. Maze Bot -->
-        <div class="experiment-card">
-          <video src="images/maze-bot.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Maze Bot (Pathfinding AI)</h3>
-            <p>Grid-based pathfinding algorithms and autonomous maze solving in JavaScript.</p>
-            <a href="js-experiments/project/index.html" target="_blank">Launch Experiment →</a>
+        <!-- 10. Maze Bot (JS AI) -->
+        <article class="exp-card" data-category="algorithms"
+          data-tags="maze bot pathfinding ai a-star dijkstra grid javascript algorithms">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-cyan video-badge">Pathfinding AI</span>
+            <video src="images/maze-bot.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Maze Bot (Pathfinding AI)</h3>
+            <p class="exp-card-desc">Grid-based pathfinding algorithms and autonomous maze solving with interactive wall
+              building in JavaScript.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="js-experiments/project/index.html" target="_blank" class="btn btn-primary"
+              style="width: 100%;">Launch Experiment →</a>
+          </div>
+        </article>
 
-        <!-- 11. Unit Converter -->
-        <div class="experiment-card">
-          <video src="images/unit-convert.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Nepali Units Converter</h3>
-            <p>PWA for Nepali units conversion like length, mass, volume, etc.</p>
-            <a href="unit_converter_pwa/" target="_blank">Launch Experiment →</a>
+        <!-- 11. Nepali Units Converter -->
+        <article class="exp-card" data-category="pwa"
+          data-tags="pwa nepali units converter length mass volume ropani aana dhur">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-pink video-badge">Offline PWA</span>
+            <video src="images/unit-convert.webm" autoplay muted loop playsinline></video>
           </div>
-        </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Nepali Units Converter</h3>
+            <p class="exp-card-desc">Progressive Web App for traditional Nepali units conversion across land
+              measurement, mass, and volume.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="unit_converter_pwa/" target="_blank" class="btn btn-primary" style="width: 100%;">Launch Experiment
+              →</a>
+          </div>
+        </article>
 
         <!-- 12. Basic Utility Tools -->
-        <div class="experiment-card">
-          <video src="images/basic-utility.webm" autoplay muted loop playsinline></video>
-          <div class="experiment-card-body">
-            <h3>Basic Utility Tools</h3>
-            <p>PWA for Basic Utility Tools like color-picker, qr-code, word-count, bim, number-system.</p>
-            <a href="PWA-tools/" target="_blank">Launch Experiment →</a>
+        <article class="exp-card" data-category="pwa"
+          data-tags="pwa utilities tools color-picker qr-code word-count bmi number-system">
+          <div class="video-preview-wrapper">
+            <span class="badge badge-amber video-badge">Offline PWA</span>
+            <video src="images/basic-utility.webm" autoplay muted loop playsinline></video>
           </div>
+          <div class="exp-card-body">
+            <h3 class="exp-card-title">Basic Utility Tools</h3>
+            <p class="exp-card-desc">PWA containing everyday client-side utilities like color pickers, QR generators,
+              word counters, and number formatters.</p>
+          </div>
+          <div class="exp-card-footer">
+            <a href="PWA-tools/" target="_blank" class="btn btn-primary" style="width: 100%;">Launch Experiment →</a>
+          </div>
+        </article>
+
+        <!-- Empty state when no experiments match search -->
+        <div class="empty-state" id="expEmptyState">
+          <h3 style="color: var(--accent-pink);">No Experiments Found</h3>
+          <p style="color: var(--text-muted); margin-top: 6px;">Try modifying your keyword search or resetting the
+            category filter.</p>
         </div>
 
       </div>
     </section>
 
-    <!-- Publications Section -->
-      <section id="publications">
-        <h2><span>Research & Publications</span></h2>
-        <div class="project-card">
-          <div>
-            <h3>Statistic based Sentiment Analysis of Social Media Data</h3>
-            <div class="role">Lead Author | IRJIET Vol. 2, pp. 28–32 (2018)</div>
-            <p style="font-size: 0.85rem; font-style: italic; color: var(--text-muted); margin-bottom: 12px;">
-              Karn, A., Shrestha, A., Pudasaini, A., Mahara, B., & Jaiswal, A. "Statistic based Sentiment Analysis of Social Media Data." <i>Int. Res. J. Innov. Eng. Technol.</i> 2 (2018): 28–32.
-            </p>
-            <p>Research paper exploring statistical models and natural language processing techniques to evaluate and analyze sentiment patterns across social media datasets.</p>
-
-            <!-- Collapsible BibTeX Snippet -->
-            <details style="margin-top: 12px; font-size: 0.8rem; color: var(--text-muted);">
-              <summary style="cursor: pointer; color: var(--primary-color); font-weight: 600;">Show BibTeX Citation</summary>
-              <pre style="background-color: var(--tag-bg); border: 1px solid var(--card-border); padding: 12px; border-radius: 6px; margin-top: 8px; overflow-x: auto; color: var(--text-main); font-family: monospace;">
-@article{karn2018statistic,
-    title={Statistic based Sentiment Analysis of Social Media Data},
-    author={Karn, Aman and Shrestha, Anish and Pudasaini, Anil and Mahara, Binay and Jaiswal, Anku},
-    journal={Int. Res. J. Innov. Eng. Technol.},
-    volume={2},
-    pages={28--32},
-    year={2018}
-}</pre>
-            </details>
-          </div>
-          <div>
-            <div class="tag-container" style="margin-top: 16px;">
-              <span class="tag">NLP</span>
-              <span class="tag">Python</span>
-              <span class="tag">Statistical Modeling</span>
-              <span class="tag">Data Analysis</span>
-            </div>
-            <div class="card-links">
-              <a href="https://irjiet.com/article/Statistic-Based-Sentiment-Analysis-of-Social-Media-Data/80" target="_blank">IRJIET Journal Entry →</a>
-              <a href="https://www.researchgate.net/publication/333943106_Statistic-Based_Sentiment_Analysis_of_Social_Media_Data" target="_blank">ResearchGate Profile →</a>
-            </div>
-          </div>
+    <!-- Research & Publications Section -->
+    <section id="publications">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-icon"></div>
+          <h2>Research & Publications</h2>
         </div>
-      </section>
+        <div class="section-subtitle">Academic Peer-Reviewed Work</div>
+      </div>
 
-</main>
+      <div class="publication-card">
+        <h3 class="pub-title">Statistic based Sentiment Analysis of Social Media Data</h3>
+        <div class="pub-role">Lead Author | IRJIET Vol. 2, Issue 8, pp. 28–32 (2018)</div>
 
-<footer>
-  <p>© Aman Karn | Senior Game & Software Engineer</p>
-  <p>Email: <b>ak99professional_[at]_gmail_[dot]_com</b> | <a href="https://github.com/Dragoenix99cZar" target="_blank">GitHub</a> | <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank">LinkedIn</a> | <a href="./rindex.html" target="_blank">In-Rust</a> | <a href="./sitemap.html" target="_blank">Sitemap</a></p>
-  <p>Profile: <a href="index_v2.html" target="_blank">pV2</a> | <a href="index_v3.html" target="_blank">pV3</a> | <a href="index_v4.html" target="_blank">pV4</a></p>
-</footer>
+        <div class="pub-citation-box">
+          Karn, A., Shrestha, A., Pudasaini, A., Mahara, B., & Jaiswal, A. "Statistic based Sentiment Analysis of Social
+          Media Data." <i>International Research Journal of Innovations in Engineering and Technology (IRJIET)</i> 2,
+          no. 8 (2018): 28–32.
+        </div>
 
-<script>
-  const width = 1024;
-  const height = 1024;
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
+        <p class="pub-desc">
+          Research paper exploring statistical sentiment classification models and natural language processing pipelines
+          to quantify sentiment distribution patterns across large-scale social media text streams.
+        </p>
 
-  function make_environment(...envs) {
-    return new Proxy(envs, {
-      get(target, prop, receiver) {
-        for (let env of envs) {
-          if (env.hasOwnProperty(prop)) {
-            return env[prop];
+        <div class="tech-stack" style="margin-bottom: 16px;">
+          <span class="tech-tag">NLP</span>
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">Statistical Modeling</span>
+          <span class="tech-tag">Data Mining</span>
+        </div>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="https://irjiet.com/article/Statistic-Based-Sentiment-Analysis-of-Social-Media-Data/80"
+            target="_blank" class="btn btn-primary">IRJIET Journal Entry ↗</a>
+          <a href="https://www.researchgate.net/publication/333943106_Statistic-Based_Sentiment_Analysis_of_Social_Media_Data"
+            target="_blank" class="btn btn-sub">ResearchGate Publication ↗</a>
+        </div>
+
+        <!-- Collapsible BibTeX Citation Widget -->
+        <details class="bibtex-toggle">
+          <summary>
+            <span>📜 View BibTeX Citation</span>
+            <span style="font-size: 0.75rem; color: var(--accent-cyan);">Click to Expand ▼</span>
+          </summary>
+          <div class="bibtex-pre-container">
+            <button class="btn-copy-bib" id="copyBibBtn">Copy BibTeX</button>
+            <pre class="bibtex-code" id="bibtexText">@article{karn2018statistic,
+  title={Statistic based Sentiment Analysis of Social Media Data},
+  author={Karn, Aman and Shrestha, Anish and Pudasaini, Anil and Mahara, Binay and Jaiswal, Anku},
+  journal={International Research Journal of Innovations in Engineering and Technology (IRJIET)},
+  volume={2},
+  number={8},
+  pages={28--32},
+  year={2018}
+}</pre>
+          </div>
+        </details>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Neo-Brutalist Footer -->
+  <footer>
+    <p><strong>Aman Karn</strong> • Senior Game & Software Engineer</p>
+    <p>Contact: <b>ak99professional@gmail.com</b></p>
+
+    <div class="footer-links-row">
+      <a href="https://github.com/Dragoenix99cZar" target="_blank">GitHub</a>
+      <span>•</span>
+      <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank">LinkedIn</a>
+      <span>•</span>
+      <a href="./wip/wip_index.html">WIP Systems Lab</a>
+      <span>•</span>
+      <a href="./ak.html">Terminal CV (curl)</a>
+      <span>•</span>
+      <a href="./rindex.html">Rust Version</a>
+      <span>•</span>
+      <a href="./sitemap.html">Sitemap</a>
+    </div>
+
+    <div class="footer-links-row" style="color: var(--text-dim); font-size: 0.75rem;">
+      Historical Versions:
+      <a href="./index.html">vMain</a> |
+      <a href="./index_v2.html">v2</a> |
+      <a href="./index_v3.html">v3</a> |
+      <a href="./index_v4.html">v4</a> |
+      <a href="./index_v5.html">v5</a>
+    </div>
+
+    <p style="font-size: 0.75rem; margin-top: 16px; color: #505d70;">
+      © Aman Karn • Built with Vanilla CSS, WebAssembly, and Neo-Brutalist design principles.
+    </p>
+  </footer>
+
+  <!-- WebAssembly Procedural Shader & Interactive Scripts -->
+  <script>
+    // --- 1. WebAssembly C-Compiled Background Visualizer Engine ---
+    const width = 1024;
+    const height = 1024;
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    const effectNameLabel = document.getElementById('effectName');
+    const cycleBtn = document.getElementById('cycleEffectBtn');
+
+    function make_environment(...envs) {
+      return new Proxy(envs, {
+        get(target, prop, receiver) {
+          for (let env of envs) {
+            if (env.hasOwnProperty(prop)) {
+              return env[prop];
+            }
           }
+          return (...args) => { console.error("NOT IMPLEMENTED: " + prop, args); };
         }
-        return (...args) => { console.error("NOT IMPLEMENTED: " + prop, args); }
-      }
-    });
-  }
+      });
+    }
 
-  async function init(wasmInstance) {
-    const exports = wasmInstance.exports;
+    const effectNames = [
+      "compute_waves",
+      "compute_plasma",
+      "compute_matrix",
+      "compute_warped",
+      "compute_starfield",
+      "compute_tunnel"
+    ];
 
-    const effects = [
+    let cycleNextEffect = () => { };
+
+    async function initWasmVisualizer(wasmInstance) {
+      if (!ctx) return;
+      const exports = wasmInstance.exports;
+
+      const effects = [
         exports.compute_waves,
         exports.compute_plasma,
         exports.compute_matrix,
         exports.compute_warped,
         exports.compute_starfield,
-        exports.compute_tunnel,
-        //exports.compute_julia,
-    ];
+        exports.compute_tunnel
+      ];
 
-    let activeRenderEffect = effects[Math.floor(Math.random() * effects.length)];
-    console.log("Effect: ", activeRenderEffect);
+      let effectIndex = Math.floor(Math.random() * effects.length);
+      let activeRenderEffect = effects[effectIndex];
 
-    const bufferPtr = exports.get_buffer_pointer();
-    exports.set_alpha(38);
-    const byteLength = width * height * 4;
-    const pixelArray = new Uint8ClampedArray(
-      exports.memory.buffer,      // Raw Wasm linear memory
-      bufferPtr,                  // Memory offset/pointer
-      byteLength                  // Data size
-    );
+      function updateEffectLabel() {
+        if (effectNameLabel) {
+          effectNameLabel.textContent = effectNames[effectIndex % effectNames.length];
+        }
+      }
+      updateEffectLabel();
 
-    const imageData = new ImageData(pixelArray, width, height);
+      const bufferPtr = exports.get_buffer_pointer();
+      exports.set_alpha(36); // Subtle backdrop opacity in WASM
+      const byteLength = width * height * 4;
+      const pixelArray = new Uint8ClampedArray(
+        exports.memory.buffer,
+        bufferPtr,
+        byteLength
+      );
 
-    let frame = 0;
-    function loop() {
-      activeRenderEffect(frame++);
-      ctx.putImageData(imageData, 0, 0);
-      requestAnimationFrame(loop);
+      const imageData = new ImageData(pixelArray, width, height);
+
+      let frame = 0;
+      function loop() {
+        activeRenderEffect(frame++);
+        ctx.putImageData(imageData, 0, 0);
+        requestAnimationFrame(loop);
+      }
+
+      cycleNextEffect = () => {
+        effectIndex = (effectIndex + 1) % effects.length;
+        activeRenderEffect = effects[effectIndex];
+        updateEffectLabel();
+      };
+
+      if (cycleBtn) {
+        cycleBtn.addEventListener('click', cycleNextEffect);
+      }
+
+      window.addEventListener('keyup', (e) => {
+        if (e.code === 'Backquote') {
+          e.preventDefault();
+          cycleNextEffect();
+        }
+      });
+
+      loop();
     }
 
-    let animIdx = 0;
-    window.addEventListener('keyup', (e) => {
-      if (e.code === 'Backquote') {
-        e.preventDefault();
-        activeRenderEffect = effects[(animIdx++) % effects.length];
-        console.log("Effect: ", activeRenderEffect);
-      }
-    });
-
-    loop();
-  }
-
-  const libm = {
+    const libm = {
       "atan2f": Math.atan2,
-      "cosf":   Math.cos,
-      "sinf":   Math.sin,
-      "sqrtf":  Math.sqrt,
-  };
+      "cosf": Math.cos,
+      "sinf": Math.sin,
+      "sqrtf": Math.sqrt,
+    };
 
-  let w = null;
-  WebAssembly.instantiateStreaming(fetch('./renderer_in_c/renderer.wasm'), {
-    "env": make_environment(libm)
-  }).then(w0 => {
-    w = w0;
-    if (w) init(w0.instance);
-  });
-</script>
+    fetch('./renderer_in_c/renderer.wasm')
+      .then(resp => {
+        if (!resp.ok) throw new Error("WASM not found");
+        return WebAssembly.instantiateStreaming(resp, { "env": make_environment(libm) });
+      })
+      .then(w0 => initWasmVisualizer(w0.instance))
+      .catch(err => {
+        console.warn("WASM Background Visualizer fallback active:", err);
+        if (effectNameLabel) effectNameLabel.textContent = "fallback_static";
+      });
+
+    // --- 2. Interactive Curl Command Copy Handler ---
+    const curlBtn = document.getElementById('curlBtn');
+    const copyToast = document.getElementById('copyToast');
+
+    if (curlBtn && copyToast) {
+      curlBtn.addEventListener('click', () => {
+        const textToCopy = "curl https://dragoenix99czar.github.io/ak";
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          copyToast.style.display = 'block';
+          setTimeout(() => {
+            copyToast.style.display = 'none';
+          }, 2000);
+        }).catch(() => {
+          prompt("Copy to clipboard:", textToCopy);
+        });
+      });
+    }
+
+    // --- 3. BibTeX Copy Handler ---
+    const copyBibBtn = document.getElementById('copyBibBtn');
+    const bibtexText = document.getElementById('bibtexText');
+
+    if (copyBibBtn && bibtexText) {
+      copyBibBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(bibtexText.textContent).then(() => {
+          const original = copyBibBtn.textContent;
+          copyBibBtn.textContent = "COPIED!";
+          setTimeout(() => copyBibBtn.textContent = original, 1800);
+        });
+      });
+    }
+
+    // --- 4. Experiments Filtering & Search Logic ---
+    const expSearchInput = document.getElementById('expSearchInput');
+    const expPills = document.querySelectorAll('#expPills .pill-btn');
+    const expCards = document.querySelectorAll('.exp-card');
+    const expEmptyState = document.getElementById('expEmptyState');
+
+    let currentExpCategory = 'all';
+    let expSearchQuery = '';
+
+    function filterExperiments() {
+      let matchCount = 0;
+
+      expCards.forEach(card => {
+        const category = card.dataset.category || '';
+        const tags = (card.dataset.tags || '').toLowerCase();
+        const title = (card.querySelector('.exp-card-title')?.textContent || '').toLowerCase();
+        const desc = (card.querySelector('.exp-card-desc')?.textContent || '').toLowerCase();
+
+        const categoryMatch = currentExpCategory === 'all' || category.includes(currentExpCategory);
+        const searchMatch = !expSearchQuery ||
+          title.includes(expSearchQuery) ||
+          desc.includes(expSearchQuery) ||
+          tags.includes(expSearchQuery);
+
+        if (categoryMatch && searchMatch) {
+          card.style.display = 'flex';
+          matchCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (expEmptyState) {
+        expEmptyState.style.display = matchCount === 0 ? 'block' : 'none';
+      }
+    }
+
+    if (expPills) {
+      expPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          expPills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          currentExpCategory = pill.dataset.filter;
+          filterExperiments();
+        });
+      });
+    }
+
+    if (expSearchInput) {
+      expSearchInput.addEventListener('input', (e) => {
+        expSearchQuery = e.target.value.trim().toLowerCase();
+        filterExperiments();
+      });
+    }
+  </script>
 
 </body>
+
 </html>
