@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Multi-Slot SVG Stack DSL Studio</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    sans-serif;
+                background-color: #1a1a1e;
+                color: #e2e2e9;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                padding: 20px;
+                overflow: hidden;
+            }
+
+            header {
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+                color: #00ffaa;
+            }
+
+            p {
+                color: #9090a0;
+                font-size: 0.9rem;
+                margin-top: 4px;
+            }
+
+            /* 2 Rows, 3 Columns Explicit Layout System */
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-template-rows: 1.2fr 1fr;
+                gap: 20px;
+                flex-grow: 1;
+                height: calc(100% - 70px);
+            }
+
+            /* Row 1: Source Workstations */
+            .editor-pane {
+                background-color: #111113;
+                border: 1px solid #2e2e36;
+                border-radius: 8px;
+                padding: 12px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .editor-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .editor-title {
+                font-size: 0.8rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: #a0a0b0;
+                font-weight: bold;
+            }
+
+            textarea {
+                width: 100%;
+                flex-grow: 1;
+                background-color: #070708;
+                color: #39ff14; /* Matrix neon-green terminal coloration */
+                border: 1px solid #232328;
+                border-radius: 6px;
+                padding: 12px;
+                font-family: "Courier New", Courier, monospace;
+                font-size: 0.95rem;
+                line-height: 1.4;
+                resize: none;
+                outline: none;
+            }
+
+            textarea:focus {
+                border-color: #00ffaa;
+            }
+
+            .compile-btn {
+                background-color: #00ffaa;
+                color: #0b0b0d;
+                border: none;
+                border-radius: 4px;
+                padding: 6px 14px;
+                font-weight: bold;
+                font-size: 0.8rem;
+                cursor: pointer;
+                text-transform: uppercase;
+                transition:
+                    background 0.2s ease,
+                    transform 0.1s ease;
+            }
+
+            .compile-btn:hover {
+                background-color: #00dd92;
+            }
+
+            .compile-btn:active {
+                transform: scale(0.96);
+            }
+
+            /* Row 2: Injected Target Displays */
+            .preview-pane {
+                background-color: #111113;
+                border: 1px solid #2e2e36;
+                border-radius: 8px;
+                padding: 12px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .preview-canvas {
+                flex-grow: 1;
+                background-color: #24242b;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                position: relative;
+            }
+
+            /* Scaling constraints for inner injected SVGs */
+            .preview-canvas svg {
+                max-width: 90%;
+                max-height: 90%;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            }
+
+            /* Feedback message banner overlay */
+            .status-overlay {
+                position: absolute;
+                bottom: 8px;
+                left: 8px;
+                right: 8px;
+                font-family: monospace;
+                font-size: 0.75rem;
+                padding: 4px 8px;
+                border-radius: 4px;
+                background-color: rgba(7, 7, 8, 0.85);
+                pointer-events: none;
+            }
+
+            .status-ok {
+                color: #00ffaa;
+            }
+            .status-err {
+                color: #ff5555;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Multi-Slot SVG Stack DSL Studio</h1>
+            <p>
+                Modify script entries in Row 1. Click "Compile" to build and
+                inject graphic instances dynamically into Row 2 below.
+            </p>
+        </header>
+
+        <div class="grid-container">
+            <!-- ================= ROW 1: DSL INPUT PANELS ================= -->
+            <!-- Column 1 Editor -->
+            <div class="editor-pane">
+                <div class="editor-header">
+                    <span class="editor-title">Slot 1: Crimson Banner</span>
+                    <button class="compile-btn" onclick="processSlot(1)">
+                        Compile ⚡
+                    </button>
+                </div>
+                <textarea id="dsl-1" spellcheck="false">
+300 200 INIT
+0 0 100% 100% crimson RECT
+150 100 50 teal CIRCLE
+150 110 24 Stack_DSL white TEXT</textarea>
+            </div>
+
+            <!-- Column 2 Editor -->
+            <div class="editor-pane">
+                <div class="editor-header">
+                    <span class="editor-title"
+                        >Slot 2: Animated Cyber Radar</span
+                    >
+                    <button class="compile-btn" onclick="processSlot(2)">
+                        Compile ⚡
+                    </button>
+                </div>
+                <textarea id="dsl-2" spellcheck="false">
+400 400 INIT
+0 0 100% 100% #0d1117 RECT
+200 200 130 #1f2937 CIRCLE
+200 200 100 #00f0ff CIRCLE
+transform rotate 0 360 5s indefinite ANIMATE
+200 200 90 #0d1117 CIRCLE
+200 210 22 ACTIVE #00f0ff TEXT</textarea>
+            </div>
+
+            <!-- Column 3 Editor -->
+            <div class="editor-pane">
+                <div class="editor-header">
+                    <span class="editor-title">Slot 3: Minimal UI Button</span>
+                    <button class="compile-btn" onclick="processSlot(3)">
+                        Compile ⚡
+                    </button>
+                </div>
+                <textarea id="dsl-3" spellcheck="false">
+500 200 INIT
+0 0 100% 100% #16161a RECT
+50 50 400 100 #7c3aed RECT
+250 110 28 SUBMIT_ORDER #ffffff TEXT</textarea>
+            </div>
+
+            <!-- ================= ROW 2: INJECTION DISPLAY TARGET DIVS ================= -->
+            <!-- Column 1 Output Display Viewport -->
+            <div class="preview-pane">
+                <div class="editor-title" style="margin-bottom: 8px">
+                    Display Outlet 1
+                </div>
+                <div class="preview-canvas">
+                    <div id="target-div-1"></div>
+                    <div id="status-1" class="status-overlay status-ok">
+                        Ready to compile
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 2 Output Display Viewport -->
+            <div class="preview-pane">
+                <div class="editor-title" style="margin-bottom: 8px">
+                    Display Outlet 2
+                </div>
+                <div class="preview-canvas">
+                    <div id="target-div-2"></div>
+                    <div id="status-2" class="status-overlay status-ok">
+                        Ready to compile
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 3 Output Display Viewport -->
+            <div class="preview-pane">
+                <div class="editor-title" style="margin-bottom: 8px">
+                    Display Outlet 3
+                </div>
+                <div class="preview-canvas">
+                    <div id="target-div-3"></div>
+                    <div id="status-3" class="status-overlay status-ok">
+                        Ready to compile
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Core Stack Engine Compiler Engine
+            class SvgStackDSL {
+              constructor() {
+                this.stack = [];
+                this.shapes = [];
+                this.currentShapeChildren = [];
+                this.width = 500;
+                this.height = 500;
+              }
+
+              push(val) {
+                this.stack.push(val);
+              }
+
+              pop() {
+                if (this.stack.length === 0) throw new Error("Stack Underflow! Lacking scalar parameters.");
+                return this.stack.pop();
+              }
+
+              commitShape(openingTag) {
+                if (this.currentShapeChildren.length <= 0) {
+                  this.shapes.push(`${openingTag} />`);
+                } else {
+                  const shapeXml = `${openingTag}>\n  ${this.currentShapeChildren.join(`\n  `)}\n </${openingTag.split(' ')[0].substring(1)}>`;
+                  this.shapes.push(shapeXml);
+                  this.currentShapeChildren = [];
+                }
+              }
+
+              execute(script) {
+                const tokens = script.trim().split(/\s+/);
+
+                for (const token of tokens) {
+                  if (!token) continue;
+
+                  switch (token.toUpperCase()) {
+                    case "INIT":
+                      this.height = this.pop();
+                      this.width = this.pop();
+                      break;
+
+                    case "RECT":
+                      const fillRect = this.pop();
+                      const h = this.pop();
+                      const w = this.pop();
+                      const yRect = this.pop();
+                      const xRect = this.pop();
+                      this.commitShape(`<rect x="${xRect}" y="${yRect}" width="${w}" height="${h}" fill="${fillRect}"`);
+                      break;
+
+                    case "CIRCLE":
+                      const fillCircle = this.pop();
+                      const r = this.pop();
+                      const cy = this.pop();
+                      const cx = this.pop();
+                      this.commitShape(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fillCircle}"`);
+                      break;
+
+                    case "TEXT":
+                      const fillText = this.pop();
+                      const textStr = this.pop().replace(/_/g, ' ');
+                      const fSize = this.pop();
+                      const y = this.pop();
+                      const x = this.pop();
+                      this.shapes.push(`<text x="${x}" y="${y}" font-size="${fSize}" fill="${fillText}" font-family="sans-serif" text-anchor="middle">${textStr}</text>`);
+                      break;
+
+                    case "ANIMATE":
+                      const repeat = this.pop();
+                      const dur = this.pop();
+                      const to = this.pop();
+                      const from = this.pop();
+                      const attr = this.pop();
+                      this.currentShapeChildren.push(
+                        `<animate attributeName="${attr}" from="${from}" to="${to}" dur="${dur}" repeatCount="${repeat}" />`
+                      );
+                      break;
+
+                    default:
+                      const num = Number(token);
+                      this.push(!isNaN(num) ? num : token);
+                      break;
+                  }
+                }
+              }
+
+              compile() {
+                return [
+                  `<svg width="100%" height="100%" viewBox="0 0 ${this.width} ${this.height}" version="1.1" xmlns="http://w3.org">`,
+                  ...this.shapes.map(s => "  " + s),
+                  `</svg>`
+                ].join("\n");
+              }
+            }
+
+            // Orchestration Compilation Controller Function
+            function processSlot(slotId) {
+              const scriptSource = document.getElementById(`dsl-${slotId}`).value;
+              const injectionTarget = document.getElementById(`target-div-1.${slotId}` ? `target-div-${slotId}` : null);
+              const statusElement = document.getElementById(`status-${slotId}`);
+
+              try {
+                const compilerInstance = new SvgStackDSL();
+                compilerInstance.execute(scriptSource);
+
+                const outputSvgMarkup = compilerInstance.compile();
+                // Perform inner HTML DOM element code node injection
+                injectionTarget.innerHTML = outputSvgMarkup;
+                statusElement.className = "status-overlay status-ok";
+                statusElement.textContent = "⚡ Compiled successfully!";
+              } catch (error) {
+                statusElement.className = "status-overlay status-err";
+                statusElement.textContent = `❌ ${error.message}`;
+              }
+            }
+                // Trigger complete system-wide asset compiling workspace rendering on initialization
+            window.addEventListener('DOMContentLoaded', () => {
+              processSlot(1);
+              processSlot(2);
+              processSlot(3);
+            });
+        </script>
+    </body>
+</html>
