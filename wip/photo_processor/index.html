@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Passport & Visa Photo Alignment Workspace</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+<div class="container">
+    <h2>Photo Alignment, Crop & Compress Tool</h2>
+    <input type="file" id="upload" accept="image/png, image/jpeg" />
+
+    <div class="canvas-container" id="workspace">
+        <canvas id="photoCanvas" width="600" height="600"></canvas>
+        <div class="guide-overlay">
+            <div class="center-line"></div>
+            <div class="head-zone">
+                <span class="head-label">
+                    FACE TARGET ZONE
+                </span>
+            </div>
+            <div class="eye-line">
+                <span class="eye-label">
+                    EYE LEVEL TARGET ZONE
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls-info">
+        <strong>Workspace Actions:</strong> Drag mouse to Pan image
+        position | Use your mouse Scroll Wheel to Zoom.<br />
+        ⌨️ Use keyboard <strong>Arrow Keys</strong> for
+        micro-adjustments down to the exact pixel.
+    </div>
+
+    <!-- Parameter Configurations Board -->
+    <div class="export-panel split-workspace-panel">
+        <!-- Left Hand Control Suite -->
+        <div class="panel-controls-sidebar">
+            <div class="input-group">
+                <label for="formatSelect">File Format</label>
+                <select id="formatSelect">
+                    <option value="jpeg">JPEG (.jpg)</option>
+                    <option value="png">PNG (.png)</option>
+                    <option value="webp">WebP (.webp)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="resSelect">Target Output Dimensions</label>
+                <select id="resSelect">
+                    <option value="600">600 x 600 px (Standard)</option>
+                    <option value="900">900 x 900 px (Mid-res)</option>
+                    <option value="1200">1200 x 1200 px (Max Legal)</option>
+                    <option value="custom">Custom Dimension...</option>
+                </select>
+                <input
+                    type="number"
+                    id="customResInput"
+                    value="600"
+                    min="100"
+                    max="4000"
+                    style="display: none; margin-top: 6px"
+                />
+            </div>
+
+            <div class="input-group">
+                <label for="sizeCeiling">Size Compliance Alert Trigger</label>
+                <select id="sizeCeiling">
+                    <option value="240">Flag over 240 KB (US Visa Specs)</option>
+                    <option value="60">Flag over 60 KB (Online Form Specs)</option>
+                    <option value="0">No Size Limits / Verification</option>
+                </select>
+            </div>
+
+            <div class="workspace-actions" style="display: flex; gap: 10px;">
+                <button id="rotateBtn" class="action-btn" style="flex-grow: 1; padding: 10px; font-weight: 600; cursor: pointer;">
+                    🔄 Rotate 90° Clockwise
+                </button>
+                <button id="downloadCroppedBtn" class="action-btn primary-action" style="flex-grow: 1; padding: 10px; background: #22c55e; color: #fff; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
+                    🎯 Save Cropped Output
+                </button>
+            </div>
+
+            <div>
+                <button id="generatePreviewsBtn" class="generate-btn">
+                    🔍 Generate Compression Options
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dedicated Separate Preview Output Section Base -->
+    <div class="preview-results-section">
+        <h3 class="section-heading" id="previewSectionHeader" style="display: none;">Compression Tier Analyses</h3>
+        <div id="previewMatrix" class="panel-matrix-display">
+            <!-- Structural split-slider blocks inject here -->
+        </div>
+    </div>
+
+</div>
+<script type="module">
+    import init, { ImageProcessor } from "./pkg/photo_processor.js";
+    let processor = null;
+    let isDragging = false;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+
+    // Cache the loaded workspace image element globally to optimize layout rendering loops
+    let activeWorkspaceImage = null;
+
+    const canvas = document.getElementById("photoCanvas");
+    const ctx = canvas.getContext("2d");
+    const workspace = document.getElementById("workspace");
+    const resSelect = document.getElementById("resSelect");
+    const customResInput = document.getElementById("customResInput");
+    const formatSelect = document.getElementById("formatSelect");
+    const sizeCeiling = document.getElementById("sizeCeiling");
+    const generatePreviewsBtn = document.getElementById("generatePreviewsBtn");
+    const previewMatrix = document.getElementById("previewMatrix");
+
+    // Launch WebAssembly core binary runtime module assets
+    async function start() {
+        await init();
+        console.log("WASM Processing Engine fully bound and operational.");
+    }
+    start();
+
+    // Catch image load requests across local binary stream bridges
+    document.getElementById("upload").addEventListener("change", async (e) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        const arrayBuffer = await files[0].arrayBuffer();
+        const byteArray = new Uint8Array(arrayBuffer);
+
+        // Instantiate our main Rust application core model structure container logic
+        processor = new ImageProcessor(byteArray);
+
+        // Pre-render the HTML Image instance once to eliminate workspace flashing/flickering
+        if (activeWorkspaceImage) {
+            URL.revokeObjectURL(activeWorkspaceImage.src);
+        }
+        activeWorkspaceImage = new Image();
+        activeWorkspaceImage.src = URL.createObjectURL(files[0]);
+        activeWorkspaceImage.onload = () => {
+            drawWorkspace();
+        };
+    });
+
+    // Redraw loop matrix rendering workspace state slices
+    function drawWorkspace() {
+        if (!processor || !activeWorkspaceImage) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const pos = processor.get_position();
+        const zoom = processor.get_zoom();
+        const rotation = processor.get_rotation(); // Read the dynamic canvas rotation angle states
+
+        ctx.save();
+        // 1. Shift canvas alignment structure relative to dragging positions
+        ctx.translate(canvas.width / 2 + pos[0], canvas.height / 2 + pos[1]);
+
+        // 2. Project rotation angles safely matching degrees parameters
+        ctx.rotate((rotation * Math.PI) / 180);
+
+        // 3. Apply standard scaling factor layers
+        ctx.scale(zoom, zoom);
+
+        ctx.drawImage(activeWorkspaceImage, -activeWorkspaceImage.width / 2, -activeWorkspaceImage.height / 2);
+        ctx.restore();
+    }
+
+    // Toggle custom entry boxes contextually matching selection triggers
+    resSelect.addEventListener("change", (e) => {
+        customResInput.style.display = e.target.value === "custom" ? "block" : "none";
+    });
+
+    // --- Interactive Mouse/Touch Workspace Listeners ---
+    workspace.addEventListener("mousedown", (e) => {
+        if (!processor) return;
+        isDragging = true;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+    });
+
+    window.addEventListener("mousemove", (e) => {
+        if (!isDragging || !processor) return;
+        const dx = e.clientX - lastMouseX;
+        const dy = e.clientY - lastMouseY;
+        processor.pan_image(dx, dy);
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        drawWorkspace();
+    });
+
+    window.addEventListener("mouseup", () => { isDragging = false; });
+
+    workspace.addEventListener("wheel", (e) => {
+        if (!processor) return;
+        e.preventDefault();
+        const zoomDelta = e.deltaY < 0 ? 0.04 : -0.04;
+        processor.zoom_image(zoomDelta);
+        drawWorkspace();
+    }, { passive: false });
+
+    window.addEventListener("keydown", (e) => {
+        if (!processor) return;
+        let moved = false;
+        switch(e.key) {
+            case "ArrowUp":    processor.pan_image(0, -1); moved = true; break;
+            case "ArrowDown":  processor.pan_image(0, 1);  moved = true; break;
+            case "ArrowLeft":  processor.pan_image(-1, 0); moved = true; break;
+            case "ArrowRight": processor.pan_image(1, 0);  moved = true; break;
+        }
+        if (moved) {
+            e.preventDefault();
+            drawWorkspace();
+        }
+    });
+
+    document.getElementById("rotateBtn").addEventListener("click", () => {
+        if (!processor) return;
+        processor.rotate_clockwise();
+        drawWorkspace(); // Re-render instantly
+    });
+
+    document.getElementById("downloadCroppedBtn").addEventListener("click", async () => {
+        if (!processor) {
+            alert("Please select and upload an original file into the viewport workspace first.");
+            return;
+        }
+
+        let dimension = parseInt(resSelect.value, 10);
+        if (resSelect.value === "custom") {
+            dimension = parseInt(customResInput.value, 10) || 600;
+        }
+
+        try {
+            // Export the current crop at 100% maximum lossless parameters as a base PNG
+            const rawBytes = processor.export_at_quality(formatSelect.value, dimension, dimension, 100);
+
+            // Read Base64 Data URI asynchronously to safely bypass local network security rules
+            const dataUri = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(new Blob([rawBytes], { type: "image/png" }));
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+            });
+
+            const anchor = document.createElement("a");
+            anchor.href = dataUri;
+            anchor.download = `cropped_photo_${dimension}px.png`;
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+        } catch (err) {
+            console.error("Failed to export standalone crop view matrix profile layouts:", err);
+        }
+    });
+
+    // Helper utility to convert uncompressed fallback data layers from Rust smoothly into compressed WebP Blobs
+    function compressToWebPNative(pngBytes, dim, qualityValue) {
+        return new Promise((resolve, reject) => {
+            const pngBlob = new Blob([pngBytes], { type: "image/png" });
+            const tempUrl = URL.createObjectURL(pngBlob);
+            const img = new Image();
+            img.src = tempUrl;
+            img.onload = () => {
+                URL.revokeObjectURL(tempUrl);
+                const offscreenCanvas = document.createElement("canvas");
+                offscreenCanvas.width = dim;
+                offscreenCanvas.height = dim;
+                const oCtx = offscreenCanvas.getContext("2d");
+                if (!oCtx) return reject(new Error("Canvas context generation breakdown."));
+
+                oCtx.drawImage(img, 0, 0);
+                offscreenCanvas.toBlob((webpBlob) => {
+                    if (webpBlob) resolve(webpBlob);
+                    else reject(new Error("WebP context encoder failure."));
+                }, "image/webp", qualityValue / 100);
+            };
+            img.onerror = () => {
+                URL.revokeObjectURL(tempUrl);
+                reject(new Error("Intermediate decompression layer failure."));
+            };
+        });
+    }
+
+    // --- Compression Matrix Option Multi-Generation Logic ---
+    generatePreviewsBtn.addEventListener("click", async () => {
+        if (!processor || !activeWorkspaceImage) {
+            alert("Please select and upload an original file into the viewport workspace first.");
+            return;
+        }
+        previewMatrix.innerHTML = ""; // Empty out older target calculations
+
+        let dimension = parseInt(resSelect.value, 10);
+        if (resSelect.value === "custom") {
+            dimension = parseInt(customResInput.value, 10) || 600;
+        }
+
+        const selectedFormat = formatSelect.value;
+        const ceilingKb = parseInt(sizeCeiling.value, 10);
+
+        // Define our 3 preview test tiers (High, Balanced, Maximum Compression)
+        const qualityTiers = [
+            { title: "High Quality Version", quality: 92 },
+            { title: "Balanced Version", quality: 70 },
+            { title: "High Compression Version", quality: 40 }
+        ];
+
+        // 1. Generate an uncompressed PNG reference of the user's current crop alignment state out of Rust
+        const uncompressedBytes = processor.export_at_quality("png", dimension, dimension, 100);
+        const uncompressedBlob = new Blob([uncompressedBytes], { type: "image/png" });
+
+        // Convert the reference bytes to a loadable HTML Image Element
+        const imgOriginal = await new Promise((resolve) => {
+            const img = new Image();
+            img.src = URL.createObjectURL(uncompressedBlob);
+            img.onload = () => resolve(img);
+        });
+
+        // Show the results section heading dynamically
+        document.getElementById("previewSectionHeader").style.display = "block";
+        previewMatrix.innerHTML = "";
+
+        for (const tier of qualityTiers) {
+            try {
+                // 2. Fetch the target compression bytes from our hybrid pipeline setup
+                const outputBytes = processor.export_at_quality(selectedFormat, dimension, dimension, tier.quality);
+
+                let finalBlob;
+                if (selectedFormat === "webp") {
+                    finalBlob = await compressToWebPNative(outputBytes, dimension, tier.quality);
+                } else {
+                    const mimeType = selectedFormat === "jpeg" ? "image/jpeg" : "image/png";
+                    finalBlob = new Blob([outputBytes], { type: mimeType });
+                }
+
+                const currentKb = finalBlob.size / 1024;
+                const blobUrl = URL.createObjectURL(finalBlob);
+
+                // Convert the compressed bytes to a loadable HTML Image Element
+                const imgCompressed = await new Promise((resolve) => {
+                    const img = new Image();
+                    img.src = blobUrl;
+                    img.onload = () => resolve(img);
+                });
+
+                // Build status verification flags based on choice configuration profiles
+                let badgeHtml = "";
+                if (ceilingKb > 0) {
+                    if (currentKb <= ceilingKb) {
+                        badgeHtml = `<span class="status-badge badge-pass">✓ COMPLIANT (${currentKb.toFixed(1)} KB)</span>`;
+                    } else {
+                        badgeHtml = `<span class="status-badge badge-fail">⚠️ EXCEEDS CEILING (${currentKb.toFixed(1)} KB / Max ${ceilingKb}KB)</span>`;
+                    }
+                } else {
+                    badgeHtml = `<span class="status-badge" style="background:#edf2f7; color:#4a5568;">SIZE: ${currentKb.toFixed(1)} KB</span>`;
+                }
+
+                // 3. Construct an expanded split-screen comparison layout frame container
+                const card = document.createElement("div");
+                card.className = "preview-card split-layout-card";
+                card.innerHTML = `
+                    <div class="card-sidebar">
+                        <div class="sidebar-header">
+                            <h4 class="card-title">${tier.title}</h4>
+                            <div class="card-meta">Quality Factor: <strong>${tier.quality}%</strong></div>
+                            ${badgeHtml}
+                        </div>
+                        <button class="download-opt-btn">💾 Download File</button>
+                    </div>
+                    <div class="split-slider-container">
+                        <canvas class="comparison-canvas"></canvas>
+                        <!-- The visual vertical line tracking element -->
+                        <div class="slider-handle">
+                            <div class="handle-button">↔</div>
+                        </div>
+                        <div class="label-badge label-orig">ORIGINAL</div>
+                        <div class="label-badge label-comp">COMPRESSED</div>
+                    </div>
+                `;
+
+                // Handle file downloads
+                card.querySelector(".download-opt-btn").addEventListener("click", () => {
+                    const ext = selectedFormat === "jpeg" ? "jpg" : selectedFormat;
+                    const anchor = document.createElement("a");
+                    anchor.href = blobUrl;
+                    anchor.download = `photo_${dimension}px_q${tier.quality}.${ext}`;
+                    document.body.appendChild(anchor);
+                    anchor.click();
+                    document.body.removeChild(anchor);
+                });
+
+                previewMatrix.appendChild(card);
+
+                // 4. Initialize the comparison rendering context for this specific tier canvas
+                const compCanvas = card.querySelector(".comparison-canvas");
+                const compCtx = compCanvas.getContext("2d");
+                const sliderContainer = card.querySelector(".split-slider-container");
+                const handle = card.querySelector(".slider-handle");
+
+                // Lock internal buffer coordinate metrics to clean 600x600 high-res preview dimensions
+                compCanvas.width = 600;
+                compCanvas.height = 600;
+
+                // Tracks slider split boundary location natively (default center: 50%)
+                let sliderPos = 0.5;
+
+                function renderComparison() {
+                    compCtx.clearRect(0, 0, compCanvas.width, compCanvas.height);
+                    const splitX = compCanvas.width * sliderPos;
+
+                    // Layer A: Paint the full original background image context layer
+                    compCtx.drawImage(imgOriginal, 0, 0, compCanvas.width, compCanvas.height);
+
+                    // Layer B: Clip context bounds horizontally and project the compressed canvas matrix layer
+                    compCtx.save();
+                    compCtx.beginPath();
+                    compCtx.rect(splitX, 0, compCanvas.width - splitX, compCanvas.height);
+                    compCtx.clip();
+                    compCtx.drawImage(imgCompressed, 0, 0, compCanvas.width, compCanvas.height);
+                    compCtx.restore();
+
+                    // Position the structural visual control divider handle matching current states
+                    handle.style.left = `${sliderPos * 100}%`;
+                }
+
+                // Interactive slider input binding loops
+                function updateSliderFromEvent(e) {
+                    const rect = sliderContainer.getBoundingClientRect();
+                    // Get touch input locations or mouse placement coordinates
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    let x = clientX - rect.left;
+
+                    // Clamp values safely between 0% and 100% canvas bounds limits
+                    x = Math.max(0, Math.min(x, rect.width));
+                    sliderPos = x / rect.width;
+                    renderComparison();
+                }
+
+                let isSliding = false;
+
+                const startSliding = (e) => {
+                    isSliding = true;
+                    updateSliderFromEvent(e);
+                };
+
+                const stopSliding = () => { isSliding = false; };
+
+                const moveSliding = (e) => {
+                    if (!isSliding) return;
+                    updateSliderFromEvent(e);
+                };
+
+                // Mouse interaction hooks
+                sliderContainer.addEventListener("mousedown", startSliding);
+                window.addEventListener("mouseup", stopSliding);
+                window.addEventListener("mousemove", moveSliding);
+
+                // Touch support hooks for mobile compatibility metrics
+                sliderContainer.addEventListener("touchstart", startSliding, { passive: true });
+                window.addEventListener("touchend", stopSliding);
+                window.addEventListener("touchmove", moveSliding, { passive: true });
+
+                // Kick off initial rendering state sweep
+                renderComparison();
+
+            } catch (error) {
+                console.error("Error creating slider preview card context: ", error);
+            }
+        }
+        document.getElementById("previewSectionHeader").scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+</script>
+</body>
+</html>

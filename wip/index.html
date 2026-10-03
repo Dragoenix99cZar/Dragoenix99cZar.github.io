@@ -6,7 +6,7 @@
   <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="Experimental research laboratory showcasing work-in-progress WebAssembly engines, 3D software rasterizers, compiler pipelines, procedural algorithms, and graphics tools by Aman Karn.">
+    content="Experimental research laboratory showcasing work-in-progress WebAssembly engines, biometric image processing, 3D software rasterizers, compiler pipelines, procedural algorithms, and graphics tools by Aman Karn.">
   <title>WIP Lab & Experimental Systems | Aman Karn</title>
 
   <!-- Modern Neo-Brutalist Typography -->
@@ -653,7 +653,6 @@
     </div>
     <div class="nav-actions">
       <a href="../index.html" class="btn btn-sub">← Return to Portfolio</a>
-      <a href="../ak.html" class="btn btn-sub">Terminal CV (curl)</a>
     </div>
   </nav>
 
@@ -675,11 +674,11 @@
 
       <div class="metrics-bar">
         <div class="metric-card">
-          <div class="metric-val" id="totalCount">9</div>
+          <div class="metric-val" id="totalCount">10</div>
           <div class="metric-label">Research Modules</div>
         </div>
         <div class="metric-card">
-          <div class="metric-val">5</div>
+          <div class="metric-val">7</div>
           <div class="metric-label">WebAssembly Cores</div>
         </div>
         <div class="metric-card">
@@ -698,18 +697,18 @@
       <div class="search-row">
         <div class="search-input-wrapper">
           <input type="text" id="searchInput" class="search-input"
-            placeholder="Search projects by title, keyword, language, or algorithm (e.g., 'WASM', 'Bresenham', 'AST')..."
+            placeholder="Search projects by title, keyword, language, or algorithm (e.g., 'WASM', 'Lanczos3', 'Bresenham', 'AST')..."
             aria-label="Search projects">
         </div>
       </div>
 
       <div class="filter-pills" id="filterPills" role="radiogroup" aria-label="Filter Projects by Category">
         <span class="filter-label">Filter:</span>
-        <button class="pill-btn active" data-filter="all">All (9)</button>
-        <button class="pill-btn" data-filter="wasm">WebAssembly (5)</button>
-        <button class="pill-btn" data-filter="graphics">Graphics & 3D (3)</button>
+        <button class="pill-btn active" data-filter="all">All (10)</button>
+        <button class="pill-btn" data-filter="wasm">WebAssembly (7)</button>
+        <button class="pill-btn" data-filter="graphics">Graphics & Vision (5)</button>
         <button class="pill-btn" data-filter="compilers">Compilers & DSLs (2)</button>
-        <button class="pill-btn" data-filter="algorithms">Math & Algorithms (3)</button>
+        <button class="pill-btn" data-filter="algorithms">Math & Algorithms (6)</button>
       </div>
     </section>
 
@@ -1188,6 +1187,68 @@
         </footer>
       </article>
 
+      <!-- 10. photo_processor -->
+      <article class="project-card" data-category="wasm graphics"
+        data-tags="rust wasm image-processing photo passport visa crop compression lanczos3 canvas compliance biometric webp">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-rust">Rust + WebAssembly</span>
+            <span class="card-id">EXP_10</span>
+          </div>
+          <h2 class="card-title">Passport & Visa Photo Alignment Studio</h2>
+          <div class="card-subtitle">Client-Side Biometric Cropping & Multi-Tier Compression Engine</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              A high-stakes, 100% client-side photo alignment, cropping, and multi-tier compression suite built with
+              Rust and WebAssembly (wasm-bindgen), providing sub-pixel precision for strict official document compliance
+              (US Visa, Passports, ID photos) without server uploads.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag tag-rust">Rust (wasm-pack)</span>
+              <span class="tech-tag tag-wasm">WebAssembly (716 KB)</span>
+              <span class="tech-tag">wasm-bindgen</span>
+              <span class="tech-tag tag-math">Lanczos3 Resampling</span>
+              <span class="tech-tag">HTML5 Canvas 2D</span>
+              <span class="tech-tag">JPEG / PNG / WebP</span>
+              <span class="tech-tag">Interactive Split Slider</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Stateful Rust <code>ImageProcessor</code> core decodes raw image bytes into dynamic pixel matrices,
+              computing
+              orientation-invariant viewport panning (0°–270°), smooth zoom scaling, and alpha-blending onto white
+              backgrounds.
+              The JS layer handles dual-canvas overlays, 1px keyboard micro-stepping, multi-tier compression
+              benchmarking
+              (High, Balanced, Max Compression), and an interactive split-slider visual diff.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Guarantee absolute biometric privacy for sensitive identity documents by running heavy computer vision,
+              resampling, and strict size compliance checks (e.g., 240 KB US Visa limit / 60 KB online forms) completely
+              offline
+              inside the client runtime.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="photo_processor/index.html" class="btn btn-launch" target="_blank">Launch Photo Studio →</a>
+        </footer>
+      </article>
+
       <!-- Empty state when no cards match search -->
       <div class="empty-state" id="emptyState">
         <h3>No Matching Experiments Found</h3>
@@ -1204,7 +1265,6 @@
     <p>
       <a href="../index.html">Main Portfolio</a> •
       <a href="../sitemap.html">Sitemap</a> •
-      <a href="../ak.html">Terminal CV</a> •
       <a href="https://github.com/Dragoenix99cZar" target="_blank">GitHub</a> •
       <a href="https://linkedin.com/in/aman-karn-c99zar" target="_blank">LinkedIn</a>
     </p>
@@ -1225,16 +1285,30 @@
       let currentCategory = 'all';
       let searchQuery = '';
 
+      function updatePillCounts() {
+        filterPills.forEach(pill => {
+          const filter = pill.dataset.filter;
+          let count = 0;
+          cards.forEach(card => {
+            if (filter === 'all' || (card.dataset.category && card.dataset.category.includes(filter))) {
+              count++;
+            }
+          });
+          const baseText = pill.textContent.replace(/\s*\(\d+\)/, '');
+          pill.textContent = `${baseText} (${count})`;
+        });
+      }
+
       function updateGrid() {
         let visibleCount = 0;
 
         cards.forEach(card => {
-          const categoryMatch = currentCategory === 'all' || card.dataset.category.includes(currentCategory);
+          const categoryMatch = currentCategory === 'all' || (card.dataset.category && card.dataset.category.includes(currentCategory));
 
           const cardText = (
             card.querySelector('.card-title').textContent + ' ' +
             card.querySelector('.card-subtitle').textContent + ' ' +
-            card.dataset.tags + ' ' +
+            (card.dataset.tags || '') + ' ' +
             card.textContent
           ).toLowerCase();
 
@@ -1274,6 +1348,10 @@
         searchQuery = e.target.value.trim().toLowerCase();
         updateGrid();
       });
+
+      // Initial execution
+      updatePillCounts();
+      updateGrid();
     });
   </script>
 

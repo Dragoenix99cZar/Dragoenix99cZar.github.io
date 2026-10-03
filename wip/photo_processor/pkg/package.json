@@ -1,0 +1,15 @@
+{
+  "name": "photo-processor",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "photo_processor_bg.wasm",
+    "photo_processor.js",
+    "photo_processor.d.ts"
+  ],
+  "main": "photo_processor.js",
+  "types": "photo_processor.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
