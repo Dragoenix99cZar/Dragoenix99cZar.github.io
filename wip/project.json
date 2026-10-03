@@ -1,0 +1,391 @@
+[
+  {
+    "id": "EXP_01",
+    "folder": "soft_renderer",
+    "title": "3D Projection",
+    "subtitle": "Pure WASM",
+    "date": "2026-09-17",
+    "badge": "C + WebAssembly",
+    "badge_class": "badge-cyan",
+    "categories": [
+      "wasm",
+      "graphics"
+    ],
+    "tags": [
+      "soft-renderer",
+      "c",
+      "wasm",
+      "graphics"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: 3D Projection.",
+    "technologies": [
+      {
+        "name": "C",
+        "tag_class": "tag-c"
+      },
+      {
+        "name": "WebAssembly",
+        "tag_class": "tag-wasm"
+      },
+      {
+        "name": "HTML5 Canvas"
+      }
+    ],
+    "architecture": "Engineered around modular soft_renderer components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch 3D Projection →",
+        "url": "soft_renderer/index.html",
+        "is_primary": true
+      },
+      {
+        "label": "Index2 ↗",
+        "url": "soft_renderer/index2.html",
+        "is_primary": false
+      }
+    ]
+  },
+  {
+    "id": "EXP_02",
+    "folder": "sorting",
+    "title": "Wasm Software Rendered Sorting Visualizer",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-09-17",
+    "badge": "C + WebAssembly",
+    "badge_class": "badge-cyan",
+    "categories": [
+      "wasm",
+      "graphics"
+    ],
+    "tags": [
+      "sorting",
+      "c",
+      "wasm",
+      "graphics"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Wasm Software Rendered Sorting Visualizer.",
+    "technologies": [
+      {
+        "name": "C",
+        "tag_class": "tag-c"
+      },
+      {
+        "name": "WebAssembly",
+        "tag_class": "tag-wasm"
+      },
+      {
+        "name": "HTML5 Canvas"
+      }
+    ],
+    "architecture": "Engineered around modular sorting components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Wasm Software Rend →",
+        "url": "sorting/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_03",
+    "folder": "poisson_disc_sampling",
+    "title": "Poisson Disc Sampling (Fast + Hues)",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-09-25",
+    "badge": "Interactive Prototype",
+    "badge_class": "badge-primary",
+    "categories": [
+      "graphics"
+    ],
+    "tags": [
+      "poisson-disc-sampling",
+      "graphics"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Poisson Disc Sampling (Fast + Hues).",
+    "technologies": [
+      {
+        "name": "HTML5 Canvas"
+      }
+    ],
+    "architecture": "Engineered around modular poisson_disc_sampling components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Poisson Disc Sampl →",
+        "url": "poisson_disc_sampling/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_04",
+    "folder": "cg",
+    "title": "Cg",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-09-25",
+    "badge": "C + WebAssembly",
+    "badge_class": "badge-cyan",
+    "categories": [
+      "wasm",
+      "graphics"
+    ],
+    "tags": [
+      "cg",
+      "c",
+      "wasm",
+      "graphics"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Cg.",
+    "technologies": [
+      {
+        "name": "C",
+        "tag_class": "tag-c"
+      },
+      {
+        "name": "WebAssembly",
+        "tag_class": "tag-wasm"
+      },
+      {
+        "name": "HTML5 Canvas"
+      }
+    ],
+    "architecture": "Engineered around modular cg components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Exp01 ↗",
+        "url": "cg/exp01.html",
+        "is_primary": false
+      },
+      {
+        "label": "Exp02 ↗",
+        "url": "cg/exp02.html",
+        "is_primary": false
+      },
+      {
+        "label": "Exp03 ↗",
+        "url": "cg/exp03.html",
+        "is_primary": false
+      }
+    ]
+  },
+  {
+    "id": "EXP_05",
+    "folder": "ad2bs",
+    "title": "Wasm Nepali Date Converter",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-09-26",
+    "badge": "C + WebAssembly",
+    "badge_class": "badge-cyan",
+    "categories": [
+      "wasm"
+    ],
+    "tags": [
+      "ad2bs",
+      "c",
+      "wasm"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Wasm Nepali Date Converter.",
+    "technologies": [
+      {
+        "name": "C",
+        "tag_class": "tag-c"
+      },
+      {
+        "name": "WebAssembly",
+        "tag_class": "tag-wasm"
+      }
+    ],
+    "architecture": "Engineered around modular ad2bs components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Wasm Nepali Date C →",
+        "url": "ad2bs/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_06",
+    "folder": "post_calc",
+    "title": "Rust WebAssembly Scientific Calculator",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-09-28",
+    "badge": "Rust + WebAssembly",
+    "badge_class": "badge-rust",
+    "categories": [
+      "wasm"
+    ],
+    "tags": [
+      "post-calc",
+      "rust",
+      "wasm"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Rust WebAssembly Scientific Calculator.",
+    "technologies": [
+      {
+        "name": "Rust",
+        "tag_class": "tag-rust"
+      },
+      {
+        "name": "WebAssembly",
+        "tag_class": "tag-wasm"
+      }
+    ],
+    "architecture": "Engineered around modular post_calc components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Rust WebAssembly S →",
+        "url": "post_calc/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_07",
+    "folder": "vm",
+    "title": "Stacky Compiler Pipeline Visualizer",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-09-29",
+    "badge": "Interactive Prototype",
+    "badge_class": "badge-primary",
+    "categories": [
+      "algorithms"
+    ],
+    "tags": [
+      "vm",
+      "algorithms"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Stacky Compiler Pipeline Visualizer.",
+    "technologies": [],
+    "architecture": "Engineered around modular vm components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Stacky Compiler Pi →",
+        "url": "vm/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_08",
+    "folder": "map_game",
+    "title": "World Map Game",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-10-01",
+    "badge": "Rust + WebAssembly",
+    "badge_class": "badge-rust",
+    "categories": [
+      "wasm",
+      "graphics"
+    ],
+    "tags": [
+      "map-game",
+      "rust",
+      "wasm",
+      "graphics"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: World Map Game.",
+    "technologies": [
+      {
+        "name": "Rust",
+        "tag_class": "tag-rust"
+      },
+      {
+        "name": "WebAssembly",
+        "tag_class": "tag-wasm"
+      },
+      {
+        "name": "SVG Vector"
+      }
+    ],
+    "architecture": "Engineered around modular map_game components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch World Map Game →",
+        "url": "map_game/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_09",
+    "folder": "svg_stack_dsl",
+    "title": "Multi-Slot SVG Stack DSL Studio",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-10-02",
+    "badge": "Interactive Prototype",
+    "badge_class": "badge-primary",
+    "categories": [
+      "algorithms"
+    ],
+    "tags": [
+      "svg-stack-dsl",
+      "algorithms"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Multi-Slot SVG Stack DSL Studio.",
+    "technologies": [],
+    "architecture": "Engineered around modular svg_stack_dsl components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Multi-Slot SVG Sta →",
+        "url": "svg_stack_dsl/index.html",
+        "is_primary": true
+      },
+      {
+        "label": "Demo ↗",
+        "url": "svg_stack_dsl/demo.html",
+        "is_primary": false
+      }
+    ]
+  },
+  {
+    "id": "EXP_10",
+    "folder": "photo_processor",
+    "title": "Passport & Visa Photo Alignment Workspace",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-10-03",
+    "badge": "Rust + WebAssembly",
+    "badge_class": "badge-rust",
+    "categories": [
+      "wasm",
+      "graphics"
+    ],
+    "tags": [
+      "photo-processor",
+      "rust",
+      "wasm",
+      "graphics"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Passport & Visa Photo Alignment Workspace.",
+    "technologies": [
+      {
+        "name": "Rust",
+        "tag_class": "tag-rust"
+      },
+      {
+        "name": "WebAssembly",
+        "tag_class": "tag-wasm"
+      },
+      {
+        "name": "HTML5 Canvas"
+      }
+    ],
+    "architecture": "Engineered around modular photo_processor components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Passport & Visa Ph →",
+        "url": "photo_processor/index.html",
+        "is_primary": true
+      }
+    ]
+  }
+]

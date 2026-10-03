@@ -16,628 +16,8 @@
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@400;600;700;800&display=swap"
     rel="stylesheet">
 
-  <style>
-    :root {
-      /* High-Contrast Dark Neo-Brutalist Palette */
-      --bg: #0a0c10;
-      --card-bg: #12161f;
-      --card-inner: #181d28;
-      --border-color: #000000;
-      --border-light: #262d3d;
-
-      /* Vibrant Accent Colors */
-      --primary: #00ff669d;
-      /* Neon Terminal Green */
-      --accent-cyan: #00eeffa5;
-      /* Cyberpunk Cyan */
-      --accent-amber: #ffb803b8;
-      /* High-Voltage Yellow */
-      --accent-pink: #ff0055b4;
-      /* Brutalist Pink */
-      --accent-rust: #f78000c0;
-      /* Rust Orange */
-      --accent-purple: #b5179db7;
-      /* Deep Magenta */
-
-      --text-main: #ffffff;
-      --text-muted: #b8c5d6;
-      --text-dim: #73849c;
-
-      /* Hard Unblurred Drop Shadows */
-      --shadow-sm: 3px 3px 0px #000000;
-      --shadow-md: 5px 5px 0px #000000;
-      --shadow-lg: 8px 8px 0px #000000;
-      --shadow-hover: 9px 9px 0px #000000;
-      --shadow-active: 2px 2px 0px #000000;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text-main);
-      line-height: 1.5;
-      padding: 0;
-      margin: 0;
-      min-height: 100vh;
-      overflow-x: hidden;
-      background-image:
-        radial-gradient(circle at 10% 10%, rgba(0, 255, 102, 0.04) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.04) 0%, transparent 40%);
-    }
-
-    code,
-    pre,
-    .mono {
-      font-family: "JetBrains Mono", monospace;
-    }
-
-    /* Top Utility Header */
-    .top-nav {
-      background: #0f131a;
-      border-bottom: 3px solid var(--border-color);
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .breadcrumb a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.1s;
-    }
-
-    .breadcrumb a:hover {
-      color: var(--primary);
-    }
-
-    .breadcrumb .separator {
-      color: var(--accent-pink);
-    }
-
-    .breadcrumb .current {
-      color: var(--primary);
-      background: #18221c;
-      padding: 3px 8px;
-      border: 2px solid var(--border-color);
-      box-shadow: 2px 2px 0px #000000;
-    }
-
-    .nav-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    /* Container */
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 30px 20px 80px 20px;
-    }
-
-    /* Hero Banner */
-    .hero-banner {
-      background: var(--card-bg);
-      border: 4px solid var(--border-color);
-      box-shadow: var(--shadow-lg);
-      padding: 36px 30px;
-      margin-bottom: 35px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-banner::after {
-      content: "WIP_LAB";
-      position: absolute;
-      right: -10px;
-      bottom: -20px;
-      font-size: clamp(3.5rem, 10vw, 7rem);
-      font-weight: 900;
-      color: rgba(255, 255, 255, 0.025);
-      pointer-events: none;
-      user-select: none;
-      letter-spacing: 0.1em;
-    }
-
-    .hero-badge-strip {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 4px 10px;
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .badge-primary {
-      background: var(--primary);
-      color: #000;
-    }
-
-    .badge-cyan {
-      background: var(--accent-cyan);
-      color: #000;
-    }
-
-    .badge-amber {
-      background: var(--accent-amber);
-      color: #000;
-    }
-
-    .badge-pink {
-      background: var(--accent-pink);
-      color: #fff;
-    }
-
-    .badge-rust {
-      background: var(--accent-rust);
-      color: #000;
-    }
-
-    .badge-dark {
-      background: #1c222e;
-      color: var(--text-main);
-    }
-
-    .hero-banner h1 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 900;
-      text-transform: uppercase;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 12px;
-    }
-
-    .hero-banner p.lead {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 880px;
-      margin-bottom: 24px;
-    }
-
-    /* Metrics Summary Bar */
-    .metrics-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .metric-card {
-      background: var(--card-inner);
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      padding: 14px 18px;
-    }
-
-    .metric-val {
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: var(--primary);
-      line-height: 1;
-      margin-bottom: 4px;
-      font-family: "JetBrains Mono", monospace;
-    }
-
-    .metric-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      letter-spacing: 0.05em;
-    }
-
-    /* Filter & Controls Toolbar */
-    .toolbar-container {
-      background: var(--card-bg);
-      border: 3px solid var(--border-color);
-      box-shadow: var(--shadow-md);
-      padding: 16px 20px;
-      margin-bottom: 35px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .search-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .search-input-wrapper {
-      flex: 1;
-      min-width: 260px;
-      position: relative;
-    }
-
-    .search-input {
-      width: 100%;
-      background: #090c12;
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      padding: 10px 14px;
-      color: var(--text-main);
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
-    .search-input:focus {
-      border-color: var(--primary);
-    }
-
-    .search-input::placeholder {
-      color: var(--text-dim);
-    }
-
-    .filter-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .filter-label {
-      font-size: 0.8rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-right: 4px;
-    }
-
-    .pill-btn {
-      background: var(--card-inner);
-      color: var(--text-muted);
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.1s ease;
-      font-family: inherit;
-    }
-
-    .pill-btn:hover {
-      background: #252d3d;
-      color: #fff;
-      transform: translate(-1px, -1px);
-      box-shadow: 4px 4px 0px #000000;
-    }
-
-    .pill-btn.active {
-      background: var(--primary);
-      color: #000;
-      box-shadow: 2px 2px 0px #000000;
-      transform: translate(1px, 1px);
-    }
-
-    /* Projects Grid */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-      gap: 28px;
-    }
-
-    @media (max-width: 500px) {
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Neo-Brutalist Project Card */
-    .project-card {
-      background: var(--card-bg);
-      border: 4px solid var(--border-color);
-      box-shadow: var(--shadow-lg);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .project-card:hover {
-      transform: translate(-4px, -4px);
-      box-shadow: var(--shadow-hover);
-    }
-
-    /* Card Top Header */
-    .card-header {
-      padding: 20px 22px 16px 22px;
-      border-bottom: 3px solid var(--border-color);
-      background: #151a24;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .card-top-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .card-id {
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: var(--text-dim);
-      font-family: "JetBrains Mono", monospace;
-    }
-
-    .card-title {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--text-main);
-      text-transform: uppercase;
-      letter-spacing: -0.01em;
-      line-height: 1.2;
-    }
-
-    .card-subtitle {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--accent-cyan);
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    /* Card Content Sections */
-    .card-body {
-      padding: 20px 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      flex-grow: 1;
-    }
-
-    .section-block {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .section-title {
-      font-size: 0.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--accent-amber);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .section-title::before {
-      content: "";
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: var(--accent-amber);
-      border: 1px solid var(--border-color);
-    }
-
-    .section-title.title-arch {
-      color: var(--accent-cyan);
-    }
-
-    .section-title.title-arch::before {
-      background: var(--accent-cyan);
-    }
-
-    .section-title.title-vision {
-      color: var(--accent-pink);
-    }
-
-    .section-title.title-vision::before {
-      background: var(--accent-pink);
-    }
-
-    .section-desc {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    /* Tech Tags Container */
-    .tech-stack {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .tech-tag {
-      background: #090c12;
-      color: var(--primary);
-      border: 1.5px solid var(--border-color);
-      box-shadow: 2px 2px 0px #000000;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      font-family: "JetBrains Mono", monospace;
-      text-transform: uppercase;
-    }
-
-    .tech-tag.tag-c {
-      color: var(--accent-cyan);
-    }
-
-    .tech-tag.tag-rust {
-      color: var(--accent-rust);
-    }
-
-    .tech-tag.tag-wasm {
-      color: var(--accent-amber);
-    }
-
-    .tech-tag.tag-math {
-      color: var(--accent-pink);
-    }
-
-    /* Architecture Callout */
-    .arch-box {
-      background: #0b0f16;
-      border: 2px solid var(--border-color);
-      border-left: 4px solid var(--accent-cyan);
-      box-shadow: var(--shadow-sm);
-      padding: 10px 12px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.45;
-    }
-
-    /* Vision Callout */
-    .vision-box {
-      background: #0b0f16;
-      border: 2px solid var(--border-color);
-      border-left: 4px solid var(--accent-pink);
-      box-shadow: var(--shadow-sm);
-      padding: 10px 12px;
-      font-size: 0.85rem;
-      color: #e2e8f0;
-      line-height: 1.45;
-    }
-
-    /* Card Action Footer */
-    .card-footer {
-      padding: 16px 22px;
-      background: #0e121a;
-      border-top: 3px solid var(--border-color);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin-top: auto;
-    }
-
-    /* Neo-Brutalist Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px 16px;
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 0.825rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      text-decoration: none;
-      border: 3px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      cursor: pointer;
-      transition: all 0.1s ease;
-      white-space: nowrap;
-    }
-
-    .btn:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: var(--shadow-active);
-    }
-
-    .btn-launch {
-      background: var(--primary);
-      color: #000;
-      flex: 1;
-      min-width: 140px;
-    }
-
-    .btn-launch:hover {
-      background: #26ff7b;
-      color: #000;
-    }
-
-    .btn-sub {
-      background: var(--card-inner);
-      color: var(--text-main);
-    }
-
-    .btn-sub:hover {
-      background: #252e40;
-      color: var(--accent-cyan);
-    }
-
-    /* Empty state */
-    .empty-state {
-      display: none;
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 60px 20px;
-      background: var(--card-bg);
-      border: 3px solid var(--border-color);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .empty-state h3 {
-      font-size: 1.5rem;
-      color: var(--accent-pink);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    /* Footer */
-    footer {
-      border-top: 4px solid var(--border-color);
-      background: #080a0e;
-      padding: 40px 20px;
-      text-align: center;
-      margin-top: 60px;
-    }
-
-    footer p {
-      color: var(--text-dim);
-      font-size: 0.85rem;
-      margin-bottom: 8px;
-    }
-
-    footer a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <!-- Modular Stylesheet Component -->
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -706,546 +86,508 @@
         <span class="filter-label">Filter:</span>
         <button class="pill-btn active" data-filter="all">All (10)</button>
         <button class="pill-btn" data-filter="wasm">WebAssembly (7)</button>
-        <button class="pill-btn" data-filter="graphics">Graphics & Vision (5)</button>
-        <button class="pill-btn" data-filter="compilers">Compilers & DSLs (2)</button>
-        <button class="pill-btn" data-filter="algorithms">Math & Algorithms (6)</button>
+        <button class="pill-btn" data-filter="graphics">Graphics & Vision (6)</button>
+        <button class="pill-btn" data-filter="compilers">Compilers & DSLs (0)</button>
+        <button class="pill-btn" data-filter="algorithms">Math & Algorithms (2)</button>
       </div>
     </section>
 
     <!-- Projects Grid -->
     <section class="projects-grid" id="projectsGrid" aria-label="Experimental Projects Showcase">
 
-      <!-- 1. soft_renderer -->
-      <article class="project-card" data-category="wasm graphics 3d"
-        data-tags="c wasm 3d obj software-renderer rasterizer projection matrix">
-        <header class="card-header">
-          <div class="card-top-meta">
-            <span class="badge badge-cyan">C + WebAssembly</span>
-            <span class="card-id">EXP_01</span>
-          </div>
-          <h2 class="card-title">3D Software Renderer & OBJ Viewer</h2>
-          <div class="card-subtitle">Bare-Metal 3D Rasterization Pipeline</div>
-        </header>
-        <div class="card-body">
-          <div class="section-block">
-            <div class="section-title">Description</div>
-            <p class="section-desc">
-              A software 3D graphics pipeline performing perspective transformations, camera rotations, and mesh
-              rasterization without WebGL, hardware acceleration, or GPU libraries.
-            </p>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title">Technologies Used</div>
-            <div class="tech-stack">
-              <span class="tech-tag tag-c">C (clang wasm32)</span>
-              <span class="tech-tag tag-wasm">WebAssembly</span>
-              <span class="tech-tag">HTML5 Canvas 2D</span>
-              <span class="tech-tag tag-math">3D Matrix Math</span>
-              <span class="tech-tag">Wavefront .OBJ</span>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-arch">Architecture Overview</div>
-            <div class="arch-box">
-              C-based vertex transformation pipeline computing World → View → Perspective Projection → Screen mapping.
-              Supports 6-DOF camera kinematics (WASD/QE + mouse look) and streams processed wireframes/faces into an
-              HTML5 Canvas raster buffer.
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-vision">Vision & Roadmap</div>
-            <div class="vision-box">
-              Demonstrate the foundational math of modern graphics APIs (Vulkan, Metal) from first principles. Extending
-              toward z-buffering, barycentric triangle filling, and directional Phong illumination.
-            </div>
-          </div>
-        </div>
-        <footer class="card-footer">
-          <a href="soft_renderer/index.html" class="btn btn-launch" target="_blank">Launch 3D Engine →</a>
-          <a href="soft_renderer/index2.html" class="btn btn-sub" target="_blank">OBJ Batch Viewer ↗</a>
-        </footer>
-      </article>
-
-      <!-- 2. cg Suite -->
+      <!-- EXP_10: photo_processor -->
       <article class="project-card" data-category="wasm graphics"
-        data-tags="c wasm graphics dda bresenham rasterization framebuffer education">
-        <header class="card-header">
-          <div class="card-top-meta">
-            <span class="badge badge-amber">C + WASM Sandbox</span>
-            <span class="card-id">EXP_02</span>
-          </div>
-          <h2 class="card-title">Computer Graphics Lab Suite</h2>
-          <div class="card-subtitle">Modern Turbo-C (graphics.h) Replacement</div>
-        </header>
-        <div class="card-body">
-          <div class="section-block">
-            <div class="section-title">Description</div>
-            <p class="section-desc">
-              A modern computer graphics experimentation lab replacing obsolete 16-bit DOSBox / Turbo-C courseware with
-              a high-performance Clang → WASM shared-memory framebuffer pipeline.
-            </p>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title">Technologies Used</div>
-            <div class="tech-stack">
-              <span class="tech-tag tag-c">C</span>
-              <span class="tech-tag tag-wasm">WebAssembly</span>
-              <span class="tech-tag">Shared Linear Memory</span>
-              <span class="tech-tag">HTML5 putImageData</span>
-              <span class="tech-tag">Markdown Specs</span>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-arch">Architecture Overview</div>
-            <div class="arch-box">
-              C routines (Direct, DDA, Bresenham) write directly into a 1D RGBA framebuffer allocated in WASM linear
-              memory. The JS runtime maps this buffer via direct pointer offset for zero-copy blitting to canvas.
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-vision">Vision & Roadmap</div>
-            <div class="vision-box">
-              Modernize academic computer graphics education. Bridge historical rasterization algorithms directly with
-              modern web runtimes without legacy emulation layers.
-            </div>
-          </div>
-        </div>
-        <footer class="card-footer">
-          <a href="cg/exp1/index.html" class="btn btn-launch" target="_blank">Launch Line Lab →</a>
-          <a href="cg/exp2/index.html" class="btn btn-sub" target="_blank">Pixel Engine ↗</a>
-          <a href="cg/lib/index.html" class="btn btn-sub" target="_blank">Lib Guide ↗</a>
-        </footer>
-      </article>
-
-      <!-- 3. vm (Stacky) -->
-      <article class="project-card" data-category="compilers algorithms"
-        data-tags="compiler vm bytecode ast shunting-yard lexer interpreter parser javascript">
-        <header class="card-header">
-          <div class="card-top-meta">
-            <span class="badge badge-pink">Compiler Pipeline</span>
-            <span class="card-id">EXP_03</span>
-          </div>
-          <h2 class="card-title">Stacky Compiler & VM Pipeline</h2>
-          <div class="card-subtitle">5-Stage Visual Language Execution Engine</div>
-        </header>
-        <div class="card-body">
-          <div class="section-block">
-            <div class="section-title">Description</div>
-            <p class="section-desc">
-              An interactive compiler design educational visualizer demonstrating each discrete phase of program
-              compilation from raw infix text strings down to stack-machine bytecode execution.
-            </p>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title">Technologies Used</div>
-            <div class="tech-stack">
-              <span class="tech-tag">Vanilla JavaScript</span>
-              <span class="tech-tag tag-math">Lexer / Tokenizer</span>
-              <span class="tech-tag">Shunting-Yard RPN</span>
-              <span class="tech-tag">ASCII AST Tree</span>
-              <span class="tech-tag tag-c">Stack Virtual Machine</span>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-arch">Architecture Overview</div>
-            <div class="arch-box">
-              Linear 5-phase compiler: (1) Lexer with unary deduction → (2) Shunting-Yard operator precedence queue →
-              (3) Hierarchical AST generator → (4) Bytecode opcode generator (PUSH/LOAD/ADD/POW) → (5) Stack runtime
-              executor.
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-vision">Vision & Roadmap</div>
-            <div class="vision-box">
-              Demystify compiler design and intermediate representation (IR) pipelines. Expand toward custom
-              control-flow instructions (JMP, IF, LOOP) and a bytecode disassembly debugger.
-            </div>
-          </div>
-        </div>
-        <footer class="card-footer">
-          <a href="vm/index.html" class="btn btn-launch" target="_blank">Launch Compiler Studio →</a>
-        </footer>
-      </article>
-
-      <!-- 4. svg_stack_dsl -->
-      <article class="project-card" data-category="compilers graphics"
-        data-tags="dsl forth postscript stack-machine svg generative-art vector ide">
-        <header class="card-header">
-          <div class="card-top-meta">
-            <span class="badge badge-cyan">Stack DSL Engine</span>
-            <span class="card-id">EXP_04</span>
-          </div>
-          <h2 class="card-title">Multi-Slot SVG Stack DSL Studio</h2>
-          <div class="card-subtitle">Forth-Inspired Generative Vector Studio</div>
-        </header>
-        <div class="card-body">
-          <div class="section-block">
-            <div class="section-title">Description</div>
-            <p class="section-desc">
-              A Forth/PostScript-style stack-based domain-specific language (DSL) and interactive multi-workstation
-              studio for generating vector graphics and layouts using postfix commands.
-            </p>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title">Technologies Used</div>
-            <div class="tech-stack">
-              <span class="tech-tag">Stack Machine</span>
-              <span class="tech-tag tag-math">DSL Tokenizer</span>
-              <span class="tech-tag">SVG 1.1 DOM</span>
-              <span class="tech-tag">Multi-Slot IDE Layout</span>
-              <span class="tech-tag">Pure JavaScript</span>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-arch">Architecture Overview</div>
-            <div class="arch-box">
-              Postfix evaluator maintaining shape queues and operand stacks. Commands like INIT, RECT, CIRCLE, LINE,
-              TEXT, and POLYGON pop parameters from the stack and compile into clean SVG XML markup across 6 concurrent
-              slots.
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-vision">Vision & Roadmap</div>
-            <div class="vision-box">
-              Establish a concise, token-efficient vector representation for generative art, parameterized game icon
-              generation, and AI agent vector scripting with zero overhead.
-            </div>
-          </div>
-        </div>
-        <footer class="card-footer">
-          <a href="svg_stack_dsl/index.html" class="btn btn-launch" target="_blank">Launch DSL Studio →</a>
-          <a href="svg_stack_dsl/demo.html" class="btn btn-sub" target="_blank">Live Demo ↗</a>
-        </footer>
-      </article>
-
-      <!-- 5. map_game -->
-      <article class="project-card" data-category="wasm algorithms"
-        data-tags="rust wasm svg cartography game trivia geography wasm-bindgen">
-        <header class="card-header">
-          <div class="card-top-meta">
-            <span class="badge badge-rust">Rust + WASM</span>
-            <span class="card-id">EXP_05</span>
-          </div>
-          <h2 class="card-title">World Map Vector Geography Game</h2>
-          <div class="card-subtitle">Interactive Vector Cartography & Quiz Engine</div>
-        </header>
-        <div class="card-body">
-          <div class="section-block">
-            <div class="section-title">Description</div>
-            <p class="section-desc">
-              An interactive vector-based world geography trivia game testing spatial recall and country identification
-              across continents over an ultra-detailed 1.2 MB vector map.
-            </p>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title">Technologies Used</div>
-            <div class="tech-stack">
-              <span class="tech-tag tag-rust">Rust</span>
-              <span class="tech-tag tag-wasm">wasm-bindgen</span>
-              <span class="tech-tag">SVG Vector Graphics</span>
-              <span class="tech-tag">JSON Level Schemas</span>
-              <span class="tech-tag">DOM Event Interop</span>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-arch">Architecture Overview</div>
-            <div class="arch-box">
-              Rust engine compiled to WebAssembly manages the state machine, scoring, continent filters, and challenge
-              queues. JavaScript binds vector path events (hover, click, highlight) directly to the WASM core.
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-vision">Vision & Roadmap</div>
-            <div class="vision-box">
-              Transform high-density vector cartography into a modular learning engine with historical territory
-              overlays, geopolitical trivia packs, and time-attack game modes.
-            </div>
-          </div>
-        </div>
-        <footer class="card-footer">
-          <a href="map_game/index.html" class="btn btn-launch" target="_blank">Launch Map Game →</a>
-        </footer>
-      </article>
-
-      <!-- 6. sorting -->
-      <article class="project-card" data-category="wasm algorithms"
-        data-tags="c wasm algorithms sorting quicksort timsort heapsort benchmark visualization">
-        <header class="card-header">
-          <div class="card-top-meta">
-            <span class="badge badge-primary">C + WASM Engine</span>
-            <span class="card-id">EXP_06</span>
-          </div>
-          <h2 class="card-title">Sorting Visualizer (C Engine)</h2>
-          <div class="card-subtitle">Low-Level Memory Framebuffer Sorting Suite</div>
-        </header>
-        <div class="card-body">
-          <div class="section-block">
-            <div class="section-title">Description</div>
-            <p class="section-desc">
-              Real-time visualization of 7 classic sorting algorithms (Bubble, Selection, Insertion, Heap, Quicksort,
-              Merge, Timsort) with state-machine frame buffering executed in C/WASM.
-            </p>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title">Technologies Used</div>
-            <div class="tech-stack">
-              <span class="tech-tag tag-c">C</span>
-              <span class="tech-tag tag-wasm">WebAssembly</span>
-              <span class="tech-tag tag-math">7 Sorting Algorithms</span>
-              <span class="tech-tag">Linear Memory Blit</span>
-              <span class="tech-tag">HTML5 Canvas</span>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-arch">Architecture Overview</div>
-            <div class="arch-box">
-              Sorting logic and framebuffer array rendering implemented directly in C (<code>main.c</code>). Iteration
-              states render into an internal memory buffer piped into a 1000×400 canvas at configurable speeds.
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-vision">Vision & Roadmap</div>
-            <div class="vision-box">
-              Build an algorithmic benchmark suite illustrating cache locality, comparison vs write overhead, and
-              behavior under pathological inputs (reversed, nearly sorted).
-            </div>
-          </div>
-        </div>
-        <footer class="card-footer">
-          <a href="sorting/index.html" class="btn btn-launch" target="_blank">Launch Visualizer →</a>
-        </footer>
-      </article>
-
-      <!-- 7. poisson_disc_sampling -->
-      <article class="project-card" data-category="algorithms graphics"
-        data-tags="algorithms procedural math poisson blue-noise sampling pcg canvas">
-        <header class="card-header">
-          <div class="card-top-meta">
-            <span class="badge badge-amber">Procedural Math</span>
-            <span class="card-id">EXP_07</span>
-          </div>
-          <h2 class="card-title">Poisson Disc Sampling Visualizer</h2>
-          <div class="card-subtitle">Fast Blue-Noise Point Distribution Engine</div>
-        </header>
-        <div class="card-body">
-          <div class="section-block">
-            <div class="section-title">Description</div>
-            <p class="section-desc">
-              Real-time interactive generation and visualization of Bridson’s algorithm for Poisson Disc Sampling in 2D
-              space, generating blue-noise spatial distributions with distance guarantees.
-            </p>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title">Technologies Used</div>
-            <div class="tech-stack">
-              <span class="tech-tag">Pure JavaScript</span>
-              <span class="tech-tag tag-math">Bridson's Algorithm</span>
-              <span class="tech-tag">Spatial Grid Partitioning</span>
-              <span class="tech-tag">HTML5 Canvas</span>
-              <span class="tech-tag">HSL Chromatic Math</span>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-arch">Architecture Overview</div>
-            <div class="arch-box">
-              Spatial grid-acceleration partitioning provides $O(N)$ lookup. Active point queues emit candidate annular
-              samples ($r \le d < 2r$) validated against grid neighbors, animated with cyclical hue shifts. </div>
-            </div>
-
-            <div class="section-block">
-              <div class="section-title title-vision">Vision & Roadmap</div>
-              <div class="vision-box">
-                Provide a foundational visual toolkit for procedural content generation (PCG) in game engines, object
-                scattering, foliage density distribution, and terrain decoration algorithms.
-              </div>
-            </div>
-          </div>
-          <footer class="card-footer">
-            <a href="poisson_disc_sampling/index.html" class="btn btn-launch" target="_blank">Launch Visualizer →</a>
-          </footer>
-      </article>
-
-      <!-- 8. post_calc -->
-      <article class="project-card" data-category="wasm algorithms"
-        data-tags="rust wasm math calculator parser expression-evaluation ast">
-        <header class="card-header">
-          <div class="card-top-meta">
-            <span class="badge badge-rust">Rust + WASM</span>
-            <span class="card-id">EXP_08</span>
-          </div>
-          <h2 class="card-title">Scientific Expression Calculator</h2>
-          <div class="card-subtitle">Rust-Powered Mathematical Evaluation Engine</div>
-        </header>
-        <div class="card-body">
-          <div class="section-block">
-            <div class="section-title">Description</div>
-            <p class="section-desc">
-              A high-precision desktop-style scientific keypad calculator evaluating arbitrary mathematical expressions
-              with comprehensive algebraic, exponential, and trigonometric support.
-            </p>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title">Technologies Used</div>
-            <div class="tech-stack">
-              <span class="tech-tag tag-rust">Rust</span>
-              <span class="tech-tag tag-wasm">wasm-bindgen</span>
-              <span class="tech-tag tag-math">Scientific Math Parser</span>
-              <span class="tech-tag">HTML5 / CSS Grid</span>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-arch">Architecture Overview</div>
-            <div class="arch-box">
-              A compiled Rust math core evaluates mathematical expressions with floating-point precision, handling
-              operator associativity, nested brackets, trigonometry, and scientific notations via WASM bindings.
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-vision">Vision & Roadmap</div>
-            <div class="vision-box">
-              Demonstrate how systems-level numerical precision can power web interfaces with zero client-side
-              dependencies, serving as a reliable calculation engine for data tools.
-            </div>
-          </div>
-        </div>
-        <footer class="card-footer">
-          <a href="post_calc/index.html" class="btn btn-launch" target="_blank">Launch Calculator →</a>
-        </footer>
-      </article>
-
-      <!-- 9. ad2bs -->
-      <article class="project-card" data-category="wasm algorithms"
-        data-tags="c wasm calendar conversion bikram-sambat gregorian nepali">
-        <header class="card-header">
-          <div class="card-top-meta">
-            <span class="badge badge-cyan">C + WASM</span>
-            <span class="card-id">EXP_09</span>
-          </div>
-          <h2 class="card-title">Nepali Calendar Date Converter</h2>
-          <div class="card-subtitle">AD ⇄ BS Bi-Directional Conversion Core</div>
-        </header>
-        <div class="card-body">
-          <div class="section-block">
-            <div class="section-title">Description</div>
-            <p class="section-desc">
-              A bi-directional high-precision calendar conversion tool between Gregorian (AD) and Bikram Sambat (BS)
-              date standards powered by low-level C logic compiled to WebAssembly.
-            </p>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title">Technologies Used</div>
-            <div class="tech-stack">
-              <span class="tech-tag tag-c">C (nep_cal.c)</span>
-              <span class="tech-tag tag-wasm">WebAssembly (8.8 KB)</span>
-              <span class="tech-tag tag-math">Lookup Matrices</span>
-              <span class="tech-tag">HTML5 Forms</span>
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-arch">Architecture Overview</div>
-            <div class="arch-box">
-              C lookup tables and conversion algorithms compiled into a compact 8.8 KB WASM binary. JavaScript connects
-              form inputs to WASM memory pointers for instant client-side date computations without network round-trips.
-            </div>
-          </div>
-
-          <div class="section-block">
-            <div class="section-title title-vision">Vision & Roadmap</div>
-            <div class="vision-box">
-              Establish a zero-dependency, ultra-lightweight standard for Nepali calendar math that can be embedded
-              anywhere—from micro-frontends to IoT and edge runtimes.
-            </div>
-          </div>
-        </div>
-        <footer class="card-footer">
-          <a href="ad2bs/index.html" class="btn btn-launch" target="_blank">Launch Converter →</a>
-        </footer>
-      </article>
-
-      <!-- 10. photo_processor -->
-      <article class="project-card" data-category="wasm graphics"
-        data-tags="rust wasm image-processing photo passport visa crop compression lanczos3 canvas compliance biometric webp">
+        data-tags="photo-processor rust wasm graphics" data-date="2026-10-03">
         <header class="card-header">
           <div class="card-top-meta">
             <span class="badge badge-rust">Rust + WebAssembly</span>
-            <span class="card-id">EXP_10</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-10-03</span>
+              <span class="card-id">EXP_10</span>
+            </div>
           </div>
-          <h2 class="card-title">Passport & Visa Photo Alignment Studio</h2>
-          <div class="card-subtitle">Client-Side Biometric Cropping & Multi-Tier Compression Engine</div>
+          <h2 class="card-title">Passport & Visa Photo Alignment Workspace</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
         </header>
         <div class="card-body">
           <div class="section-block">
             <div class="section-title">Description</div>
             <p class="section-desc">
-              A high-stakes, 100% client-side photo alignment, cropping, and multi-tier compression suite built with
-              Rust and WebAssembly (wasm-bindgen), providing sub-pixel precision for strict official document compliance
-              (US Visa, Passports, ID photos) without server uploads.
+              Interactive low-level experimentation and graphics module: Passport & Visa Photo Alignment Workspace.
             </p>
           </div>
 
           <div class="section-block">
             <div class="section-title">Technologies Used</div>
             <div class="tech-stack">
-              <span class="tech-tag tag-rust">Rust (wasm-pack)</span>
-              <span class="tech-tag tag-wasm">WebAssembly (716 KB)</span>
-              <span class="tech-tag">wasm-bindgen</span>
-              <span class="tech-tag tag-math">Lanczos3 Resampling</span>
-              <span class="tech-tag">HTML5 Canvas 2D</span>
-              <span class="tech-tag">JPEG / PNG / WebP</span>
-              <span class="tech-tag">Interactive Split Slider</span>
+              <span class="tech-tag tag-rust">Rust</span>
+              <span class="tech-tag tag-wasm">WebAssembly</span>
+              <span class="tech-tag">HTML5 Canvas</span>
             </div>
           </div>
 
           <div class="section-block">
             <div class="section-title title-arch">Architecture Overview</div>
             <div class="arch-box">
-              Stateful Rust <code>ImageProcessor</code> core decodes raw image bytes into dynamic pixel matrices,
-              computing
-              orientation-invariant viewport panning (0°–270°), smooth zoom scaling, and alpha-blending onto white
-              backgrounds.
-              The JS layer handles dual-canvas overlays, 1px keyboard micro-stepping, multi-tier compression
-              benchmarking
-              (High, Balanced, Max Compression), and an interactive split-slider visual diff.
+              Engineered around modular photo_processor components, executing direct transformations and client-side processing.
             </div>
           </div>
 
           <div class="section-block">
             <div class="section-title title-vision">Vision & Roadmap</div>
             <div class="vision-box">
-              Guarantee absolute biometric privacy for sensitive identity documents by running heavy computer vision,
-              resampling, and strict size compliance checks (e.g., 240 KB US Visa limit / 60 KB online forms) completely
-              offline
-              inside the client runtime.
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
             </div>
           </div>
         </div>
         <footer class="card-footer">
-          <a href="photo_processor/index.html" class="btn btn-launch" target="_blank">Launch Photo Studio →</a>
+          <a href="photo_processor/index.html" class="btn btn-launch" target="_blank">Launch Passport & Visa Ph →</a>
+        </footer>
+      </article>
+
+      <!-- EXP_09: svg_stack_dsl -->
+      <article class="project-card" data-category="algorithms"
+        data-tags="svg-stack-dsl algorithms" data-date="2026-10-02">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-primary">Interactive Prototype</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-10-02</span>
+              <span class="card-id">EXP_09</span>
+            </div>
+          </div>
+          <h2 class="card-title">Multi-Slot SVG Stack DSL Studio</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Multi-Slot SVG Stack DSL Studio.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular svg_stack_dsl components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="svg_stack_dsl/index.html" class="btn btn-launch" target="_blank">Launch Multi-Slot SVG Sta →</a>
+          <a href="svg_stack_dsl/demo.html" class="btn btn-sub" target="_blank">Demo ↗</a>
+        </footer>
+      </article>
+
+      <!-- EXP_08: map_game -->
+      <article class="project-card" data-category="wasm graphics"
+        data-tags="map-game rust wasm graphics" data-date="2026-10-01">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-rust">Rust + WebAssembly</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-10-01</span>
+              <span class="card-id">EXP_08</span>
+            </div>
+          </div>
+          <h2 class="card-title">World Map Game</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: World Map Game.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag tag-rust">Rust</span>
+              <span class="tech-tag tag-wasm">WebAssembly</span>
+              <span class="tech-tag">SVG Vector</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular map_game components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="map_game/index.html" class="btn btn-launch" target="_blank">Launch World Map Game →</a>
+        </footer>
+      </article>
+
+      <!-- EXP_07: vm -->
+      <article class="project-card" data-category="algorithms"
+        data-tags="vm algorithms" data-date="2026-09-29">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-primary">Interactive Prototype</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-29</span>
+              <span class="card-id">EXP_07</span>
+            </div>
+          </div>
+          <h2 class="card-title">Stacky Compiler Pipeline Visualizer</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Stacky Compiler Pipeline Visualizer.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular vm components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="vm/index.html" class="btn btn-launch" target="_blank">Launch Stacky Compiler Pi →</a>
+        </footer>
+      </article>
+
+      <!-- EXP_06: post_calc -->
+      <article class="project-card" data-category="wasm"
+        data-tags="post-calc rust wasm" data-date="2026-09-28">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-rust">Rust + WebAssembly</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-28</span>
+              <span class="card-id">EXP_06</span>
+            </div>
+          </div>
+          <h2 class="card-title">Rust WebAssembly Scientific Calculator</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Rust WebAssembly Scientific Calculator.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag tag-rust">Rust</span>
+              <span class="tech-tag tag-wasm">WebAssembly</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular post_calc components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="post_calc/index.html" class="btn btn-launch" target="_blank">Launch Rust WebAssembly S →</a>
+        </footer>
+      </article>
+
+      <!-- EXP_05: ad2bs -->
+      <article class="project-card" data-category="wasm"
+        data-tags="ad2bs c wasm" data-date="2026-09-26">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-cyan">C + WebAssembly</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-26</span>
+              <span class="card-id">EXP_05</span>
+            </div>
+          </div>
+          <h2 class="card-title">Wasm Nepali Date Converter</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Wasm Nepali Date Converter.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag tag-c">C</span>
+              <span class="tech-tag tag-wasm">WebAssembly</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular ad2bs components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="ad2bs/index.html" class="btn btn-launch" target="_blank">Launch Wasm Nepali Date C →</a>
+        </footer>
+      </article>
+
+      <!-- EXP_04: cg -->
+      <article class="project-card" data-category="wasm graphics"
+        data-tags="cg c wasm graphics" data-date="2026-09-25">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-cyan">C + WebAssembly</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-25</span>
+              <span class="card-id">EXP_04</span>
+            </div>
+          </div>
+          <h2 class="card-title">Cg</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Cg.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag tag-c">C</span>
+              <span class="tech-tag tag-wasm">WebAssembly</span>
+              <span class="tech-tag">HTML5 Canvas</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular cg components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="cg/exp01.html" class="btn btn-sub" target="_blank">Exp01 ↗</a>
+          <a href="cg/exp02.html" class="btn btn-sub" target="_blank">Exp02 ↗</a>
+          <a href="cg/exp03.html" class="btn btn-sub" target="_blank">Exp03 ↗</a>
+        </footer>
+      </article>
+
+      <!-- EXP_03: poisson_disc_sampling -->
+      <article class="project-card" data-category="graphics"
+        data-tags="poisson-disc-sampling graphics" data-date="2026-09-25">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-primary">Interactive Prototype</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-25</span>
+              <span class="card-id">EXP_03</span>
+            </div>
+          </div>
+          <h2 class="card-title">Poisson Disc Sampling (Fast + Hues)</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Poisson Disc Sampling (Fast + Hues).
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag">HTML5 Canvas</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular poisson_disc_sampling components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="poisson_disc_sampling/index.html" class="btn btn-launch" target="_blank">Launch Poisson Disc Sampl →</a>
+        </footer>
+      </article>
+
+      <!-- EXP_02: sorting -->
+      <article class="project-card" data-category="wasm graphics"
+        data-tags="sorting c wasm graphics" data-date="2026-09-17">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-cyan">C + WebAssembly</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-17</span>
+              <span class="card-id">EXP_02</span>
+            </div>
+          </div>
+          <h2 class="card-title">Wasm Software Rendered Sorting Visualizer</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Wasm Software Rendered Sorting Visualizer.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag tag-c">C</span>
+              <span class="tech-tag tag-wasm">WebAssembly</span>
+              <span class="tech-tag">HTML5 Canvas</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular sorting components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="sorting/index.html" class="btn btn-launch" target="_blank">Launch Wasm Software Rend →</a>
+        </footer>
+      </article>
+
+      <!-- EXP_01: soft_renderer -->
+      <article class="project-card" data-category="wasm graphics"
+        data-tags="soft-renderer c wasm graphics" data-date="2026-09-17">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-cyan">C + WebAssembly</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-17</span>
+              <span class="card-id">EXP_01</span>
+            </div>
+          </div>
+          <h2 class="card-title">3D Projection</h2>
+          <div class="card-subtitle">Pure WASM</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: 3D Projection.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag tag-c">C</span>
+              <span class="tech-tag tag-wasm">WebAssembly</span>
+              <span class="tech-tag">HTML5 Canvas</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular soft_renderer components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="soft_renderer/index.html" class="btn btn-launch" target="_blank">Launch 3D Projection →</a>
+          <a href="soft_renderer/index2.html" class="btn btn-sub" target="_blank">Index2 ↗</a>
         </footer>
       </article>
 
@@ -1273,87 +615,8 @@
     </p>
   </footer>
 
-  <!-- Interactive Search & Filtering Logic -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const searchInput = document.getElementById('searchInput');
-      const filterPills = document.querySelectorAll('.pill-btn');
-      const cards = document.querySelectorAll('.project-card');
-      const emptyState = document.getElementById('emptyState');
-      const totalCount = document.getElementById('totalCount');
-
-      let currentCategory = 'all';
-      let searchQuery = '';
-
-      function updatePillCounts() {
-        filterPills.forEach(pill => {
-          const filter = pill.dataset.filter;
-          let count = 0;
-          cards.forEach(card => {
-            if (filter === 'all' || (card.dataset.category && card.dataset.category.includes(filter))) {
-              count++;
-            }
-          });
-          const baseText = pill.textContent.replace(/\s*\(\d+\)/, '');
-          pill.textContent = `${baseText} (${count})`;
-        });
-      }
-
-      function updateGrid() {
-        let visibleCount = 0;
-
-        cards.forEach(card => {
-          const categoryMatch = currentCategory === 'all' || (card.dataset.category && card.dataset.category.includes(currentCategory));
-
-          const cardText = (
-            card.querySelector('.card-title').textContent + ' ' +
-            card.querySelector('.card-subtitle').textContent + ' ' +
-            (card.dataset.tags || '') + ' ' +
-            card.textContent
-          ).toLowerCase();
-
-          const searchMatch = !searchQuery || cardText.includes(searchQuery);
-
-          if (categoryMatch && searchMatch) {
-            card.style.display = 'flex';
-            visibleCount++;
-          } else {
-            card.style.display = 'none';
-          }
-        });
-
-        if (visibleCount === 0) {
-          emptyState.style.display = 'block';
-        } else {
-          emptyState.style.display = 'none';
-        }
-
-        if (totalCount) {
-          totalCount.textContent = visibleCount;
-        }
-      }
-
-      // Filter Pill Click Handlers
-      filterPills.forEach(pill => {
-        pill.addEventListener('click', () => {
-          filterPills.forEach(p => p.classList.remove('active'));
-          pill.classList.add('active');
-          currentCategory = pill.dataset.filter;
-          updateGrid();
-        });
-      });
-
-      // Search Input Handler
-      searchInput.addEventListener('input', (e) => {
-        searchQuery = e.target.value.trim().toLowerCase();
-        updateGrid();
-      });
-
-      // Initial execution
-      updatePillCounts();
-      updateGrid();
-    });
-  </script>
+  <!-- Modular Client Controller Component -->
+  <script src="app.js"></script>
 
 </body>
 
