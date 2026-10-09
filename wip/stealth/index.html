@@ -3,12 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | Stealth Game</title>
+    <title>Stealth Game</title>
   </head>
-<body style="text-align: center; padding: 0; border: 0; margin: 0; background: #653e63;">
-<div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100vw;">
-    <canvas id="unity-canvas" tabindex="-1" style="width: 99.5%; background: #653e63; max-height: 100%;"></canvas>
-</div>
+  <body style="text-align: center; padding: 0; border: 0; margin: 0; background: #653e63;">
+    <!--<canvas id="unity-canvas" width=1664 height=936 tabindex="-1" style="width: 1664px; height: 936px; background: #404040"></canvas>-->
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100vw;">
+        <canvas id="unity-canvas" tabindex="-1" style="width: 99.5%; background: #653e63; max-height: 100%;"></canvas>
+    </div>
     <script src="Build/stealth.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -29,9 +30,9 @@
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
         arguments: [],
-        dataUrl: "Build/stealth.data.gz",
-        frameworkUrl: "Build/stealth.framework.js.gz",
-        codeUrl: "Build/stealth.wasm.gz",
+        dataUrl: "Build/stealth.data.unityweb",
+        frameworkUrl: "Build/stealth.framework.js.unityweb",
+        codeUrl: "Build/stealth.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "VajraGames",
         productName: "Stealth Game",
