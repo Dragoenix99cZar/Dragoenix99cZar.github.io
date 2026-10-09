@@ -6,10 +6,7 @@
     <title>Stealth Game</title>
   </head>
   <body style="text-align: center; padding: 0; border: 0; margin: 0; background: #653e63;">
-    <!--<canvas id="unity-canvas" width=1664 height=936 tabindex="-1" style="width: 1664px; height: 936px; background: #404040"></canvas>-->
-    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100vw;">
-        <canvas id="unity-canvas" tabindex="-1" style="width: 99.5%; background: #653e63; max-height: 100%;"></canvas>
-    </div>
+    <canvas id="unity-canvas" tabindex="-1" style="width: 99vw; height: 98vh; background: #404040; margin: 0 auto; padding: 0;"></canvas>
     <script src="Build/stealth.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -30,9 +27,9 @@
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
         arguments: [],
-        dataUrl: "Build/stealth.data.unityweb",
-        frameworkUrl: "Build/stealth.framework.js.unityweb",
-        codeUrl: "Build/stealth.wasm.unityweb",
+        dataUrl: "Build/stealth.data",
+        frameworkUrl: "Build/stealth.framework.js",
+        codeUrl: "Build/stealth.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "VajraGames",
         productName: "Stealth Game",
