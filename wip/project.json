@@ -1,6 +1,6 @@
 [
   {
-    "id": "EXP_11",
+    "id": "EXP_23",
     "folder": "soft_renderer",
     "title": "3D Projection",
     "subtitle": "Pure WASM",
@@ -47,7 +47,7 @@
     ]
   },
   {
-    "id": "EXP_12",
+    "id": "EXP_24",
     "folder": "sorting",
     "title": "Wasm Software Rendered Sorting Visualizer",
     "subtitle": "Experimental Research Prototype",
@@ -89,7 +89,7 @@
     ]
   },
   {
-    "id": "EXP_13",
+    "id": "EXP_25",
     "folder": "poisson_disc_sampling",
     "title": "Poisson Disc Sampling (Fast + Hues)",
     "subtitle": "Experimental Research Prototype",
@@ -120,7 +120,7 @@
     ]
   },
   {
-    "id": "EXP_14",
+    "id": "EXP_26",
     "folder": "cg",
     "title": "Cg",
     "subtitle": "Experimental Research Prototype",
@@ -172,7 +172,7 @@
     ]
   },
   {
-    "id": "EXP_15",
+    "id": "EXP_27",
     "folder": "ad2bs",
     "title": "Wasm Nepali Date Converter",
     "subtitle": "Experimental Research Prototype",
@@ -209,7 +209,7 @@
     ]
   },
   {
-    "id": "EXP_16",
+    "id": "EXP_28",
     "folder": "post_calc",
     "title": "Rust WebAssembly Scientific Calculator",
     "subtitle": "Experimental Research Prototype",
@@ -246,7 +246,7 @@
     ]
   },
   {
-    "id": "EXP_17",
+    "id": "EXP_29",
     "folder": "vm",
     "title": "Stacky Compiler Pipeline Visualizer",
     "subtitle": "Experimental Research Prototype",
@@ -273,7 +273,7 @@
     ]
   },
   {
-    "id": "EXP_18",
+    "id": "EXP_30",
     "folder": "map_game",
     "title": "World Map Game",
     "subtitle": "Experimental Research Prototype",
@@ -315,7 +315,7 @@
     ]
   },
   {
-    "id": "EXP_19",
+    "id": "EXP_31",
     "folder": "svg_stack_dsl",
     "title": "Multi-Slot SVG Stack DSL Studio",
     "subtitle": "Experimental Research Prototype",
@@ -347,7 +347,7 @@
     ]
   },
   {
-    "id": "EXP_20",
+    "id": "EXP_32",
     "folder": "photo_processor",
     "title": "Passport & Visa Photo Alignment Workspace",
     "subtitle": "Experimental Research Prototype",
@@ -389,7 +389,7 @@
     ]
   },
   {
-    "id": "EXP_21",
+    "id": "EXP_33",
     "folder": "shooter_original",
     "title": "Unity WebGL Player",
     "subtitle": "Experimental Research Prototype",
@@ -416,7 +416,7 @@
     ]
   },
   {
-    "id": "EXP_22",
+    "id": "EXP_34",
     "folder": "shooter_v1",
     "title": "Unity WebGL Player",
     "subtitle": "Experimental Research Prototype",
@@ -438,6 +438,37 @@
       {
         "label": "Launch Unity WebGL Player →",
         "url": "shooter_v1/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_35",
+    "folder": "stealth",
+    "title": "Unity Web Player",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-10-09",
+    "badge": "Interactive Prototype",
+    "badge_class": "badge-primary",
+    "categories": [
+      "graphics"
+    ],
+    "tags": [
+      "stealth",
+      "graphics"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Unity Web Player.",
+    "technologies": [
+      {
+        "name": "HTML5 Canvas"
+      }
+    ],
+    "architecture": "Engineered around modular stealth components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Unity Web Player →",
+        "url": "stealth/index.html",
         "is_primary": true
       }
     ]
