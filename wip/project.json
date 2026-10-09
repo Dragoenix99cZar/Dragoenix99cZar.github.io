@@ -1,6 +1,6 @@
 [
   {
-    "id": "EXP_01",
+    "id": "EXP_11",
     "folder": "soft_renderer",
     "title": "3D Projection",
     "subtitle": "Pure WASM",
@@ -47,7 +47,7 @@
     ]
   },
   {
-    "id": "EXP_02",
+    "id": "EXP_12",
     "folder": "sorting",
     "title": "Wasm Software Rendered Sorting Visualizer",
     "subtitle": "Experimental Research Prototype",
@@ -89,7 +89,7 @@
     ]
   },
   {
-    "id": "EXP_03",
+    "id": "EXP_13",
     "folder": "poisson_disc_sampling",
     "title": "Poisson Disc Sampling (Fast + Hues)",
     "subtitle": "Experimental Research Prototype",
@@ -120,7 +120,7 @@
     ]
   },
   {
-    "id": "EXP_04",
+    "id": "EXP_14",
     "folder": "cg",
     "title": "Cg",
     "subtitle": "Experimental Research Prototype",
@@ -172,7 +172,7 @@
     ]
   },
   {
-    "id": "EXP_05",
+    "id": "EXP_15",
     "folder": "ad2bs",
     "title": "Wasm Nepali Date Converter",
     "subtitle": "Experimental Research Prototype",
@@ -209,7 +209,7 @@
     ]
   },
   {
-    "id": "EXP_06",
+    "id": "EXP_16",
     "folder": "post_calc",
     "title": "Rust WebAssembly Scientific Calculator",
     "subtitle": "Experimental Research Prototype",
@@ -246,7 +246,7 @@
     ]
   },
   {
-    "id": "EXP_07",
+    "id": "EXP_17",
     "folder": "vm",
     "title": "Stacky Compiler Pipeline Visualizer",
     "subtitle": "Experimental Research Prototype",
@@ -273,7 +273,7 @@
     ]
   },
   {
-    "id": "EXP_08",
+    "id": "EXP_18",
     "folder": "map_game",
     "title": "World Map Game",
     "subtitle": "Experimental Research Prototype",
@@ -315,7 +315,7 @@
     ]
   },
   {
-    "id": "EXP_09",
+    "id": "EXP_19",
     "folder": "svg_stack_dsl",
     "title": "Multi-Slot SVG Stack DSL Studio",
     "subtitle": "Experimental Research Prototype",
@@ -347,7 +347,7 @@
     ]
   },
   {
-    "id": "EXP_10",
+    "id": "EXP_20",
     "folder": "photo_processor",
     "title": "Passport & Visa Photo Alignment Workspace",
     "subtitle": "Experimental Research Prototype",
@@ -384,6 +384,60 @@
       {
         "label": "Launch Passport & Visa Ph →",
         "url": "photo_processor/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_21",
+    "folder": "shooter_original",
+    "title": "Unity WebGL Player",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-10-09",
+    "badge": "Interactive Prototype",
+    "badge_class": "badge-primary",
+    "categories": [
+      "algorithms"
+    ],
+    "tags": [
+      "shooter-original",
+      "algorithms"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Unity WebGL Player.",
+    "technologies": [],
+    "architecture": "Engineered around modular shooter_original components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Unity WebGL Player →",
+        "url": "shooter_original/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_22",
+    "folder": "shooter_v1",
+    "title": "Unity WebGL Player",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-10-09",
+    "badge": "Interactive Prototype",
+    "badge_class": "badge-primary",
+    "categories": [
+      "algorithms"
+    ],
+    "tags": [
+      "shooter-v1",
+      "algorithms"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Unity WebGL Player.",
+    "technologies": [],
+    "architecture": "Engineered around modular shooter_v1 components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Unity WebGL Player →",
+        "url": "shooter_v1/index.html",
         "is_primary": true
       }
     ]
