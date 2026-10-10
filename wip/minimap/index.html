@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>N-Body Simulation - Fish-Eye vs Linear Minimap</title>
+    <style>
+        body { 
+            background: #0d0f12; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            color: #f0f3f6; 
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 { margin: 0 0 5px 0; font-size: 24px; color: #00ffcc; letter-spacing: 1px; }
+        p { margin: 0; font-size: 14px; color: #8a99ad; }
+        .canvas-container { 
+            display: flex; 
+            gap: 40px; 
+            background: #161b22;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #30363d;
+        }
+        .canvas-box { text-align: center; }
+        canvas { 
+            border: 2px solid #30363d; 
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.05); 
+            background: #0d1117; 
+        }
+        #minimap { border-radius: 50%; } 
+        #linearMap { border-radius: 12px; } 
+        h3 { margin-top: 0; margin-bottom: 15px; color: #c9d1d9; font-weight: 500; font-size: 16px; }
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+        }
+        button {
+            background: #21262d;
+            border: 1px solid #f0f6fc1f;
+            color: #c9d1d9;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            background: #30363d;
+            border-color: #8b949e;
+        }
+        button.reset {
+            background: #238636;
+            color: #fff;
+            border: 1px solid rgba(240,246,252,0.1);
+        }
+        button.reset:hover {
+            background: #2ea44f;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>N-Body Gravity Simulation</h1>
+        <p>Comparing Proximity-Biased Fish-Eye (Log Radial) vs. Standard Linear XY Grid</p>
+    </div>
+
+    <div class="canvas-container">
+        <!-- Fish Eye Radial Compressed Map -->
+        <div class="canvas-box">
+            <h3>Fish-Eye Radial Map (Shrinking Edge)</h3>
+            <canvas id="minimap" width="700" height="700"></canvas>
+        </div>
+        
+        <!-- Standard Normal Equidistant Map -->
+        <div class="canvas-box">
+            <h3>Standard Linear Map (Equidistant)</h3>
+            <canvas id="linearMap" width="700" height="700"></canvas>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="reset" onclick="initSimulation()">Reset Universe</button>
+        <button onclick="toggleHeavyBody()">Toggle Heavy Center Star</button>
+    </div>
+
+    <script>
+        const canvasFish = document.getElementById('minimap');
+        const ctxFish = canvasFish.getContext('2d');
+
+        const canvasLinear = document.getElementById('linearMap');
+        const ctxLinear = canvasLinear.getContext('2d');
+
+        const CENTER_X = canvasFish.width / 2; 
+        const CENTER_Y = canvasFish.height / 2; 
+        const UI_MAX_RADIUS = (canvasFish.width / 2) - 15; 
+
+        // Simulation Parameters
+        const G = 0.2;              // Gravitational constant for the simulation
+        const DT = 0.8;              // Time step
+        const SOFTENING = 15;        // Softening factor to prevent infinite forces on close approaches
+        const MAX_TRACKING_DIST = 2500; // Maximum boundary tracked on screen edge
+        const COMPRESSION_ALPHA = 0.005; // Compression coefficient for fish-eye warping
+
+        let bodies = [];
+        let includeCentralMass = true;
+
+        // Initialize / Reset Simulation
+        function initSimulation() {
+            bodies = [];
+
+            // Optional massive star in the center
+            if (includeCentralMass) {
+                bodies.push({
+                    x: 0,
+                    y: 0,
+                    vx: 0,
+                    vy: 0,
+                    mass: 5000,
+                    radius: 7,
+                    color: '#ffcc00',
+                    name: 'Sol Prime',
+                    trail: []
+                });
+            }
+
+            // Generate N random floating bodies orbiting or floating around
+            const numBodies = 45;
+            for (let i = 0; i < numBodies; i++) {
+                // Distribute bodies outwards
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 150 + Math.random() * 1800; 
+                
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+
+                // Give them a rough tangential velocity for orbital mechanics if central star exists
+                let vx = (Math.random() - 0.5) * 2;
+                let vy = (Math.random() - 0.5) * 2;
+                if (includeCentralMass) {
+                    const orbitSpeed = Math.sqrt((G * 5000) / distance) * 0.9;
+                    vx = -Math.sin(angle) * orbitSpeed + (Math.random() - 0.5) * 0.5;
+                    vy = Math.cos(angle) * orbitSpeed + (Math.random() - 0.5) * 0.5;
+                }
+
+                bodies.push({
+                    x: x,
+                    y: y,
+                    vx: vx,
+                    vy: vy,
+                    mass: 5 + Math.random() * 80,
+                    radius: 2 + Math.random() * 3,
+                    color: `hsl(${Math.random() * 360}, 85%, 65%)`,
+                    name: i === 0 ? 'Heavy Rogue' : null,
+                    trail: []
+                });
+            }
+            
+            // Make one rogue body massive
+            if(!includeCentralMass) {
+                bodies[0].mass = 1200;
+                bodies[0].radius = 6;
+                bodies[0].color = '#ff3366';
+                bodies[0].name = 'Rogue Black Hole';
+            }
+        }
+
+        function toggleHeavyBody() {
+            includeCentralMass = !includeCentralMass;
+            initSimulation();
+        }
+
+        // Mathematical Fish-Eye Radial Compression
+        function getCompressedRadius(realRadius) {
+            if (realRadius <= 0) return 0;
+            const numerator = Math.log(1 + COMPRESSION_ALPHA * realRadius);
+            const denominator = Math.log(1 + COMPRESSION_ALPHA * MAX_TRACKING_DIST);
+            return UI_MAX_RADIUS * Math.min(1, numerator / denominator);
+        }
+
+        // N-Body Physics Engine (O(N^2) mutual gravitational attraction)
+        function updatePhysics() {
+            // 1. Calculate forces / Accelerations
+            for (let i = 0; i < bodies.length; i++) {
+                let fx = 0;
+                let fy = 0;
+                let b1 = bodies[i];
+
+                for (let j = 0; j < bodies.length; j++) {
+                    if (i === j) continue;
+                    let b2 = bodies[j];
+
+                    let dx = b2.x - b1.x;
+                    let dy = b2.y - b1.y;
+                    let distSq = dx * dx + dy * dy + SOFTENING;
+                    let dist = Math.sqrt(distSq);
+
+                    // Newton's law of universal gravitation: F = G * (m1 * m2) / r^2
+                    // Acceleration a1 = F / m1 = G * m2 / r^2
+                    let forceMag = (G * b2.mass) / distSq;
+                    
+                    fx += forceMag * (dx / dist);
+                    fy += forceMag * (dy / dist);
+                }
+
+                b1.ax = fx;
+                b1.ay = fy;
+            }
+
+            // 2. Apply Accelerations & Update Positions
+            bodies.forEach(b => {
+                b.vx += b.ax * DT;
+                b.vy += b.ay * DT;
+                b.x += b.vx * DT;
+                b.y += b.vy * DT;
+
+                // Keep trail history
+                b.trail.push({ x: b.x, y: b.y });
+                if (b.trail.length > 25) b.trail.shift();
+            });
+        }
+
+        // Render Fish-Eye Perspective Canvas
+        function drawFishEyeMap() {
+            ctxFish.clearRect(0, 0, canvasFish.width, canvasFish.height);
+
+            // Circular boundary background
+            ctxFish.fillStyle = '#0b0e14';
+            ctxFish.beginPath();
+            ctxFish.arc(CENTER_X, CENTER_Y, UI_MAX_RADIUS, 0, Math.PI * 2);
+            ctxFish.fill();
+
+            // Dynamic grid lines spacing (every 250 meters layout)
+            ctxFish.strokeStyle = 'rgba(0, 255, 204, 0.12)';
+            ctxFish.lineWidth = 1;
+            for (let d = 250; d <= MAX_TRACKING_DIST; d += 250) {
+                const uiRadius = getCompressedRadius(d);
+                ctxFish.beginPath();
+                ctxFish.arc(CENTER_X, CENTER_Y, uiRadius, 0, Math.PI * 2);
+                ctxFish.stroke();
+            }
+
+            // Crosshairs
+            ctxFish.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            ctxFish.beginPath();
+            ctxFish.moveTo(CENTER_X - UI_MAX_RADIUS, CENTER_Y); ctxFish.lineTo(CENTER_X + UI_MAX_RADIUS, CENTER_Y);
+            ctxFish.moveTo(CENTER_X, CENTER_Y - UI_MAX_RADIUS); ctxFish.lineTo(CENTER_X, CENTER_Y + UI_MAX_RADIUS);
+            ctxFish.stroke();
+
+            // Draw Bodies & Compressed Trails
+            bodies.forEach(b => {
+                const bDist = Math.sqrt(b.x * b.x + b.y * b.y);
+                const bAngle = Math.atan2(b.y, b.x);
+                const uiRadius = getCompressedRadius(bDist);
+                const uiX = CENTER_X + uiRadius * Math.cos(bAngle);
+                const uiY = CENTER_Y + uiRadius * Math.sin(bAngle);
+
+                // Render Compressed Trail
+                if (b.trail.length > 1) {
+                    ctxFish.strokeStyle = b.color + '44'; // Add opacity
+                    ctxFish.lineWidth = 1.5;
+                    ctxFish.beginPath();
+                    b.trail.forEach((pt, idx) => {
+                        const pDist = Math.sqrt(pt.x * pt.x + pt.y * pt.y);
+                        const pAngle = Math.atan2(pt.y, pt.x);
+                        const pUiRadius = getCompressedRadius(pDist);
+                        const pUiX = CENTER_X + pUiRadius * Math.cos(pAngle);
+                        const pUiY = CENTER_Y + pUiRadius * Math.sin(pAngle);
+                        if (idx === 0) ctxFish.moveTo(pUiX, pUiY);
+                        else ctxFish.lineTo(pUiX, pUiY);
+                    });
+                    ctxFish.stroke();
+                }
+
+                // Render Scaled Blip
+                ctxFish.fillStyle = b.color;
+                ctxFish.beginPath();
+                // Squeeze size down slightly at the absolute rim to prevent overflow overlap clutter
+                const dynamicSize = Math.max(1.5, b.radius * (1 - (uiRadius / UI_MAX_RADIUS) * 0.4));
+                ctxFish.arc(uiX, uiY, dynamicSize, 0, Math.PI * 2);
+                ctxFish.fill();
+
+                if (b.name && uiRadius < UI_MAX_RADIUS * 0.85) {
+                    ctxFish.fillStyle = '#8a99ad';
+                    ctxFish.font = '10px sans-serif';
+                    ctxFish.fillText(b.name, uiX + 8, uiY + 3);
+                }
+            });
+
+            // Outer Frame Ring Ring
+            ctxFish.strokeStyle = '#30363d';
+            ctxFish.lineWidth = 3;
+            ctxFish.beginPath();
+            ctxFish.arc(CENTER_X, CENTER_Y, UI_MAX_RADIUS, 0, Math.PI * 2);
+            ctxFish.stroke();
+        }
+
+        // Render Standard Linear Coordinate Grid Canvas
+        function drawLinearMap() {
+            ctxLinear.clearRect(0, 0, canvasLinear.width, canvasLinear.height);
+
+            // Directly scale real coordinates into visual bounds linearly
+            const scale = UI_MAX_RADIUS / MAX_TRACKING_DIST;
+
+            // Grid rings (equidistant uniform intervals)
+            ctxLinear.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            for (let d = 250; d <= MAX_TRACKING_DIST; d += 250) {
+                ctxLinear.beginPath();
+                ctxLinear.arc(CENTER_X, CENTER_Y, d * scale, 0, Math.PI * 2);
+                ctxLinear.stroke();
+            }
+
+            // Draw Bodies & Linear Trails
+            bodies.forEach(b => {
+                const uiX = CENTER_X + b.x * scale;
+                const uiY = CENTER_Y + b.y * scale;
+
+                // Render trails linearly
+                if (b.trail.length > 1) {
+                    ctxLinear.strokeStyle = b.color + '33';
+                    ctxLinear.lineWidth = 1;
+                    ctxLinear.beginPath();
+                    b.trail.forEach((pt, idx) => {
+                        if (idx === 0) ctxLinear.moveTo(CENTER_X + pt.x * scale, CENTER_Y + pt.y * scale);
+                        else ctxLinear.lineTo(CENTER_X + pt.x * scale, CENTER_Y + pt.y * scale);
+                    });
+                    ctxLinear.stroke();
+                }
+
+                // Render if within view bounds
+                if (uiX >= 0 && uiX <= canvasLinear.width && uiY >= 0 && uiY <= canvasLinear.height) {
+                    ctxLinear.fillStyle = b.color;
+                    ctxLinear.beginPath();
+                    ctxLinear.arc(uiX, uiY, b.radius, 0, Math.PI * 2);
+                    ctxLinear.fill();
+
+                    if (b.name) {
+                        ctxLinear.fillStyle = '#8a99ad';
+                        ctxLinear.font = '10px sans-serif';
+                        ctxLinear.fillText(b.name, uiX + 8, uiY + 3);
+                    }
+                }
+            });
+        }
+
+        // Master Animation Loop
+        function loop() {
+            updatePhysics();
+            drawFishEyeMap();
+            drawLinearMap();
+            requestAnimationFrame(loop);
+        }
+
+        // Execute on start
+        initSimulation();
+        loop();
+    </script>
+</body>
+</html>

@@ -54,11 +54,11 @@
 
       <div class="metrics-bar">
         <div class="metric-card">
-          <div class="metric-val" id="totalCount">12</div>
+          <div class="metric-val" id="totalCount">18</div>
           <div class="metric-label">Research Modules</div>
         </div>
         <div class="metric-card">
-          <div class="metric-val">7</div>
+          <div class="metric-val">9</div>
           <div class="metric-label">WebAssembly Cores</div>
         </div>
         <div class="metric-card">
@@ -84,18 +84,67 @@
 
       <div class="filter-pills" id="filterPills" role="radiogroup" aria-label="Filter Projects by Category">
         <span class="filter-label">Filter:</span>
-        <button class="pill-btn active" data-filter="all">All (12)</button>
-        <button class="pill-btn" data-filter="wasm">WebAssembly (7)</button>
-        <button class="pill-btn" data-filter="graphics">Graphics & Vision (6)</button>
+        <button class="pill-btn active" data-filter="all">All (18)</button>
+        <button class="pill-btn" data-filter="wasm">WebAssembly (9)</button>
+        <button class="pill-btn" data-filter="graphics">Graphics & Vision (7)</button>
         <button class="pill-btn" data-filter="compilers">Compilers & DSLs (0)</button>
-        <button class="pill-btn" data-filter="algorithms">Math & Algorithms (4)</button>
+        <button class="pill-btn" data-filter="algorithms">Math & Algorithms (7)</button>
       </div>
     </section>
 
     <!-- Projects Grid -->
     <section class="projects-grid" id="projectsGrid" aria-label="Experimental Projects Showcase">
 
-      <!-- EXP_47: shooter_v1 -->
+      <!-- EXP_18: minimap -->
+      <article class="project-card" data-category="graphics"
+        data-tags="minimap graphics" data-date="2026-10-10">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-primary">Interactive Prototype</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-10-10</span>
+              <span class="card-id">EXP_18</span>
+            </div>
+          </div>
+          <h2 class="card-title">N-Body Simulation</h2>
+          <div class="card-subtitle">Fish-Eye vs Linear Minimap</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: N-Body Simulation.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag">HTML5 Canvas</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular minimap components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="minimap/index.html" class="btn btn-launch" target="_blank">Launch N-Body Simulation →</a>
+          <a href="minimap/fish_normal.html" class="btn btn-sub" target="_blank">Fish Normal ↗</a>
+        </footer>
+      </article>
+
+      <!-- EXP_17: shooter_v1 -->
       <article class="project-card" data-category="algorithms"
         data-tags="shooter-v1 algorithms" data-date="2026-10-09">
         <header class="card-header">
@@ -103,7 +152,7 @@
             <span class="badge badge-primary">Interactive Prototype</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-10-09</span>
-              <span class="card-id">EXP_47</span>
+              <span class="card-id">EXP_17</span>
             </div>
           </div>
           <h2 class="card-title">Unity WebGL Player</h2>
@@ -143,7 +192,7 @@
         </footer>
       </article>
 
-      <!-- EXP_46: shooter_original -->
+      <!-- EXP_16: shooter_original -->
       <article class="project-card" data-category="algorithms"
         data-tags="shooter-original algorithms" data-date="2026-10-09">
         <header class="card-header">
@@ -151,7 +200,7 @@
             <span class="badge badge-primary">Interactive Prototype</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-10-09</span>
-              <span class="card-id">EXP_46</span>
+              <span class="card-id">EXP_16</span>
             </div>
           </div>
           <h2 class="card-title">Unity WebGL Player</h2>
@@ -191,7 +240,7 @@
         </footer>
       </article>
 
-      <!-- EXP_45: photo_processor -->
+      <!-- EXP_15: photo_processor -->
       <article class="project-card" data-category="wasm graphics"
         data-tags="photo-processor rust wasm graphics" data-date="2026-10-03">
         <header class="card-header">
@@ -199,7 +248,7 @@
             <span class="badge badge-rust">Rust + WebAssembly</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-10-03</span>
-              <span class="card-id">EXP_45</span>
+              <span class="card-id">EXP_15</span>
             </div>
           </div>
           <h2 class="card-title">Passport & Visa Photo Alignment Workspace</h2>
@@ -241,7 +290,7 @@
         </footer>
       </article>
 
-      <!-- EXP_44: svg_stack_dsl -->
+      <!-- EXP_14: svg_stack_dsl -->
       <article class="project-card" data-category="algorithms"
         data-tags="svg-stack-dsl algorithms" data-date="2026-10-02">
         <header class="card-header">
@@ -249,7 +298,7 @@
             <span class="badge badge-primary">Interactive Prototype</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-10-02</span>
-              <span class="card-id">EXP_44</span>
+              <span class="card-id">EXP_14</span>
             </div>
           </div>
           <h2 class="card-title">Multi-Slot SVG Stack DSL Studio</h2>
@@ -290,7 +339,7 @@
         </footer>
       </article>
 
-      <!-- EXP_43: map_game -->
+      <!-- EXP_13: map_game -->
       <article class="project-card" data-category="wasm graphics"
         data-tags="map-game rust wasm graphics" data-date="2026-10-01">
         <header class="card-header">
@@ -298,7 +347,7 @@
             <span class="badge badge-rust">Rust + WebAssembly</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-10-01</span>
-              <span class="card-id">EXP_43</span>
+              <span class="card-id">EXP_13</span>
             </div>
           </div>
           <h2 class="card-title">World Map Game</h2>
@@ -340,7 +389,7 @@
         </footer>
       </article>
 
-      <!-- EXP_42: vm -->
+      <!-- EXP_12: vm -->
       <article class="project-card" data-category="algorithms"
         data-tags="vm algorithms" data-date="2026-09-29">
         <header class="card-header">
@@ -348,7 +397,7 @@
             <span class="badge badge-primary">Interactive Prototype</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-29</span>
-              <span class="card-id">EXP_42</span>
+              <span class="card-id">EXP_12</span>
             </div>
           </div>
           <h2 class="card-title">Stacky Compiler Pipeline Visualizer</h2>
@@ -388,7 +437,7 @@
         </footer>
       </article>
 
-      <!-- EXP_41: post_calc -->
+      <!-- EXP_11: post_calc -->
       <article class="project-card" data-category="wasm"
         data-tags="post-calc rust wasm" data-date="2026-09-28">
         <header class="card-header">
@@ -396,7 +445,7 @@
             <span class="badge badge-rust">Rust + WebAssembly</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-28</span>
-              <span class="card-id">EXP_41</span>
+              <span class="card-id">EXP_11</span>
             </div>
           </div>
           <h2 class="card-title">Rust WebAssembly Scientific Calculator</h2>
@@ -437,7 +486,7 @@
         </footer>
       </article>
 
-      <!-- EXP_40: ad2bs -->
+      <!-- EXP_10: ad2bs -->
       <article class="project-card" data-category="wasm"
         data-tags="ad2bs c wasm" data-date="2026-09-26">
         <header class="card-header">
@@ -445,7 +494,7 @@
             <span class="badge badge-cyan">C + WebAssembly</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-26</span>
-              <span class="card-id">EXP_40</span>
+              <span class="card-id">EXP_10</span>
             </div>
           </div>
           <h2 class="card-title">Wasm Nepali Date Converter</h2>
@@ -486,7 +535,7 @@
         </footer>
       </article>
 
-      <!-- EXP_39: cg -->
+      <!-- EXP_09: cg -->
       <article class="project-card" data-category="wasm graphics"
         data-tags="cg c wasm graphics" data-date="2026-09-25">
         <header class="card-header">
@@ -494,7 +543,7 @@
             <span class="badge badge-cyan">C + WebAssembly</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-25</span>
-              <span class="card-id">EXP_39</span>
+              <span class="card-id">EXP_09</span>
             </div>
           </div>
           <h2 class="card-title">Cg</h2>
@@ -538,7 +587,7 @@
         </footer>
       </article>
 
-      <!-- EXP_38: poisson_disc_sampling -->
+      <!-- EXP_08: poisson_disc_sampling -->
       <article class="project-card" data-category="graphics"
         data-tags="poisson-disc-sampling graphics" data-date="2026-09-25">
         <header class="card-header">
@@ -546,7 +595,7 @@
             <span class="badge badge-primary">Interactive Prototype</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-25</span>
-              <span class="card-id">EXP_38</span>
+              <span class="card-id">EXP_08</span>
             </div>
           </div>
           <h2 class="card-title">Poisson Disc Sampling (Fast + Hues)</h2>
@@ -586,7 +635,7 @@
         </footer>
       </article>
 
-      <!-- EXP_37: sorting -->
+      <!-- EXP_07: sorting -->
       <article class="project-card" data-category="wasm graphics"
         data-tags="sorting c wasm graphics" data-date="2026-09-17">
         <header class="card-header">
@@ -594,7 +643,7 @@
             <span class="badge badge-cyan">C + WebAssembly</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-17</span>
-              <span class="card-id">EXP_37</span>
+              <span class="card-id">EXP_07</span>
             </div>
           </div>
           <h2 class="card-title">Wasm Software Rendered Sorting Visualizer</h2>
@@ -636,7 +685,7 @@
         </footer>
       </article>
 
-      <!-- EXP_36: soft_renderer -->
+      <!-- EXP_06: soft_renderer -->
       <article class="project-card" data-category="wasm graphics"
         data-tags="soft-renderer c wasm graphics" data-date="2026-09-17">
         <header class="card-header">
@@ -644,7 +693,7 @@
             <span class="badge badge-cyan">C + WebAssembly</span>
             <div class="card-meta-right">
               <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-09-17</span>
-              <span class="card-id">EXP_36</span>
+              <span class="card-id">EXP_06</span>
             </div>
           </div>
           <h2 class="card-title">3D Projection</h2>
@@ -684,6 +733,247 @@
         <footer class="card-footer">
           <a href="soft_renderer/index.html" class="btn btn-launch" target="_blank">Launch 3D Projection →</a>
           <a href="soft_renderer/index2.html" class="btn btn-sub" target="_blank">Index2 ↗</a>
+        </footer>
+      </article>
+
+      <!-- EXP_05: wasm_c -->
+      <article class="project-card" data-category="wasm"
+        data-tags="wasm-c wasm" data-date="2026-08-13">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-cyan">WebAssembly Core</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-08-13</span>
+              <span class="card-id">EXP_05</span>
+            </div>
+          </div>
+          <h2 class="card-title">C Wasm Demo</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: C Wasm Demo.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag tag-wasm">WebAssembly</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular wasm_c components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="wasm_c/index.html" class="btn btn-launch" target="_blank">Launch C Wasm Demo →</a>
+        </footer>
+      </article>
+
+      <!-- EXP_04: rust_wasm -->
+      <article class="project-card" data-category="wasm"
+        data-tags="rust-wasm rust wasm" data-date="2026-08-12">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-rust">Rust + WebAssembly</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-08-12</span>
+              <span class="card-id">EXP_04</span>
+            </div>
+          </div>
+          <h2 class="card-title">Rust Wasm Calculator</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Rust Wasm Calculator.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag tag-rust">Rust</span>
+              <span class="tech-tag tag-wasm">WebAssembly</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular rust_wasm components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="rust_wasm/index.html" class="btn btn-launch" target="_blank">Launch Rust Wasm Calculat →</a>
+        </footer>
+      </article>
+
+      <!-- EXP_03: invoice_sample -->
+      <article class="project-card" data-category="algorithms"
+        data-tags="invoice-sample algorithms" data-date="2026-08-09">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-primary">Interactive Prototype</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-08-09</span>
+              <span class="card-id">EXP_03</span>
+            </div>
+          </div>
+          <h2 class="card-title">Receipt Generator</h2>
+          <div class="card-subtitle">Labeled Item Fields</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Receipt Generator.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular invoice_sample components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="invoice_sample/index.html" class="btn btn-launch" target="_blank">Launch Receipt Generator →</a>
+        </footer>
+      </article>
+
+      <!-- EXP_02: raylib_wip -->
+      <article class="project-card" data-category="algorithms"
+        data-tags="raylib-wip c algorithms" data-date="2026-06-11">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-amber">C Engine</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-06-11</span>
+              <span class="card-id">EXP_02</span>
+            </div>
+          </div>
+          <h2 class="card-title">Raylib Wip</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Raylib Wip.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              <span class="tech-tag tag-c">C</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular raylib_wip components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          
+        </footer>
+      </article>
+
+      <!-- EXP_01: js-experiments -->
+      <article class="project-card" data-category="algorithms"
+        data-tags="js-experiments algorithms" data-date="2026-05-31">
+        <header class="card-header">
+          <div class="card-top-meta">
+            <span class="badge badge-primary">Interactive Prototype</span>
+            <div class="card-meta-right">
+              <span class="card-date mono" title="Introduced to WIP Lab">📅 2026-05-31</span>
+              <span class="card-id">EXP_01</span>
+            </div>
+          </div>
+          <h2 class="card-title">Js-Experiments</h2>
+          <div class="card-subtitle">Experimental Research Prototype</div>
+        </header>
+        <div class="card-body">
+          <div class="section-block">
+            <div class="section-title">Description</div>
+            <p class="section-desc">
+              Interactive low-level experimentation and graphics module: Js-Experiments.
+            </p>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Technologies Used</div>
+            <div class="tech-stack">
+              
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-arch">Architecture Overview</div>
+            <div class="arch-box">
+              Engineered around modular js-experiments components, executing direct transformations and client-side processing.
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title title-vision">Vision & Roadmap</div>
+            <div class="vision-box">
+              Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.
+            </div>
+          </div>
+        </div>
+        <footer class="card-footer">
+          
         </footer>
       </article>
 

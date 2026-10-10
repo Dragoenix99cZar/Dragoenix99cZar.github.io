@@ -1,6 +1,150 @@
 [
   {
-    "id": "EXP_36",
+    "id": "EXP_01",
+    "folder": "js-experiments",
+    "title": "Js-Experiments",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-05-31",
+    "badge": "Interactive Prototype",
+    "badge_class": "badge-primary",
+    "categories": [
+      "algorithms"
+    ],
+    "tags": [
+      "js-experiments",
+      "algorithms"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Js-Experiments.",
+    "technologies": [],
+    "architecture": "Engineered around modular js-experiments components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": []
+  },
+  {
+    "id": "EXP_02",
+    "folder": "raylib_wip",
+    "title": "Raylib Wip",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-06-11",
+    "badge": "C Engine",
+    "badge_class": "badge-amber",
+    "categories": [
+      "algorithms"
+    ],
+    "tags": [
+      "raylib-wip",
+      "c",
+      "algorithms"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Raylib Wip.",
+    "technologies": [
+      {
+        "name": "C",
+        "tag_class": "tag-c"
+      }
+    ],
+    "architecture": "Engineered around modular raylib_wip components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": []
+  },
+  {
+    "id": "EXP_03",
+    "folder": "invoice_sample",
+    "title": "Receipt Generator",
+    "subtitle": "Labeled Item Fields",
+    "date": "2026-08-09",
+    "badge": "Interactive Prototype",
+    "badge_class": "badge-primary",
+    "categories": [
+      "algorithms"
+    ],
+    "tags": [
+      "invoice-sample",
+      "algorithms"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Receipt Generator.",
+    "technologies": [],
+    "architecture": "Engineered around modular invoice_sample components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Receipt Generator →",
+        "url": "invoice_sample/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_04",
+    "folder": "rust_wasm",
+    "title": "Rust Wasm Calculator",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-08-12",
+    "badge": "Rust + WebAssembly",
+    "badge_class": "badge-rust",
+    "categories": [
+      "wasm"
+    ],
+    "tags": [
+      "rust-wasm",
+      "rust",
+      "wasm"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: Rust Wasm Calculator.",
+    "technologies": [
+      {
+        "name": "Rust",
+        "tag_class": "tag-rust"
+      },
+      {
+        "name": "WebAssembly",
+        "tag_class": "tag-wasm"
+      }
+    ],
+    "architecture": "Engineered around modular rust_wasm components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch Rust Wasm Calculat →",
+        "url": "rust_wasm/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_05",
+    "folder": "wasm_c",
+    "title": "C Wasm Demo",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-08-13",
+    "badge": "WebAssembly Core",
+    "badge_class": "badge-cyan",
+    "categories": [
+      "wasm"
+    ],
+    "tags": [
+      "wasm-c",
+      "wasm"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: C Wasm Demo.",
+    "technologies": [
+      {
+        "name": "WebAssembly",
+        "tag_class": "tag-wasm"
+      }
+    ],
+    "architecture": "Engineered around modular wasm_c components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch C Wasm Demo →",
+        "url": "wasm_c/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_06",
     "folder": "soft_renderer",
     "title": "3D Projection",
     "subtitle": "Pure WASM",
@@ -47,7 +191,7 @@
     ]
   },
   {
-    "id": "EXP_37",
+    "id": "EXP_07",
     "folder": "sorting",
     "title": "Wasm Software Rendered Sorting Visualizer",
     "subtitle": "Experimental Research Prototype",
@@ -89,7 +233,7 @@
     ]
   },
   {
-    "id": "EXP_38",
+    "id": "EXP_08",
     "folder": "poisson_disc_sampling",
     "title": "Poisson Disc Sampling (Fast + Hues)",
     "subtitle": "Experimental Research Prototype",
@@ -120,7 +264,7 @@
     ]
   },
   {
-    "id": "EXP_39",
+    "id": "EXP_09",
     "folder": "cg",
     "title": "Cg",
     "subtitle": "Experimental Research Prototype",
@@ -172,7 +316,7 @@
     ]
   },
   {
-    "id": "EXP_40",
+    "id": "EXP_10",
     "folder": "ad2bs",
     "title": "Wasm Nepali Date Converter",
     "subtitle": "Experimental Research Prototype",
@@ -209,7 +353,7 @@
     ]
   },
   {
-    "id": "EXP_41",
+    "id": "EXP_11",
     "folder": "post_calc",
     "title": "Rust WebAssembly Scientific Calculator",
     "subtitle": "Experimental Research Prototype",
@@ -246,7 +390,7 @@
     ]
   },
   {
-    "id": "EXP_42",
+    "id": "EXP_12",
     "folder": "vm",
     "title": "Stacky Compiler Pipeline Visualizer",
     "subtitle": "Experimental Research Prototype",
@@ -273,7 +417,7 @@
     ]
   },
   {
-    "id": "EXP_43",
+    "id": "EXP_13",
     "folder": "map_game",
     "title": "World Map Game",
     "subtitle": "Experimental Research Prototype",
@@ -315,7 +459,7 @@
     ]
   },
   {
-    "id": "EXP_44",
+    "id": "EXP_14",
     "folder": "svg_stack_dsl",
     "title": "Multi-Slot SVG Stack DSL Studio",
     "subtitle": "Experimental Research Prototype",
@@ -347,7 +491,7 @@
     ]
   },
   {
-    "id": "EXP_45",
+    "id": "EXP_15",
     "folder": "photo_processor",
     "title": "Passport & Visa Photo Alignment Workspace",
     "subtitle": "Experimental Research Prototype",
@@ -389,7 +533,7 @@
     ]
   },
   {
-    "id": "EXP_46",
+    "id": "EXP_16",
     "folder": "shooter_original",
     "title": "Unity WebGL Player",
     "subtitle": "Experimental Research Prototype",
@@ -416,7 +560,7 @@
     ]
   },
   {
-    "id": "EXP_47",
+    "id": "EXP_17",
     "folder": "shooter_v1",
     "title": "Unity WebGL Player",
     "subtitle": "Experimental Research Prototype",
@@ -439,6 +583,42 @@
         "label": "Launch Unity WebGL Player →",
         "url": "shooter_v1/index.html",
         "is_primary": true
+      }
+    ]
+  },
+  {
+    "id": "EXP_18",
+    "folder": "minimap",
+    "title": "N-Body Simulation",
+    "subtitle": "Fish-Eye vs Linear Minimap",
+    "date": "2026-10-10",
+    "badge": "Interactive Prototype",
+    "badge_class": "badge-primary",
+    "categories": [
+      "graphics"
+    ],
+    "tags": [
+      "minimap",
+      "graphics"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: N-Body Simulation.",
+    "technologies": [
+      {
+        "name": "HTML5 Canvas"
+      }
+    ],
+    "architecture": "Engineered around modular minimap components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch N-Body Simulation →",
+        "url": "minimap/index.html",
+        "is_primary": true
+      },
+      {
+        "label": "Fish Normal ↗",
+        "url": "minimap/fish_normal.html",
+        "is_primary": false
       }
     ]
   }

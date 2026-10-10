@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fish-Eye vs Normal Linear Minimap</title>
+    <style>
+        body { background: #111; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; color: #fff; }
+        .canvas-container { display: flex; gap: 30px; }
+        .canvas-box { text-align: center; }
+        canvas { border: 2px solid #333; box-shadow: 0 0 20px rgba(0, 255, 0, 0.05); background: rgba(10, 25, 15, 0.85); }
+        #minimap { border-radius: 50%; } /* Fish-Eye remains circular */
+        #linearMap { border-radius: 8px; } /* Normal plane is a standard box */
+        h3 { margin-bottom: 10px; color: #aaa; font-weight: 400; }
+    </style>
+</head>
+<body>
+    <div class="canvas-container">
+        <!-- Fish Eye Radial Compressed Map -->
+        <div class="canvas-box">
+            <h3>Fish-Eye Radial Map (Shrinking Edge)</h3>
+            <canvas id="minimap" width="800" height="800"></canvas>
+        </div>
+        
+        <!-- Standard Normal Equidistant Map -->
+        <div class="canvas-box">
+            <h3>Standard Linear Map (Equidistant)</h3>
+            <canvas id="linearMap" width="800" height="800"></canvas>
+        </div>
+    </div>
+    <script>
+        // Grab both canvas contexts
+        const canvasFish = document.getElementById('minimap');
+        const ctxFish = canvasFish.getContext('2d');
+
+        const canvasLinear = document.getElementById('linearMap');
+        const ctxLinear = canvasLinear.getContext('2d');
+
+        const CENTER_X = canvasFish.width / 2; // Half of 300 width
+        const CENTER_Y = canvasFish.width / 2; // Half of 300 height
+        const UI_MAX_RADIUS = canvasFish.width / 2 - 10; // Max radius limit for the round visual UI border
+
+        // Game World Configuration
+        const MAX_TRACKING_DIST = 1000; // Tracking boundary limit (meters)
+        const COMPRESSION_ALPHA = 0.02; // Tweaks radial scale distortion
+
+        // Mock Player Data
+        const player = { x: 0, y: 0 };
+
+        // Shared Object Positions & Motions
+        const pois = [
+            { name: "Close Quest", x: 40,   y: -30,  vx: 0.3,  vy: 0.4,  color: '#00ffcc' },
+            { name: "Mid Merchant", x: -200, y: 120,  vx: -0.6, vy: -0.2, color: '#ffcc00' },
+            { name: "Distant Boss", x: 400,  y: -350, vx: 2.5,  vy: 1.8,  color: '#ff3333' }
+        ];
+
+        // Mathematical Fish-Eye Radial Compression
+        function getCompressedRadius(realRadius) {
+            if (realRadius <= 0) return 0;
+            const numerator = Math.log(1 + COMPRESSION_ALPHA * realRadius);
+            const denominator = Math.log(1 + COMPRESSION_ALPHA * MAX_TRACKING_DIST);
+            return UI_MAX_RADIUS * Math.min(1, numerator / denominator);
+        }
+
+        // Update simulation bounds and velocities
+        function updateGame() {
+            pois.forEach(poi => {
+                poi.x += poi.vx;
+                poi.y += poi.vy;
+                
+                // Bounce entities back inside our boundaries if they drift away too far
+                if (Math.abs(poi.x) > MAX_TRACKING_DIST) poi.vx *= -1;
+                if (Math.abs(poi.y) > MAX_TRACKING_DIST) poi.vy *= -1;
+            });
+        }
+
+        // RENDER SCREEN 1: Radial Compressed Fish-Eye
+        function drawFishEyeMap() {
+            ctxFish.clearRect(0, 0, canvasFish.width, canvasFish.height);
+
+            // Round background mask
+            ctxFish.fillStyle = 'rgba(10, 25, 15, 0.85)';
+            ctxFish.beginPath();
+            ctxFish.arc(CENTER_X, CENTER_Y, UI_MAX_RADIUS, 0, Math.PI * 2);
+            ctxFish.fill();
+
+            // Concentric grid rings packing tighter together at the rim
+            ctxFish.strokeStyle = 'rgba(0, 255, 0, 0.32)';
+            for (let d = 100; d <= MAX_TRACKING_DIST; d += 50) {
+                const uiRadius = getCompressedRadius(d);
+                ctxFish.beginPath();
+                ctxFish.arc(CENTER_X, CENTER_Y, uiRadius, 0, Math.PI * 2);
+                ctxFish.stroke();
+            }
+
+            // Map Entities
+            pois.forEach(poi => {
+                const dx = poi.x - player.x;
+                const dy = poi.y - player.y;
+                const realRadius = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx);
+                
+                const uiRadius = getCompressedRadius(realRadius);
+                const uiX = CENTER_X + uiRadius * Math.cos(angle);
+                const uiY = CENTER_Y + uiRadius * Math.sin(angle);
+
+                ctxFish.fillStyle = poi.color;
+                ctxFish.beginPath();
+                const blipSize = Math.max(2.5, 5 * (1 - (uiRadius / UI_MAX_RADIUS) * 0.4));
+                ctxFish.arc(uiX, uiY, blipSize, 0, Math.PI * 2);
+                ctxFish.fill();
+
+                if (uiRadius < UI_MAX_RADIUS * 0.8) {
+                    ctxFish.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                    ctxFish.font = '10px sans-serif';
+                    ctxFish.fillText(poi.name, uiX + 7, uiY + 3);
+                }
+            });
+
+            // Player Center
+            ctxFish.fillStyle = '#fff';
+            ctxFish.beginPath(); ctxFish.arc(CENTER_X, CENTER_Y, 4, 0, Math.PI * 2); ctxFish.fill();
+        }
+
+        // RENDER SCREEN 2: Linear Uniform Equidistant Grid
+        function drawLinearMap() {
+            ctxLinear.clearRect(0, 0, canvasLinear.width, canvasLinear.height);
+
+            // Linear conversion scale: map MAX_TRACKING_DIST directly onto our pixel limit
+            const scale = UI_MAX_RADIUS / MAX_TRACKING_DIST;
+
+            // Standard equidistant box rings
+            ctxLinear.strokeStyle = 'rgba(0, 255, 0, 0.32)';
+            for (let d = 100; d <= MAX_TRACKING_DIST; d += 50) {
+                const uiRadius = d * scale; // Stays perfectly constant & proportional!
+                ctxLinear.beginPath();
+                ctxLinear.arc(CENTER_X, CENTER_Y, uiRadius, 0, Math.PI * 2);
+                ctxLinear.stroke();
+            }
+
+            // Map Entities
+            pois.forEach(poi => {
+                const dx = poi.x - player.x;
+                const dy = poi.y - player.y;
+
+                // Simple straight conversion layout
+                const uiX = CENTER_X + dx * scale;
+                const uiY = CENTER_Y + dy * scale;
+
+                // Check if object is visually inside the screen frame bounds
+                if (uiX >= 0 && uiX <= canvasLinear.width && uiY >= 0 && uiY <= canvasLinear.height) {
+                    ctxLinear.fillStyle = poi.color;
+                    ctxLinear.beginPath();
+                    ctxLinear.arc(uiX, uiY, 4, 0, Math.PI * 2); // Blip size stays constant here
+                    ctxLinear.fill();
+
+                    ctxLinear.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                    ctxLinear.font = '10px sans-serif';
+                    ctxLinear.fillText(poi.name, uiX + 7, uiY + 3);
+                }
+            });
+
+            // Player Center
+            ctxLinear.fillStyle = '#fff';
+            ctxLinear.beginPath(); ctxLinear.arc(CENTER_X, CENTER_Y, 4, 0, Math.PI * 2); ctxLinear.fill();
+        }
+
+        // Unified Game Frame Loop
+        function loop() {
+            updateGame();
+            drawFishEyeMap();
+            drawLinearMap();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+
+    </script>
+</body>
+</html>
