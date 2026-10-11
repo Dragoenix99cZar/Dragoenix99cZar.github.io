@@ -3,70 +3,675 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVG Viewer with Zoom & Pan & Exporter</title>
+    <title>Horizontal Patriarchal Genealogy Chart - JSON Export/Import</title>
     <style>
+        :root {
+            --bg-color: #121214;
+            --panel-bg: #18181b;
+            --card-bg: #27272a;
+            --card-hover: #323238;
+            --border-color: #3f3f46;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+        }
+
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0 auto;
+            margin: 0;
             padding: 20px;
-            background-color: #f8fafc;
-            color: #1e293b;
-        }
-        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-        .toolbar {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
-        button {
-            background-color: #2563eb;
+
+        h1 {
+            color: var(--text-main);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 20px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 90vw;
+            flex: 1;
+        }
+
+        #chart-container {
+            flex: 1;
+            background: var(--panel-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        #inspector {
+            width: 320px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: fit-content;
+        }
+
+        #inspector h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .form-group input[type="text"] {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px 10px;
+            color: var(--text-main);
+            font-size: 14px;
+        }
+
+        .form-group input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .btn {
+            background: var(--accent-color);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 500;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
             cursor: pointer;
             transition: background 0.2s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
         }
-        button:hover { background-color: #1d4ed8; }
-        .zoom-info {
-            font-size: 0.875rem;
-            color: #64748b;
-            margin-left: auto;
+
+        .btn:hover {
+            background: var(--accent-hover);
         }
-        .viewer-container {
-            width: 100%;
-            height: 600px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            background: white;
-            overflow: hidden; /* Hide overflow so pan stays inside bounds */
-            position: relative;
-            cursor: grab;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
         }
-        .viewer-container:active {
-            cursor: grabbing;
+
+        .btn-secondary:hover {
+            background: var(--card-bg);
         }
-        .canvas-wrapper {
-            position: absolute;
-            transform-origin: 0 0;
-            will-change: transform;
+
+        .export-group {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 45px;
+            margin: 15px 5px;
         }
-        object {
+
+        .export-group .btn {
+            font-size: 20px;
+            padding: 12px 20px;
+        }
+
+        .placeholder-text {
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        svg {
             display: block;
-            pointer-events: none; /* Let pan/zoom events bubble to container */
+        }
+
+        .node-rect {
+            fill: var(--card-bg);
+            stroke: var(--border-color);
+            stroke-width: 1.5px;
+            rx: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .node-group:hover .node-rect {
+            fill: var(--card-hover);
+            stroke: var(--accent-color);
+            cursor: pointer;
+            filter: drop-shadow(0 4px 8px rgba(99, 102, 241, 0.2));
+        }
+
+        .node-group.selected .node-rect {
+            stroke: var(--accent-color);
+            stroke-width: 2px;
+            fill: var(--card-hover);
+        }
+
+        .gen-tag {
+            font-family: sans-serif;
+            font-size: 11px;
+            fill: var(--text-muted);
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-anchor: end;
+        }
+
+        .name-text {
+            font-size: 20px;
+            font-weight: bold;
+            fill: var(--text-main);
+        }
+
+        .date-text {
+            font-family: sans-serif;
+            font-size: 11px; /* Increased from 10px */
+            fill: var(--text-muted);
+            text-anchor: end; /* Right-align text anchor */
+        }
+
+        .connector-branch {
+            fill: none;
+            stroke: var(--border-color);
+            stroke-width: 2px;
         }
     </style>
 </head>
 <body>
 
-    <h1>SVG Viewer</h1>
-    <img src="tree.svg" alt="tree">
+    <h1>Karn's Patriarchal Lineage</h1>
+    <div class="subtitle">Compiled by Baidynath Lal Das</div>
+    <div class="subtitle">Updated by Amrendra Kumar Karn (Amar) • 4 Dec, 2013</div>
+    <div class="subtitle">Updated by Aman Karn • 11 Oct, 2026</div>
+
+    <div class="export-group">
+        <button class="btn btn-secondary" id="export-png">PNG</button>
+        <button class="btn btn-secondary" id="export-jpg">JPG</button>
+        <button class="btn btn-secondary" id="export-json">JSON Data</button>
+    </div>
+
+    <div class="main-layout">
+        <div id="chart-container">
+            <!-- SVG Canvas injects here -->
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           1. DATA STORE MANAGER
+           ========================================================================== */
+        const GenealogyStore = {
+            data: [],
+            selectedId: null,
+
+            async init() {
+                try {
+                    const response = await fetch('lineageData.json');
+                    if (!response.ok) throw new Error("Failed to load JSON file");
+                    this.data = await response.json();
+                } catch (error) {
+                    console.warn("Could not fetch external JSON. Falling back to default data.", error);
+                    this.data = [
+                        { "id": 100000,  "name": "जगपतिदास", "fatherId": null,    "name_en": "Jagapatidas",     "gen": "GEN I" },
+
+                        { "id": 1,  "name": "कारीदास", "fatherId": 100000,      "name_en": "Kaaridas",     "gen": "GEN II" },
+                        { "id": 2,  "name": "भिखारीदास", "fatherId": 100000,    "name_en": "Vikaridas",     "gen": "GEN II" },
+                        { "id": 3,  "name": "रंगीदास", "fatherId": 100000,      "name_en": "Rangidas",     "gen": "GEN II" },
+                        { "id": 4,  "name": "जीवछदास", "fatherId": 100000,     "name_en": "Jiwachhadas",     "gen": "GEN II" },
+
+                        { "id": 11,  "name": "अचंभीतदास", "fatherId": 1,     "name_en": "Achamvitdas",    "gen": "GEN III" },
+                        { "id": 12,  "name": "भानुदास", "fatherId": 1,       "name_en": "Bhanudas",             "gen": "GEN III" },
+
+                        { "id": 41,  "name": "मनोहरदास", "fatherId": 4,      "name_en": "Manohardas",             "gen": "GEN III" },
+                        { "id": 42,  "name": "इन्द्र​मणिदास", "fatherId": 4,     "name_en": "Indramanidas",               "gen": "GEN III" },
+                        { "id": 43,  "name": "नित्यानतन्ददास", "fatherId": 4,    "name_en": "Nityananddas",                "gen": "GEN III" },
+
+                        { "id": 111, "name": "युगलकिशोर", "fatherId": 11,    "name_en": "Yugalkishor",                "gen": "GEN IV" },
+                        { "id": 112, "name": "अवधकिशोर", "fatherId": 11,    "name_en": "Awadhkishor",                "gen": "GEN IV" },
+                        { "id": 113, "name": "मोस्सदीलाल", "fatherId": 11,    "name_en": "Mossadilal",                "gen": "GEN IV" },
+
+                        { "id": 121, "name": "रघुनाथ", "fatherId": 12,    "name_en": "Raghunath",                "gen": "GEN IV" },
+                        { "id": 122, "name": "लक्ष्मीनारायण", "fatherId": 12,    "name_en": "Laxminarayan",                "gen": "GEN IV" },
+
+                        { "id": 411, "name": "उग्रनारायण", "fatherId": 41,    "name_en": "Ugranarayan",                "gen": "GEN IV" },
+
+                        { "id": 421, "name": "सुखदेव", "fatherId": 42,    "name_en": "Sukhadev",                "gen": "GEN IV" },
+                        { "id": 422, "name": "सुभगलाल", "fatherId": 42,    "name_en": "Suvaglal",                "gen": "GEN IV" },
+                        { "id": 423, "name": "रघुवंशी", "fatherId": 42,    "name_en": "Raghubansi",                "gen": "GEN IV" },
+
+                        { "id": 431,  "name": "जनकलाल", "fatherId": 43,    "name_en": "Janaklal",                "gen": "GEN IV" },
+
+                        { "id": 1111, "name": "श्रीनारायण", "fatherId": 111,    "name_en": "Shrinarayan",                "gen": "GEN V" },
+                        { "id": 1112, "name": "हरिनारायण", "fatherId": 111,    "name_en": "Harinarayan",                "gen": "GEN V" },
+                        { "id": 1113, "name": "भूपनारायण", "fatherId": 111,    "name_en": "Bhupnarayan",                "gen": "GEN V" },
+
+                        { "id": 1131, "name": "देवनारायण", "fatherId": 113,    "name_en": "Devnarayan",                "gen": "GEN V" },
+                        { "id": 1132, "name": "बद्रीनारायण", "fatherId": 113,    "name_en": "Badrinarayan",                "gen": "GEN V" },
+                        { "id": 1133, "name": "धरणीधर", "fatherId": 113,    "name_en": "Dharnidhar",                "gen": "GEN V" },
+
+                        { "id": 1221, "name": "योगेन्द्र", "fatherId": 122,    "name_en": "Yogendra",                "gen": "GEN V" },
+
+                        { "id": 4231, "name": "सत्यदेव", "fatherId": 423,    "name_en": "Satyadev",                "gen": "GEN V" },
+                        { "id": 4232, "name": "जयनारायण", "fatherId": 423,    "name_en": "Jaynarayan",                "gen": "GEN V" },
+
+                        { "id": 4311, "name": "बैद्यनाथ", "fatherId": 431,    "name_en": "Baidyanath",                "gen": "GEN V" },
+                        { "id": 4312, "name": "उमानाथ", "fatherId": 431,    "name_en": "Umanath",                "gen": "GEN V" },
+
+                        { "id": 11111, "name": "गोपीवल्लभ", "fatherId": 1111,    "name_en": "Gopiwallav",                "gen": "GEN VI" },
+
+                        { "id": 11121, "name": "जगन्नाथ", "fatherId": 1112,    "name_en": "Jagannath",                "gen": "GEN VI" },
+                        { "id": 11122, "name": "शिवनाथ", "fatherId": 1112,    "name_en": "Shivnath",                "gen": "GEN VI" },
+                        { "id": 11123, "name": "सुरेन्द्र", "fatherId": 1112,    "name_en": "Surendra",                "gen": "GEN VI" },
+
+                        { "id": 11311, "name": "शशी", "fatherId": 1131,    "name_en": "Shashi",                "gen": "GEN VI" },
+                        { "id": 11312, "name": "अशोक (मदन)", "fatherId": 1131,    "name_en": "Ashok (Madan)",                "gen": "GEN VI" },
+                        { "id": 11313, "name": "शरद (बच्चाबाबु)", "fatherId": 1131,    "name_en": "Sarad (Bachababu)",                "gen": "GEN VI" },
+                        { "id": 11314, "name": "सन्तोष (छोटेबाबु)", "fatherId": 1131,    "name_en": "Santosh (Chhotebabu)",                "gen": "GEN VI" },
+
+                        { "id": 11321, "name": "अमरेन्द्र (अमर​)", "fatherId": 1132,    "name_en": "Amrendra",                "gen": "GEN VI" },
+                        { "id": 11322, "name": "नागेन्द्र (रमन​)", "fatherId": 1132,    "name_en": "Nagendra",                "gen": "GEN VI" },
+
+                        { "id": 11331, "name": "बसन्त", "fatherId": 1133,    "name_en": "Basant",                "gen": "GEN VI" },
+                        { "id": 11332, "name": "अरबिन्द (बचन)", "fatherId": 1133,    "name_en": "Arbind (Bachan)",                "gen": "GEN VI" },
+                        { "id": 11333, "name": "बिनोद", "fatherId": 1133,    "name_en": "Binod",                "gen": "GEN VI" },
+
+                        { "id": 42321, "name": "रविन्द्र (बब्लु)", "fatherId": 4232,    "name_en": "Rabindra (Bablu)",                "gen": "GEN VI" },
+                        { "id": 42322, "name": "संन्तोष", "fatherId": 4232,    "name_en": "Santosh",                "gen": "GEN VI" },
+
+                        { "id": 43111, "name": "राजेश्वर (शंकर)", "fatherId": 4311,    "name_en": "Rajeshwor",                "gen": "GEN VI" },
+                        { "id": 43112, "name": "दिनेश्वर (गगन)", "fatherId": 4311,    "name_en": "Dineshwor",                "gen": "GEN VI" },
+
+                        { "id": 43121, "name": "प्रशान्त (सोनु)", "fatherId": 4312,    "name_en": "Prasant (Sonu)",                "gen": "GEN VI" },
+
+                        { "id": 111111, "name": "कुलानन्द (गोविन्द)", "fatherId": 11111,    "name_en": "Kulanand (Gobind)",                "gen": "GEN VII" },
+                        { "id": 111112, "name": "घनानन्द", "fatherId": 11111,    "name_en": "Ghananand",                "gen": "GEN VII" },
+
+                        { "id": 111211, "name": "उमेश", "fatherId": 11121,    "name_en": "Umesh",                "gen": "GEN VII" },
+                        { "id": 111212, "name": "राजेश", "fatherId": 11121,    "name_en": "Rajesh",                "gen": "GEN VII" },
+
+                        { "id": 111221, "name": "मनोज", "fatherId": 11122,    "name_en": "Manoj",                "gen": "GEN VII" },
+                        { "id": 111222, "name": "सुबोध", "fatherId": 11122,    "name_en": "Subodh",                "gen": "GEN VII" },
+
+                        { "id": 111231, "name": "संजय", "fatherId": 11123,    "name_en": "Sanjay",                "gen": "GEN VII" },
+                        { "id": 111232, "name": "सन्तोष", "fatherId": 11123,    "name_en": "Santosh",                "gen": "GEN VII" },
+
+                        { "id": 113121, "name": "अभय", "fatherId": 11312,    "name_en": "Abhya",                "gen": "GEN VII" },
+                        { "id": 113122, "name": "अमित", "fatherId": 11312,    "name_en": "Amit",                "gen": "GEN VII" },
+
+                        { "id": 113131, "name": "आदर्श", "fatherId": 11313,    "name_en": "Aadarsh",                "gen": "GEN VII" },
+
+                        { "id": 113141, "name": "आरम्भ", "fatherId": 11314,    "name_en": "Aarmnbha",                "gen": "GEN VII" },
+
+                        { "id": 113211, "name": "अनुप (अन्नू)", "fatherId": 11321,    "name_en": "Anup (Annu)",                "gen": "GEN VII" },
+                        { "id": 113212, "name": "अमन", "fatherId": 11321,    "name_en": "Aman",                "gen": "GEN VII" },
+
+                        { "id": 113221, "name": "आर्यन", "fatherId": 11322,    "name_en": "Aaryan",                "gen": "GEN VII" },
+
+                        { "id": 113321, "name": "आयुष (मुर्ली)", "fatherId": 11332,    "name_en": "Aayush (Murli)",                "gen": "GEN VII" },
+
+                        { "id": 113331, "name": "अनन्त", "fatherId": 11333,    "name_en": "Anant",                "gen": "GEN VII" },
+                        { "id": 113332, "name": "नित्यानतन्द", "fatherId": 11333,    "name_en": "Nityanand",                "gen": "GEN VII" },
+
+                        { "id": 431111, "name": "विजय", "fatherId": 43111,    "name_en": "Vijay",                "gen": "GEN VII" },
+                        { "id": 431112, "name": "विभाष", "fatherId": 43111,    "name_en": "Vivash",                "gen": "GEN VII" },
+
+                        { "id": 1111111, "name": "आशिष (आशू)", "fatherId": 111111,    "name_en": "Aashish (Aashu)",                "gen": "GEN VIII" },
+
+                        { "id": 1111121, "name": "सुमन", "fatherId": 111112,    "name_en": "Suman",                "gen": "GEN VIII" },
+                        { "id": 1111122, "name": "सुमन्त", "fatherId": 111112,    "name_en": "Sumant",                "gen": "GEN VIII" },
+
+                        { "id": 1112111, "name": "दीपक (पोलो)", "fatherId": 111211,    "name_en": "Dipak (Polo)",                "gen": "GEN VIII" },
+
+                        { "id": 1112311, "name": "स्वर्णभ", "fatherId": 111231,    "name_en": "Swarnav",                "gen": "GEN VIII" },
+                        { "id": 1112312, "name": "सम्रिधा", "fatherId": 111231,    "name_en": "Samriddha",                "gen": "GEN VIII" },
+
+                        { "id": 1131211, "name": "अथर्भ", "fatherId": 113121,    "name_en": "Atharv",                "gen": "GEN VIII" }
+                    ];
+                }
+            },
+
+            getTree() {
+                const map = {};
+                const roots = [];
+                this.data.forEach(p => map[p.id] = { ...p, sons: [] });
+                for (const id in map) {
+                    const item = map[id];
+                    if (item.fatherId && map[item.fatherId]) {
+                        map[item.fatherId].sons.push(item);
+                    } else if (!item.fatherId) {
+                        roots.push(item);
+                    }
+                }
+                return roots;
+            },
+
+            getNode(id) {
+                return this.data.find(d => d.id === id);
+            },
+
+            updateNode(id, updatedFields) {
+                const target = this.getNode(id);
+                if (target) Object.assign(target, updatedFields);
+            },
+
+            addChild(parentId) {
+                const newId = Math.max(...this.data.map(d => d.id), 0) + 1;
+                const newChild = {
+                    id: newId,
+                    name: "New Descendant",
+                    name_en: "Unknown",
+                    fatherId: parentId,
+                    gen: "GEN V"
+                };
+                this.data.push(newChild);
+                this.selectedId = newId;
+                return newId;
+            },
+
+            removeNodeAndSubtree(id) {
+                const target = this.getNode(id);
+                if (!target || target.fatherId === null) return false;
+
+                function getDescendantIds(parentId, dataset) {
+                    let ids = [parentId];
+                    const children = dataset.filter(d => d.fatherId === parentId);
+                    children.forEach(child => {
+                        ids = ids.concat(getDescendantIds(child.id, dataset));
+                    });
+                    return ids;
+                }
+
+                const idsToRemove = getDescendantIds(id, this.data);
+                this.data = this.data.filter(d => !idsToRemove.includes(d.id));
+                this.selectedId = null;
+                return true;
+            },
+
+            getMaxDepth() {
+                if (this.data.length === 0) return 0;
+                return Math.max(...this.data.map(d => {
+                    let depth = 0;
+                    let curr = d;
+                    while(curr.fatherId) {
+                        depth++;
+                        curr = this.getNode(curr.fatherId) || {};
+                    }
+                    return depth;
+                }));
+            }
+        };
+
+
+        /* ==========================================================================
+           2. INDEPENDENT SVG RENDERING ENGINE
+           ========================================================================== */
+        const SVGChartRenderer = {
+            cardW: 180,
+            cardH: 80,
+            columnGap: 240,
+            ns: "http://www.w3.org/2000/svg",
+
+            el(type, attrs) {
+                const e = document.createElementNS(this.ns, type);
+                for (const k in attrs) e.setAttribute(k, attrs[k]);
+                return e;
+            },
+
+            computePositions(node, currentColumn = 0, state = { leafCounter: 0 }) {
+                node.x = currentColumn * this.columnGap + 20;
+
+                if (node.sons && node.sons.length > 0) {
+                    node.sons.forEach(son => this.computePositions(son, currentColumn + 1, state));
+                    const firstSonY = node.sons[0].y;
+                    const lastSonY = node.sons[node.sons.length - 1].y;
+                    node.y = (firstSonY + lastSonY) / 2;
+                } else {
+                    node.y = state.leafCounter * (this.cardH + 25) + 20;
+                    state.leafCounter++;
+                }
+            },
+
+            renderTree(node, svgCanvas, selectedNodeId, onNodeClick) {
+                if (node.sons && node.sons.length > 0) {
+                    node.sons.forEach(son => {
+                        const startX = node.x + this.cardW;
+                        const startY = node.y + this.cardH / 2;
+                        const endX = son.x;
+                        const endY = son.y + this.cardH / 2;
+                        const splitX = startX + (endX - startX) * 0.5;
+
+                        const pathString = `M ${startX} ${startY}
+                                            L ${splitX} ${startY}
+                                            L ${splitX} ${endY}
+                                            L ${endX} ${endY}`;
+
+                        svgCanvas.appendChild(this.el("path", { d: pathString, class: "connector-branch" }));
+                        this.renderTree(son, svgCanvas, selectedNodeId, onNodeClick);
+                    });
+                }
+
+                const g = this.el("g", {
+                    class: `node-group ${node.id === selectedNodeId ? 'selected' : ''}`,
+                    "data-id": node.id
+                });
+
+                g.addEventListener("click", () => onNodeClick(node.id));
+
+                g.appendChild(this.el("rect", {
+                    x: node.x, y: node.y, width: this.cardW, height: this.cardH, class: "node-rect"
+                }));
+
+                // Right-aligned Generation Tag (X set to right edge minus padding)
+                const gen = this.el("text", {
+                    x: node.x + this.cardW - 10,
+                    y: node.y + 15,
+                    class: "gen-tag"
+                });
+                gen.textContent = node.gen;
+                g.appendChild(gen);
+
+                // Left-aligned Name Text
+                const name = this.el("text", {
+                    x: node.x + 12,
+                    y: node.y + 45,
+                    class: "name-text"
+                });
+                name.textContent = node.name;
+                g.appendChild(name);
+
+                // Right-aligned name_en Text (X set to right edge minus padding)
+                const dates = this.el("text", {
+                    x: node.x + this.cardW - 10,
+                    y: node.y + 68,
+                    class: "date-text"
+                });
+                dates.textContent = node.name_en;
+                g.appendChild(dates);
+
+                svgCanvas.appendChild(g);
+            },
+
+            buildSVG(roots, maxCol, state, selectedId, onNodeClick) {
+                const canvasW = (maxCol + 1) * this.columnGap + 60;
+                const canvasH = state.leafCounter * (this.cardH + 25) + 30;
+
+                const svg = this.el("svg", {
+                    width: Math.max(canvasW, 800),
+                    height: Math.max(canvasH, 400),
+                    viewBox: `0 0 ${Math.max(canvasW, 800)} ${Math.max(canvasH, 400)}`
+                });
+
+                if (roots.length > 0) {
+                    this.renderTree(roots[0], svg, selectedId, onNodeClick);
+                }
+                return svg;
+            }
+        };
+
+
+        /* ==========================================================================
+           3. UI CONTROLLER & EVENT BINDINGS
+           ========================================================================== */
+        function refreshApp() {
+            const container = document.getElementById("chart-container");
+            container.innerHTML = "";
+
+            const roots = GenealogyStore.getTree();
+            const state = { leafCounter: 0 };
+
+            if (roots.length > 0) {
+                SVGChartRenderer.computePositions(roots[0], 0, state);
+            }
+
+            const maxCol = GenealogyStore.getMaxDepth();
+            const svgElement = SVGChartRenderer.buildSVG(
+                roots,
+                maxCol,
+                state,
+                GenealogyStore.selectedId,
+                (id) => {
+                    GenealogyStore.selectedId = id;
+                    refreshApp();
+                }
+            );
+
+            container.appendChild(svgElement);
+        }
+
+
+        /* ==========================================================================
+           4. EXPORT & IMPORT UTILITIES
+           ========================================================================== */
+        function downloadFile(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Export JSON Button Handler
+        document.getElementById("export-json").addEventListener("click", () => {
+            const jsonString = JSON.stringify(GenealogyStore.data, null, 4);
+            const blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
+            downloadFile(blob, "lineageData.json");
+        });
+
+        function getReadySVGString() {
+            const svgElement = document.querySelector("#chart-container svg");
+            if (!svgElement) return null;
+            const clone = svgElement.cloneNode(true);
+
+            const computedStyle = getComputedStyle(document.documentElement);
+            const panelBg = computedStyle.getPropertyValue('--panel-bg').trim() || '#18181b';
+            const cardBg = computedStyle.getPropertyValue('--card-bg').trim() || '#27272a';
+            const borderColor = computedStyle.getPropertyValue('--border-color').trim() || '#3f3f46';
+            const textMain = computedStyle.getPropertyValue('--text-main').trim() || '#f4f4f5';
+            const textMuted = computedStyle.getPropertyValue('--text-muted').trim() || '#a1a1aa';
+            const accentColor = computedStyle.getPropertyValue('--accent-color').trim() || '#6366f1';
+
+            // Insert solid background rect
+            const rect = document.createElementNS(SVGChartRenderer.ns, "rect");
+            rect.setAttribute("width", "100%");
+            rect.setAttribute("height", "100%");
+            rect.setAttribute("fill", panelBg);
+            clone.insertBefore(rect, clone.firstChild);
+
+            // Embed an explicit style block into the exported SVG to preserve text alignment and classes
+            const styleEl = document.createElementNS(SVGChartRenderer.ns, "style");
+            styleEl.textContent = `
+                .node-rect { fill: ${cardBg}; stroke: ${borderColor}; stroke-width: 1.5px; rx: 6px; }
+                .node-group.selected .node-rect { stroke: ${accentColor}; stroke-width: 2px; fill: ${cardBg}; }
+                .gen-tag { font-family: sans-serif; font-size: 11px; fill: ${textMuted}; font-weight: bold; letter-spacing: 0.5px; text-anchor: end; }
+                .name-text { font-size: 22px; font-weight: bold; fill: ${textMain}; }
+                .date-text { font-family: sans-serif; font-size: 11px; fill: ${textMuted}; text-anchor: end; }
+                .connector-branch { fill: none; stroke: ${borderColor}; stroke-width: 2px; }
+            `;
+            clone.insertBefore(styleEl, clone.firstChild.nextSibling);
+
+            const serializer = new XMLSerializer();
+            return serializer.serializeToString(clone);
+        }
+
+        document.getElementById("export-png").addEventListener("click", () => triggerRasterExport("image/png"));
+        document.getElementById("export-jpg").addEventListener("click", () => triggerRasterExport("image/jpeg"));
+
+        function triggerRasterExport(mimeType) {
+            const svgStr = getReadySVGString();
+            if (!svgStr) return;
+
+            const svgElement = document.querySelector("#chart-container svg");
+            const width = svgElement.clientWidth || 1200;
+            const height = svgElement.clientHeight || 800;
+
+            const blob = new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" });
+            const blobURL = URL.createObjectURL(blob);
+
+            const image = new Image();
+            image.onload = () => {
+                const canvas = document.createElement("canvas");
+                canvas.width = width * 2;
+                canvas.height = height * 2;
+                const context = canvas.getContext("2d");
+
+                context.scale(2, 2);
+                if (mimeType === "image/jpeg") {
+                    context.fillStyle = "#18181b";
+                    context.fillRect(0, 0, width, height);
+                }
+
+                context.drawImage(image, 0, 0, width, height);
+
+                canvas.toBlob(canvasBlob => {
+                    const ext = mimeType === "image/png" ? "png" : "jpg";
+                    downloadFile(canvasBlob, `genealogy-chart.${ext}`);
+                }, mimeType, 0.95);
+            };
+            image.src = blobURL;
+        }
+
+        // Initialize App: Fetch JSON data then render
+        window.onload = async () => {
+            await GenealogyStore.init();
+            refreshApp();
+        };
+    </script>
 </body>
 </html>
