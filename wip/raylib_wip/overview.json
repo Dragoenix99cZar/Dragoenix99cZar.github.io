@@ -1,0 +1,32 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Raylib Setup Instruction",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2026-06-11",
+  "badge": "C Engine",
+  "badge_class": "badge-amber",
+  "categories": [
+    "algorithms"
+  ],
+  "tags": [
+    "raylib",
+    "c",
+    "algorithms"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Raylib Setup.",
+  "technologies": [
+    {
+      "name": "C",
+      "tag_class": "tag-c"
+    }
+  ],
+  "architecture": "Engineered around modular raylib_wip components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+  "links": [
+    {
+      "label": "Goto Raylib relese page →",
+      "url": "https://github.com/raysan5/raylib/releases",
+      "is_primary": false
+    }
+  ]
+}

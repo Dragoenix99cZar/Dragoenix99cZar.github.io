@@ -188,6 +188,17 @@ pre,
   color: var(--text-main);
 }
 
+/* Unity3D / WebGL Badge & Tag Styling */
+.badge-unity {
+  background: #1b222c;
+  color: #ffffff;
+  border: 2px solid var(--border-color);
+}
+
+.tech-tag.tag-unity {
+  color: #61dafb; /* Or a sleek Unity teal/white contrast */
+}
+
 .hero-banner h1 {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 900;

@@ -1,0 +1,37 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Rust WebAssembly Scientific Calculator",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2026-09-28",
+  "badge": "Rust + WebAssembly",
+  "badge_class": "badge-rust",
+  "categories": [
+    "wasm",
+    "compilers"
+  ],
+  "tags": [
+    "post-calc",
+    "rust",
+    "wasm"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Rust WebAssembly Scientific Calculator.",
+  "technologies": [
+    {
+      "name": "Rust",
+      "tag_class": "tag-rust"
+    },
+    {
+      "name": "WebAssembly",
+      "tag_class": "tag-wasm"
+    }
+  ],
+  "architecture": "Engineered around modular postfix expression evaluation in rust and then to web via wasm.",
+  "vision": "Provide an accessible first-principles reference to implement calculator.",
+  "links": [
+    {
+      "label": "Launch Scientific Calc →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

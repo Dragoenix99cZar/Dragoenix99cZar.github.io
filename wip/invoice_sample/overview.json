@@ -1,0 +1,30 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Invoice Generator",
+  "subtitle": "Labeled Item Fields",
+  "date": "2026-08-09",
+  "badge": "Interactive Prototype",
+  "badge_class": "badge-primary",
+  "categories": [
+    "algorithms"
+  ],
+  "tags": [
+    "invoice-sample",
+    "algorithms"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Basic Invoice Generator.",
+  "technologies": [
+    {
+      "name": "HTML5 Canvas"
+    }
+  ],
+  "architecture": "Engineered around modular invoice_sample components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference.",
+  "links": [
+    {
+      "label": "Launch Receipt Generator →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

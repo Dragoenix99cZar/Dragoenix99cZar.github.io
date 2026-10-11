@@ -1,0 +1,36 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Nepali Date Converter",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2026-09-26",
+  "badge": "C + WebAssembly",
+  "badge_class": "badge-cyan",
+  "categories": [
+    "wasm"
+  ],
+  "tags": [
+    "ad2bs",
+    "c",
+    "wasm"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Wasm Nepali Date Converter.",
+  "technologies": [
+    {
+      "name": "C",
+      "tag_class": "tag-c"
+    },
+    {
+      "name": "WebAssembly",
+      "tag_class": "tag-wasm"
+    }
+  ],
+  "architecture": "Engineered around modular ad2bs components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+  "links": [
+    {
+      "label": "Launch Nepali Date Convert →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

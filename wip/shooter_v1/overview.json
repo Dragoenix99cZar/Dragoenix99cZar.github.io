@@ -1,0 +1,31 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "My Create-a-game imp",
+  "subtitle": "Experimental Unity3D Prototype",
+  "date": "2019-10-09",
+  "badge": "Interactive Prototype",
+  "badge_class": "badge-unity",
+  "categories": [
+    "algorithms"
+  ],
+  "tags": [
+    "shooter-v1",
+    "algorithms"
+  ],
+  "description": "Interactive low-level experimentation and graphics module. Press 'Enter' to play.",
+  "technologies": [
+    {
+      "name": "Unity3D",
+      "tag_class": "tag-unity"
+    }
+  ],
+  "architecture": "Engineered around Sebastian Lague's Create-A-Game series.",
+  "vision": "Provide an understanding of TopDown shooter game in Unity3D engine",
+  "links": [
+    {
+      "label": "Launch Shooter game →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

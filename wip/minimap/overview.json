@@ -1,0 +1,35 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Radial Minimap",
+  "subtitle": "Fish-Eye vs Linear Minimap",
+  "date": "2026-10-10",
+  "badge": "Interactive Prototype",
+  "badge_class": "badge-primary",
+  "categories": [
+    "graphics"
+  ],
+  "tags": [
+    "minimap",
+    "graphics"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Circular minimap.",
+  "technologies": [
+    {
+      "name": "HTML5 Canvas"
+    }
+  ],
+  "architecture": "Engineered around modular minimap components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and minimap implementation in html-canvas.",
+  "links": [
+    {
+      "label": "Launch Simulation →",
+      "url": "index.html",
+      "is_primary": true
+    },
+    {
+      "label": "Fish vs Normal ↗",
+      "url": "fish_normal.html",
+      "is_primary": false
+    }
+  ]
+}

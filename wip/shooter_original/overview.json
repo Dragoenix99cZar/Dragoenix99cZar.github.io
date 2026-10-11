@@ -1,0 +1,36 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Create-a-game",
+  "subtitle": "Experimental Unity3D",
+  "date": "2016-12-16",
+  "badge": "Interactive Prototype",
+  "badge_class": "badge-unity",
+  "categories": [
+    "algorithms"
+  ],
+  "tags": [
+    "shooter",
+    "algorithms"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Unity3d TopDown Shooter.",
+  "technologies": [
+    {
+      "name": "Unity3D",
+      "tag_class": "tag-unity"
+    }
+  ],
+  "architecture": "Sebastian Lague's Create-A-Game series",
+  "vision": "Provide an understanding of TopDown shooter game in Unity3D engine",
+  "links": [
+    {
+      "label": "Launch Game →",
+      "url": "index.html",
+      "is_primary": true
+    },
+    {
+      "label": "Create-a-game Src →",
+      "url": "https://github.com/SebLague/Create-a-Game-Source",
+      "is_primary": true
+    }
+  ]
+}

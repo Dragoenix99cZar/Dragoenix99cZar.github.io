@@ -1,0 +1,51 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Cg",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2026-09-25",
+  "badge": "C + WebAssembly",
+  "badge_class": "badge-cyan",
+  "categories": [
+    "wasm",
+    "graphics"
+  ],
+  "tags": [
+    "cg",
+    "c",
+    "wasm",
+    "graphics"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Cg.",
+  "technologies": [
+    {
+      "name": "C",
+      "tag_class": "tag-c"
+    },
+    {
+      "name": "WebAssembly",
+      "tag_class": "tag-wasm"
+    },
+    {
+      "name": "HTML5 Canvas"
+    }
+  ],
+  "architecture": "Engineered around modular cg components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+  "links": [
+    {
+      "label": "Exp01 ↗",
+      "url": "exp01.html",
+      "is_primary": false
+    },
+    {
+      "label": "Exp02 ↗",
+      "url": "exp02.html",
+      "is_primary": false
+    },
+    {
+      "label": "Exp03 ↗",
+      "url": "exp03.html",
+      "is_primary": false
+    }
+  ]
+}

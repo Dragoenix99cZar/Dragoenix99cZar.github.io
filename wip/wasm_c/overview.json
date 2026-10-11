@@ -1,0 +1,35 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "C Wasm Demo",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2026-08-13",
+  "badge": "WebAssembly Core",
+  "badge_class": "badge-cyan",
+  "categories": [
+    "wasm"
+  ],
+  "tags": [
+    "wasm-c",
+    "wasm"
+  ],
+  "description": "Interactive low-level experimentation module: C Wasm Demo.",
+  "technologies": [
+    {
+      "name": "WebAssembly",
+      "tag_class": "tag-wasm"
+    },
+    {
+      "name": "C",
+      "tag_class": "tag-c"
+    }
+  ],
+  "architecture": "Engineered around modular wasm_c components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+  "links": [
+    {
+      "label": "Launch C Wasm Demo →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

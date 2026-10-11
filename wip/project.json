@@ -1,10 +1,9 @@
 [
   {
-    "id": "EXP_01",
-    "folder": "js-experiments",
+    "$schema": "../overview.schema.json",
     "title": "Js-Experiments",
     "subtitle": "Experimental Research Prototype",
-    "date": "2026-05-31",
+    "date": "2018-10-18",
     "badge": "Interactive Prototype",
     "badge_class": "badge-primary",
     "categories": [
@@ -15,15 +14,20 @@
       "algorithms"
     ],
     "description": "Interactive low-level experimentation and graphics module: Js-Experiments.",
-    "technologies": [],
+    "technologies": [
+      {
+        "name": "HTML5 Canvas"
+      }
+    ],
     "architecture": "Engineered around modular js-experiments components, executing direct transformations and client-side processing.",
-    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
-    "links": []
+    "vision": "Provide an accessible first-principles reference and implemented during intership.",
+    "links": [],
+    "id": "EXP_01",
+    "folder": "js-experiments"
   },
   {
-    "id": "EXP_02",
-    "folder": "raylib_wip",
-    "title": "Raylib Wip",
+    "$schema": "../overview.schema.json",
+    "title": "Raylib Setup Instruction",
     "subtitle": "Experimental Research Prototype",
     "date": "2026-06-11",
     "badge": "C Engine",
@@ -32,11 +36,11 @@
       "algorithms"
     ],
     "tags": [
-      "raylib-wip",
+      "raylib",
       "c",
       "algorithms"
     ],
-    "description": "Interactive low-level experimentation and graphics module: Raylib Wip.",
+    "description": "Interactive low-level experimentation and graphics module: Raylib Setup.",
     "technologies": [
       {
         "name": "C",
@@ -45,12 +49,19 @@
     ],
     "architecture": "Engineered around modular raylib_wip components, executing direct transformations and client-side processing.",
     "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
-    "links": []
+    "links": [
+      {
+        "label": "Goto Raylib relese page →",
+        "url": "https://github.com/raysan5/raylib/releases",
+        "is_primary": false
+      }
+    ],
+    "id": "EXP_02",
+    "folder": "raylib_wip"
   },
   {
-    "id": "EXP_03",
-    "folder": "invoice_sample",
-    "title": "Receipt Generator",
+    "$schema": "../overview.schema.json",
+    "title": "Invoice Generator",
     "subtitle": "Labeled Item Fields",
     "date": "2026-08-09",
     "badge": "Interactive Prototype",
@@ -62,22 +73,27 @@
       "invoice-sample",
       "algorithms"
     ],
-    "description": "Interactive low-level experimentation and graphics module: Receipt Generator.",
-    "technologies": [],
+    "description": "Interactive low-level experimentation and graphics module: Basic Invoice Generator.",
+    "technologies": [
+      {
+        "name": "HTML5 Canvas"
+      }
+    ],
     "architecture": "Engineered around modular invoice_sample components, executing direct transformations and client-side processing.",
-    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "vision": "Provide an accessible first-principles reference.",
     "links": [
       {
         "label": "Launch Receipt Generator →",
         "url": "invoice_sample/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_03",
+    "folder": "invoice_sample"
   },
   {
-    "id": "EXP_04",
-    "folder": "rust_wasm",
-    "title": "Rust Wasm Calculator",
+    "$schema": "../overview.schema.json",
+    "title": "Rust Wasm Export Test",
     "subtitle": "Experimental Research Prototype",
     "date": "2026-08-12",
     "badge": "Rust + WebAssembly",
@@ -101,19 +117,20 @@
         "tag_class": "tag-wasm"
       }
     ],
-    "architecture": "Engineered around modular rust_wasm components, executing direct transformations and client-side processing.",
-    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "architecture": "Engineered around web implementation of rust code.",
+    "vision": "Provide an accessible first-principles reference to implement calculator.",
     "links": [
       {
         "label": "Launch Rust Wasm Calculat →",
         "url": "rust_wasm/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_04",
+    "folder": "rust_wasm"
   },
   {
-    "id": "EXP_05",
-    "folder": "wasm_c",
+    "$schema": "../overview.schema.json",
     "title": "C Wasm Demo",
     "subtitle": "Experimental Research Prototype",
     "date": "2026-08-13",
@@ -126,11 +143,15 @@
       "wasm-c",
       "wasm"
     ],
-    "description": "Interactive low-level experimentation and graphics module: C Wasm Demo.",
+    "description": "Interactive low-level experimentation module: C Wasm Demo.",
     "technologies": [
       {
         "name": "WebAssembly",
         "tag_class": "tag-wasm"
+      },
+      {
+        "name": "C",
+        "tag_class": "tag-c"
       }
     ],
     "architecture": "Engineered around modular wasm_c components, executing direct transformations and client-side processing.",
@@ -141,11 +162,12 @@
         "url": "wasm_c/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_05",
+    "folder": "wasm_c"
   },
   {
-    "id": "EXP_06",
-    "folder": "soft_renderer",
+    "$schema": "../overview.schema.json",
     "title": "3D Projection",
     "subtitle": "Pure WASM",
     "date": "2026-09-17",
@@ -188,12 +210,13 @@
         "url": "soft_renderer/index2.html",
         "is_primary": false
       }
-    ]
+    ],
+    "id": "EXP_06",
+    "folder": "soft_renderer"
   },
   {
-    "id": "EXP_07",
-    "folder": "sorting",
-    "title": "Wasm Software Rendered Sorting Visualizer",
+    "$schema": "../overview.schema.json",
+    "title": "Wasm Sorting Visualizer",
     "subtitle": "Experimental Research Prototype",
     "date": "2026-09-17",
     "badge": "C + WebAssembly",
@@ -226,18 +249,19 @@
     "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
     "links": [
       {
-        "label": "Launch Wasm Software Rend →",
+        "label": "Launch Sorting Visualizer →",
         "url": "sorting/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_07",
+    "folder": "sorting"
   },
   {
-    "id": "EXP_08",
-    "folder": "poisson_disc_sampling",
-    "title": "Poisson Disc Sampling (Fast + Hues)",
+    "$schema": "../overview.schema.json",
+    "title": "Poisson Disc Sampling",
     "subtitle": "Experimental Research Prototype",
-    "date": "2026-09-25",
+    "date": "2025-10-06",
     "badge": "Interactive Prototype",
     "badge_class": "badge-primary",
     "categories": [
@@ -261,11 +285,12 @@
         "url": "poisson_disc_sampling/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_08",
+    "folder": "poisson_disc_sampling"
   },
   {
-    "id": "EXP_09",
-    "folder": "cg",
+    "$schema": "../overview.schema.json",
     "title": "Cg",
     "subtitle": "Experimental Research Prototype",
     "date": "2026-09-25",
@@ -313,12 +338,13 @@
         "url": "cg/exp03.html",
         "is_primary": false
       }
-    ]
+    ],
+    "id": "EXP_09",
+    "folder": "cg"
   },
   {
-    "id": "EXP_10",
-    "folder": "ad2bs",
-    "title": "Wasm Nepali Date Converter",
+    "$schema": "../overview.schema.json",
+    "title": "Nepali Date Converter",
     "subtitle": "Experimental Research Prototype",
     "date": "2026-09-26",
     "badge": "C + WebAssembly",
@@ -346,22 +372,24 @@
     "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
     "links": [
       {
-        "label": "Launch Wasm Nepali Date C →",
+        "label": "Launch Nepali Date Convert →",
         "url": "ad2bs/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_10",
+    "folder": "ad2bs"
   },
   {
-    "id": "EXP_11",
-    "folder": "post_calc",
+    "$schema": "../overview.schema.json",
     "title": "Rust WebAssembly Scientific Calculator",
     "subtitle": "Experimental Research Prototype",
     "date": "2026-09-28",
     "badge": "Rust + WebAssembly",
     "badge_class": "badge-rust",
     "categories": [
-      "wasm"
+      "wasm",
+      "compilers"
     ],
     "tags": [
       "post-calc",
@@ -379,19 +407,20 @@
         "tag_class": "tag-wasm"
       }
     ],
-    "architecture": "Engineered around modular post_calc components, executing direct transformations and client-side processing.",
-    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "architecture": "Engineered around modular postfix expression evaluation in rust and then to web via wasm.",
+    "vision": "Provide an accessible first-principles reference to implement calculator.",
     "links": [
       {
-        "label": "Launch Rust WebAssembly S →",
+        "label": "Launch Scientific Calc →",
         "url": "post_calc/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_11",
+    "folder": "post_calc"
   },
   {
-    "id": "EXP_12",
-    "folder": "vm",
+    "$schema": "../overview.schema.json",
     "title": "Stacky Compiler Pipeline Visualizer",
     "subtitle": "Experimental Research Prototype",
     "date": "2026-09-29",
@@ -405,20 +434,25 @@
       "algorithms"
     ],
     "description": "Interactive low-level experimentation and graphics module: Stacky Compiler Pipeline Visualizer.",
-    "technologies": [],
+    "technologies": [
+      {
+        "name": "HTML5 Js"
+      }
+    ],
     "architecture": "Engineered around modular vm components, executing direct transformations and client-side processing.",
     "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
     "links": [
       {
-        "label": "Launch Stacky Compiler Pi →",
+        "label": "Launch Stacky Compiler →",
         "url": "vm/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_12",
+    "folder": "vm"
   },
   {
-    "id": "EXP_13",
-    "folder": "map_game",
+    "$schema": "../overview.schema.json",
     "title": "World Map Game",
     "subtitle": "Experimental Research Prototype",
     "date": "2026-10-01",
@@ -448,7 +482,7 @@
         "name": "SVG Vector"
       }
     ],
-    "architecture": "Engineered around modular map_game components, executing direct transformations and client-side processing.",
+    "architecture": "Engineered around Microsoft Encarta's Map Game, executing direct transformations and client-side processing.",
     "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
     "links": [
       {
@@ -456,30 +490,38 @@
         "url": "map_game/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_13",
+    "folder": "map_game"
   },
   {
-    "id": "EXP_14",
-    "folder": "svg_stack_dsl",
-    "title": "Multi-Slot SVG Stack DSL Studio",
+    "$schema": "../overview.schema.json",
+    "title": "SVG Stack DSL Studio",
     "subtitle": "Experimental Research Prototype",
     "date": "2026-10-02",
     "badge": "Interactive Prototype",
     "badge_class": "badge-primary",
     "categories": [
-      "algorithms"
+      "algorithms",
+      "compilers"
     ],
     "tags": [
-      "svg-stack-dsl",
+      "svg",
+      "stack",
+      "dsl",
       "algorithms"
     ],
-    "description": "Interactive low-level experimentation and graphics module: Multi-Slot SVG Stack DSL Studio.",
-    "technologies": [],
-    "architecture": "Engineered around modular svg_stack_dsl components, executing direct transformations and client-side processing.",
+    "description": "Interactive low-level experimentation and graphics module: SVG Stack DSL Studio.",
+    "technologies": [
+      {
+        "name": "HTML5 Js"
+      }
+    ],
+    "architecture": "Engineered around modular svg satck-based domain specific language components, executing direct transformations and client-side processing.",
     "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
     "links": [
       {
-        "label": "Launch Multi-Slot SVG Sta →",
+        "label": "Launch Stack DSL →",
         "url": "svg_stack_dsl/index.html",
         "is_primary": true
       },
@@ -488,13 +530,14 @@
         "url": "svg_stack_dsl/demo.html",
         "is_primary": false
       }
-    ]
+    ],
+    "id": "EXP_14",
+    "folder": "svg_stack_dsl"
   },
   {
-    "id": "EXP_15",
-    "folder": "photo_processor",
-    "title": "Passport & Visa Photo Alignment Workspace",
-    "subtitle": "Experimental Research Prototype",
+    "$schema": "../overview.schema.json",
+    "title": "Photo Alignment, Crop & Compress Tool",
+    "subtitle": "Experimental Photo Crop Prototype",
     "date": "2026-10-03",
     "badge": "Rust + WebAssembly",
     "badge_class": "badge-rust",
@@ -508,7 +551,7 @@
       "wasm",
       "graphics"
     ],
-    "description": "Interactive low-level experimentation and graphics module: Passport & Visa Photo Alignment Workspace.",
+    "description": "Interactive low-level experimentation and graphics module: Photo Alignment, Crop & Compress Tool.",
     "technologies": [
       {
         "name": "Rust",
@@ -526,47 +569,59 @@
     "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
     "links": [
       {
-        "label": "Launch Passport & Visa Ph →",
+        "label": "Launch Photo Crop Tool →",
         "url": "photo_processor/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_15",
+    "folder": "photo_processor"
   },
   {
-    "id": "EXP_16",
-    "folder": "shooter_original",
-    "title": "Unity WebGL Player",
-    "subtitle": "Experimental Research Prototype",
-    "date": "2026-10-09",
+    "$schema": "../overview.schema.json",
+    "title": "Create-a-game",
+    "subtitle": "Experimental Unity3D",
+    "date": "2016-12-16",
     "badge": "Interactive Prototype",
-    "badge_class": "badge-primary",
+    "badge_class": "badge-unity",
     "categories": [
       "algorithms"
     ],
     "tags": [
-      "shooter-original",
+      "shooter",
       "algorithms"
     ],
-    "description": "Interactive low-level experimentation and graphics module: Unity WebGL Player.",
-    "technologies": [],
-    "architecture": "Engineered around modular shooter_original components, executing direct transformations and client-side processing.",
-    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "description": "Interactive low-level experimentation and graphics module: Unity3d TopDown Shooter.",
+    "technologies": [
+      {
+        "name": "Unity3D",
+        "tag_class": "tag-unity"
+      }
+    ],
+    "architecture": "Sebastian Lague's Create-A-Game series",
+    "vision": "Provide an understanding of TopDown shooter game in Unity3D engine",
     "links": [
       {
-        "label": "Launch Unity WebGL Player →",
+        "label": "Launch Game →",
         "url": "shooter_original/index.html",
         "is_primary": true
+      },
+      {
+        "label": "Create-a-game Src →",
+        "url": "https://github.com/SebLague/Create-a-Game-Source",
+        "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_16",
+    "folder": "shooter_original"
   },
   {
-    "id": "EXP_17",
-    "folder": "shooter_v1",
-    "title": "Unity WebGL Player",
-    "subtitle": "Experimental Research Prototype",
-    "date": "2026-10-09",
+    "$schema": "../overview.schema.json",
+    "title": "My Create-a-game imp",
+    "subtitle": "Experimental Unity3D Prototype",
+    "date": "2019-10-09",
     "badge": "Interactive Prototype",
-    "badge_class": "badge-primary",
+    "badge_class": "badge-unity",
     "categories": [
       "algorithms"
     ],
@@ -574,22 +629,28 @@
       "shooter-v1",
       "algorithms"
     ],
-    "description": "Interactive low-level experimentation and graphics module: Unity WebGL Player.",
-    "technologies": [],
-    "architecture": "Engineered around modular shooter_v1 components, executing direct transformations and client-side processing.",
-    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "description": "Interactive low-level experimentation and graphics module. Press 'Enter' to play.",
+    "technologies": [
+      {
+        "name": "Unity3D",
+        "tag_class": "tag-unity"
+      }
+    ],
+    "architecture": "Engineered around Sebastian Lague's Create-A-Game series.",
+    "vision": "Provide an understanding of TopDown shooter game in Unity3D engine",
     "links": [
       {
-        "label": "Launch Unity WebGL Player →",
+        "label": "Launch Shooter game →",
         "url": "shooter_v1/index.html",
         "is_primary": true
       }
-    ]
+    ],
+    "id": "EXP_17",
+    "folder": "shooter_v1"
   },
   {
-    "id": "EXP_18",
-    "folder": "minimap",
-    "title": "N-Body Simulation",
+    "$schema": "../overview.schema.json",
+    "title": "Radial Minimap",
     "subtitle": "Fish-Eye vs Linear Minimap",
     "date": "2026-10-10",
     "badge": "Interactive Prototype",
@@ -601,25 +662,27 @@
       "minimap",
       "graphics"
     ],
-    "description": "Interactive low-level experimentation and graphics module: N-Body Simulation.",
+    "description": "Interactive low-level experimentation and graphics module: Circular minimap.",
     "technologies": [
       {
         "name": "HTML5 Canvas"
       }
     ],
     "architecture": "Engineered around modular minimap components, executing direct transformations and client-side processing.",
-    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "vision": "Provide an accessible first-principles reference and minimap implementation in html-canvas.",
     "links": [
       {
-        "label": "Launch N-Body Simulation →",
+        "label": "Launch Simulation →",
         "url": "minimap/index.html",
         "is_primary": true
       },
       {
-        "label": "Fish Normal ↗",
+        "label": "Fish vs Normal ↗",
         "url": "minimap/fish_normal.html",
         "is_primary": false
       }
-    ]
+    ],
+    "id": "EXP_18",
+    "folder": "minimap"
   }
 ]

@@ -1,0 +1,41 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "World Map Game",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2026-10-01",
+  "badge": "Rust + WebAssembly",
+  "badge_class": "badge-rust",
+  "categories": [
+    "wasm",
+    "graphics"
+  ],
+  "tags": [
+    "map-game",
+    "rust",
+    "wasm",
+    "graphics"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: World Map Game.",
+  "technologies": [
+    {
+      "name": "Rust",
+      "tag_class": "tag-rust"
+    },
+    {
+      "name": "WebAssembly",
+      "tag_class": "tag-wasm"
+    },
+    {
+      "name": "SVG Vector"
+    }
+  ],
+  "architecture": "Engineered around Microsoft Encarta's Map Game, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+  "links": [
+    {
+      "label": "Launch World Map Game →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

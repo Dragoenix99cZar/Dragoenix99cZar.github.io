@@ -1,0 +1,30 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Stacky Compiler Pipeline Visualizer",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2026-09-29",
+  "badge": "Interactive Prototype",
+  "badge_class": "badge-primary",
+  "categories": [
+    "algorithms"
+  ],
+  "tags": [
+    "vm",
+    "algorithms"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Stacky Compiler Pipeline Visualizer.",
+  "technologies": [
+    {
+      "name": "HTML5 Js"
+    }
+  ],
+  "architecture": "Engineered around modular vm components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+  "links": [
+    {
+      "label": "Launch Stacky Compiler →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

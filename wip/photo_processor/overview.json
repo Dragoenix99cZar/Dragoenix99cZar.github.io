@@ -1,0 +1,41 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Photo Alignment, Crop & Compress Tool",
+  "subtitle": "Experimental Photo Crop Prototype",
+  "date": "2026-10-03",
+  "badge": "Rust + WebAssembly",
+  "badge_class": "badge-rust",
+  "categories": [
+    "wasm",
+    "graphics"
+  ],
+  "tags": [
+    "photo-processor",
+    "rust",
+    "wasm",
+    "graphics"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Photo Alignment, Crop & Compress Tool.",
+  "technologies": [
+    {
+      "name": "Rust",
+      "tag_class": "tag-rust"
+    },
+    {
+      "name": "WebAssembly",
+      "tag_class": "tag-wasm"
+    },
+    {
+      "name": "HTML5 Canvas"
+    }
+  ],
+  "architecture": "Engineered around modular photo_processor components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+  "links": [
+    {
+      "label": "Launch Photo Crop Tool →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Js-Experiments",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2018-10-18",
+  "badge": "Interactive Prototype",
+  "badge_class": "badge-primary",
+  "categories": [
+    "algorithms"
+  ],
+  "tags": [
+    "js-experiments",
+    "algorithms"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Js-Experiments.",
+  "technologies": [
+    {
+      "name": "HTML5 Canvas"
+    }
+  ],
+  "architecture": "Engineered around modular js-experiments components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and implemented during intership.",
+  "links": []
+}

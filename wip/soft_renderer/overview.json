@@ -1,0 +1,46 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "3D Projection",
+  "subtitle": "Pure WASM",
+  "date": "2026-09-17",
+  "badge": "C + WebAssembly",
+  "badge_class": "badge-cyan",
+  "categories": [
+    "wasm",
+    "graphics"
+  ],
+  "tags": [
+    "soft-renderer",
+    "c",
+    "wasm",
+    "graphics"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: 3D Projection.",
+  "technologies": [
+    {
+      "name": "C",
+      "tag_class": "tag-c"
+    },
+    {
+      "name": "WebAssembly",
+      "tag_class": "tag-wasm"
+    },
+    {
+      "name": "HTML5 Canvas"
+    }
+  ],
+  "architecture": "Engineered around modular soft_renderer components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+  "links": [
+    {
+      "label": "Launch 3D Projection →",
+      "url": "index.html",
+      "is_primary": true
+    },
+    {
+      "label": "Index2 ↗",
+      "url": "index2.html",
+      "is_primary": false
+    }
+  ]
+}

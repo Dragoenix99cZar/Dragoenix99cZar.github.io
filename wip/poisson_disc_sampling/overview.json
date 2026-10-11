@@ -1,0 +1,30 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Poisson Disc Sampling",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2025-10-06",
+  "badge": "Interactive Prototype",
+  "badge_class": "badge-primary",
+  "categories": [
+    "graphics"
+  ],
+  "tags": [
+    "poisson-disc-sampling",
+    "graphics"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Poisson Disc Sampling (Fast + Hues).",
+  "technologies": [
+    {
+      "name": "HTML5 Canvas"
+    }
+  ],
+  "architecture": "Engineered around modular poisson_disc_sampling components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+  "links": [
+    {
+      "label": "Launch Poisson Disc Sampl →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

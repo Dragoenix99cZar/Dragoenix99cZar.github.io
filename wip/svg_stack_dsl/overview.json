@@ -1,0 +1,38 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "SVG Stack DSL Studio",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2026-10-02",
+  "badge": "Interactive Prototype",
+  "badge_class": "badge-primary",
+  "categories": [
+    "algorithms",
+    "compilers"
+  ],
+  "tags": [
+    "svg",
+    "stack",
+    "dsl",
+    "algorithms"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: SVG Stack DSL Studio.",
+  "technologies": [
+    {
+      "name": "HTML5 Js"
+    }
+  ],
+  "architecture": "Engineered around modular svg satck-based domain specific language components, executing direct transformations and client-side processing.",
+  "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+  "links": [
+    {
+      "label": "Launch Stack DSL →",
+      "url": "index.html",
+      "is_primary": true
+    },
+    {
+      "label": "Demo ↗",
+      "url": "demo.html",
+      "is_primary": false
+    }
+  ]
+}

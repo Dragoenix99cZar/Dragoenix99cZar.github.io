@@ -1,0 +1,36 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Rust Wasm Export Test",
+  "subtitle": "Experimental Research Prototype",
+  "date": "2026-08-12",
+  "badge": "Rust + WebAssembly",
+  "badge_class": "badge-rust",
+  "categories": [
+    "wasm"
+  ],
+  "tags": [
+    "rust-wasm",
+    "rust",
+    "wasm"
+  ],
+  "description": "Interactive low-level experimentation and graphics module: Rust Wasm Calculator.",
+  "technologies": [
+    {
+      "name": "Rust",
+      "tag_class": "tag-rust"
+    },
+    {
+      "name": "WebAssembly",
+      "tag_class": "tag-wasm"
+    }
+  ],
+  "architecture": "Engineered around web implementation of rust code.",
+  "vision": "Provide an accessible first-principles reference to implement calculator.",
+  "links": [
+    {
+      "label": "Launch Rust Wasm Calculat →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}
