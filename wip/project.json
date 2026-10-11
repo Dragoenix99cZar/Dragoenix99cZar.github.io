@@ -728,36 +728,5 @@
     ],
     "id": "EXP_19",
     "folder": "script-mapper"
-  },
-  {
-    "id": "EXP_20",
-    "folder": "family",
-    "title": "SVG Viewer with Zoom & Pan & Exporter",
-    "subtitle": "Experimental Research Prototype",
-    "date": "2026-10-11",
-    "badge": "Interactive Prototype",
-    "badge_class": "badge-primary",
-    "categories": [
-      "graphics"
-    ],
-    "tags": [
-      "family",
-      "graphics"
-    ],
-    "description": "Interactive low-level experimentation and graphics module: SVG Viewer with Zoom & Pan & Exporter.",
-    "technologies": [
-      {
-        "name": "SVG Vector"
-      }
-    ],
-    "architecture": "Engineered around modular family components, executing direct transformations and client-side processing.",
-    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
-    "links": [
-      {
-        "label": "Launch SVG Viewer with Zo →",
-        "url": "family/index.html",
-        "is_primary": true
-      }
-    ]
   }
 ]
