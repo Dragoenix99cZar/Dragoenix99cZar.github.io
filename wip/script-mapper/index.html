@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Script Mapper with JSON & Unicode Support</title>
+    <style>
+        /* Light Theme Variables */
+        :root, html[data-theme="light"] {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #64748b;
+            --secondary-hover: #475569;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
+            --btn-bg: #ffffff;
+            --ref-color: #4f46e5;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        /* Dark Theme Variables */
+        html[data-theme="dark"] {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary: #475569;
+            --secondary-hover: #334155;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --btn-bg: #0f172a;
+            --ref-color: #818cf8;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 912px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        h1, h2 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-main);
+        }
+
+        p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        /* Panels Grid */
+        .panels-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .panel {
+            background: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            max-height: 520px;
+            overflow-y: auto;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .panel h3 {
+            margin-top: 0;
+            font-size: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .char-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        /* Clickable character buttons with Unicode subtext */
+        .char-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--btn-bg);
+            border: 1px solid var(--border);
+            border-radius: 0.35rem;
+            padding: 0.35rem 0.5rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            min-width: 72px;
+            color: var(--text-main);
+        }
+
+        .char-symbol {
+            font-size: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .char-devanagari-ref {
+            font-size: 0.75rem;
+            color: var(--ref-color);
+            font-weight: 600;
+            margin-top: 1px;
+        }
+
+        .char-unicode {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+            font-family: monospace;
+        }
+
+        .char-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .char-btn:hover .char-unicode,
+        .char-btn:hover .char-devanagari-ref {
+            color: #ffffff;
+        }
+
+        /* Form elements */
+        .form-row {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0.75rem;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        button.action-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button.action-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button.secondary-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.6rem 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        button.secondary-btn:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        .output-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            min-height: 2rem;
+            letter-spacing: 0.05em;
+            color: var(--text-main);
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .footer-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .mappings-summary {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .data-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header-row">
+            <div>
+                <h1>Script Mapper</h1>
+                <p>Map Latin keystrokes to Devanagari and Tirhuta characters with Unicode references.</p>
+            </div>
+            <button class="secondary-btn" id="themeToggleBtn">🌙 Dark Mode</button>
+        </div>
+
+        <!-- Section 1: Character Sets Panel -->
+        <div class="card">
+            <h2>Character Sets (Click to Select)</h2>
+            <p style="margin-bottom: 1rem;">Clicking any character populates its assignment field below.</p>
+            <div class="panels-grid">
+                <div class="panel">
+                    <h3>Devanagari</h3>
+                    <div id="devanagariPanel" class="char-list"></div>
+                </div>
+                <div class="panel">
+                    <h3>Tirhuta</h3>
+                    <div id="tirhutaPanel" class="char-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Composition / Direct Input -->
+        <div class="card">
+            <h2>Composition</h2>
+            <p>Compose words or sentences using the Devanagari and Tirhuta letter buttons above.</p>
+            <div class="form-row" style="margin-top: 1rem;">
+                <input type="text" id="composeInput" placeholder="Click character buttons above to append here..." style="font-size: 1.5rem;">
+                <button class="secondary-btn" id="clearComposeBtn">Clear Field</button>
+            </div>
+        </div>
+
+        <!-- Section 3: Assign Mapping -->
+        <div class="card">
+            <h2>Assign Mapping</h2>
+            <p>Type a Latin key, pick letters from above, and save your mapping.</p>
+            <div class="form-row">
+                <input type="text" id="latinInput" placeholder="Latin key (e.g., ka)">
+                <input type="text" id="devanagariInput" placeholder="Devanagari char">
+                <input type="text" id="tirhutaInput" placeholder="Tirhuta char">
+                <button class="action-btn" id="assignBtn">Assign</button>
+            </div>
+
+            <div class="footer-controls">
+                <div class="mappings-summary" id="mappingsSummary">Current saved mappings: 0</div>
+                <div class="data-actions">
+                    <button class="secondary-btn" id="exportBtn">Export JSON</button>
+                    <button class="secondary-btn" id="importBtn">Import JSON</button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Live Testing -->
+        <div class="card">
+            <h2>Live Testing</h2>
+            <p>Type your mapped Latin sequence below to see live multi-script output.</p>
+            <div class="form-row" style="margin-top: 1rem;">
+                <input type="text" id="testInput" placeholder="Type here (e.g., ka)...">
+            </div>
+            <div class="output-box" id="testOutput"></div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const htmlElement = document.documentElement;
+
+        const savedTheme = localStorage.getItem('app_theme') || 'dark';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        updateThemeButtonLabel(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('app_theme', newTheme);
+            updateThemeButtonLabel(newTheme);
+        });
+
+        function updateThemeButtonLabel(theme) {
+            themeToggleBtn.textContent = theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+        }
+
+        const defaultDevanagariChars = [
+            "अ","आ","इ","ई","उ","ऊ","ऋ","ए","ऐ","ओ","औ",
+            "क","ख","ग","घ","ङ","च","छ","ज","झ","ञ",
+            "ट","ठ","ड","ढ","ण","त","थ","द","ध","न",
+            "प","फ","ब","भ","म","य","र","ल","व","श","ष","स","ह",
+            "ा","ि","ी","ु","ू","ृ","े","ै","ो","ौ","ं","ः","्",
+            "०","१","२","३","४","५","६","७","८","९"
+        ];
+
+        const tirhutaCharacters = [
+            { devanagari: "अ", tirhuta: "𑒁" },
+            { devanagari: "आ", tirhuta: "𑒂" },
+            { devanagari: "इ", tirhuta: "𑒃" },
+            { devanagari: "ई", tirhuta: "𑒄" },
+            { devanagari: "उ", tirhuta: "𑒅" },
+            { devanagari: "ऊ", tirhuta: "𑒆" },
+            { devanagari: "ऋ", tirhuta: "𑒇" },
+            { devanagari: "ए", tirhuta: "𑒋" },
+            { devanagari: "ऐ", tirhuta: "𑒌" },
+            { devanagari: "ओ", tirhuta: "𑒍" },
+            { devanagari: "औ", tirhuta: "𑒎" },
+            { devanagari: "ा", tirhuta: "𑒰" },
+            { devanagari: "ि", tirhuta: "𑒱" },
+            { devanagari: "ी", tirhuta: "𑒲" },
+            { devanagari: "ु", tirhuta: "𑒳" },
+            { devanagari: "ू", tirhuta: "𑒴" },
+            { devanagari: "ृ", tirhuta: "𑒵" },
+            { devanagari: "े", tirhuta: "𑒹" },
+            { devanagari: "ै", tirhuta: "𑒺" },
+            { devanagari: "ो", tirhuta: "𑒻" },
+            { devanagari: "ौ", tirhuta: "𑒼" },
+            { devanagari: "क", tirhuta: "𑒏" },
+            { devanagari: "ख", tirhuta: "𑒐" },
+            { devanagari: "ग", tirhuta: "𑒑" },
+            { devanagari: "घ", tirhuta: "𑒒" },
+            { devanagari: "ङ", tirhuta: "𑒓" },
+            { devanagari: "च", tirhuta: "𑒔" },
+            { devanagari: "छ", tirhuta: "𑒕" },
+            { devanagari: "ज", tirhuta: "𑒖" },
+            { devanagari: "झ", tirhuta: "𑒗" },
+            { devanagari: "ञ", tirhuta: "𑒘" },
+            { devanagari: "ट", tirhuta: "𑒙" },
+            { devanagari: "ठ", tirhuta: "𑒚" },
+            { devanagari: "ड", tirhuta: "𑒛" },
+            { devanagari: "ढ", tirhuta: "𑒜" },
+            { devanagari: "ण", tirhuta: "𑒝" },
+            { devanagari: "त", tirhuta: "𑒞" },
+            { devanagari: "थ", tirhuta: "𑒟" },
+            { devanagari: "द", tirhuta: "𑒠" },
+            { devanagari: "ध", tirhuta: "𑒡" },
+            { devanagari: "न", tirhuta: "𑒢" },
+            { devanagari: "प", tirhuta: "𑒣" },
+            { devanagari: "फ", tirhuta: "𑒤" },
+            { devanagari: "ब", tirhuta: "𑒥" },
+            { devanagari: "भ", tirhuta: "𑒦" },
+            { devanagari: "म", tirhuta: "𑒧" },
+            { devanagari: "य", tirhuta: "𑒨" },
+            { devanagari: "र", tirhuta: "𑒩" },
+            { devanagari: "ल", tirhuta: "𑒪" },
+            { devanagari: "व", tirhuta: "𑒫" },
+            { devanagari: "श", tirhuta: "𑒬" },
+            { devanagari: "ष", tirhuta: "𑒭" },
+            { devanagari: "स", tirhuta: "𑒮" },
+            { devanagari: "ह", tirhuta: "𑒯" },
+            { devanagari: "०", tirhuta: "𑓐" },
+            { devanagari: "१", tirhuta: "𑓑" },
+            { devanagari: "२", tirhuta: "𑓒" },
+            { devanagari: "३", tirhuta: "𑓓" },
+            { devanagari: "४", tirhuta: "𑓔" },
+            { devanagari: "५", tirhuta: "𑓕" },
+            { devanagari: "६", tirhuta: "𑓖" },
+            { devanagari: "७", tirhuta: "𑓗" },
+            { devanagari: "८", tirhuta: "𑓘" },
+            { devanagari: "९", tirhuta: "𑓙" }
+        ];
+
+        let mappings = JSON.parse(localStorage.getItem('script_mappings')) || {
+            "ka": { devanagari: "क", tirhuta: "𑒏" }
+        };
+
+        const devanagariPanel = document.getElementById('devanagariPanel');
+        const tirhutaPanel = document.getElementById('tirhutaPanel');
+        const latinInput = document.getElementById('latinInput');
+        const devanagariInput = document.getElementById('devanagariInput');
+        const tirhutaInput = document.getElementById('tirhutaInput');
+        const assignBtn = document.getElementById('assignBtn');
+        const mappingsSummary = document.getElementById('mappingsSummary');
+        const testInput = document.getElementById('testInput');
+        const testOutput = document.getElementById('testOutput');
+
+        const exportBtn = document.getElementById('exportBtn');
+        const importBtn = document.getElementById('importBtn');
+        const importFile = document.getElementById('importFile');
+
+        const composeInput = document.getElementById('composeInput');
+        const clearComposeBtn = document.getElementById('clearComposeBtn');
+
+        // Helper to get Unicode Hex representation
+        function getUnicodeHex(char) {
+            const code = char.codePointAt(0);
+            return 'U+' + code.toString(16).toUpperCase().padStart(4, '0');
+        }
+
+        // Render panels with buttons and unicode labels
+        function renderPanels() {
+            devanagariPanel.innerHTML = defaultDevanagariChars.map(c =>
+                `<button class="char-btn" type="button" onclick="appendChar('${c}')">
+                    <span class="char-symbol">${c}</span>
+                    <span class="char-unicode">${getUnicodeHex(c)}</span>
+                </button>`
+            ).join('');
+
+            tirhutaPanel.innerHTML = tirhutaCharacters.map(item =>
+                `<button class="char-btn" type="button" onclick="appendChar('${item.tirhuta}')">
+                    <span class="char-symbol">${item.tirhuta}</span>
+                    <span class="char-devanagari-ref">${item.devanagari}</span>
+                    <span class="char-unicode">${getUnicodeHex(item.tirhuta)}</span>
+                </button>`
+            ).join('');
+        }
+
+        window.appendChar = function(c) {
+            composeInput.value += c;
+
+            if (defaultDevanagariChars.includes(c)) {
+                devanagariInput.value = c;
+            } else {
+                const found = tirhutaCharacters.find(item => item.tirhuta === c);
+                if (found) {
+                    tirhutaInput.value = found.tirhuta;
+                } else {
+                    tirhutaInput.value = c;
+                }
+            }
+        };
+
+        clearComposeBtn.addEventListener('click', () => {
+            composeInput.value = '';
+        });
+
+        function updateSummary() {
+            const keys = Object.keys(mappings);
+            mappingsSummary.textContent = `Current saved mappings: ${keys.length} (${keys.join(', ')})`;
+        }
+
+        assignBtn.addEventListener('click', () => {
+            const latin = latinInput.value.trim().toLowerCase();
+            const dev = devanagariInput.value.trim();
+            const tir = tirhutaInput.value.trim();
+
+            if (!latin || (!dev && !tir)) {
+                alert('Please enter a Latin key and choose at least one script character.');
+                return;
+            }
+
+            mappings[latin] = { devanagari: dev, tirhuta: tir };
+            localStorage.setItem('script_mappings', JSON.stringify(mappings));
+
+            latinInput.value = '';
+            devanagariInput.value = '';
+            tirhutaInput.value = '';
+
+            updateSummary();
+            processLiveTest();
+        });
+
+        // Export Mappings to JSON
+        exportBtn.addEventListener('click', () => {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(mappings, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "script_mappings.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        });
+
+        // Trigger Import File Dialog
+        importBtn.addEventListener('click', () => {
+            importFile.click();
+        });
+
+        // Handle JSON Import
+        importFile.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (typeof importedData === 'object' && importedData !== null) {
+                        mappings = importedData;
+                        localStorage.setItem('script_mappings', JSON.stringify(mappings));
+                        updateSummary();
+                        processLiveTest();
+                        alert('Mappings imported successfully!');
+                    } else {
+                        alert('Invalid JSON structure.');
+                    }
+                } catch (err) {
+                    alert('Error parsing the JSON file.');
+                }
+            };
+            reader.readAsText(file);
+            importFile.value = '';
+        });
+
+        function processLiveTest() {
+            const text = testInput.value;
+            if (!text) {
+                testOutput.textContent = '';
+                return;
+            }
+
+            let resultDev = '';
+            let resultTir = '';
+            const sortedKeys = Object.keys(mappings).sort((a, b) => b.length - a.length);
+
+            let i = 0;
+            while (i < text.length) {
+                let matched = false;
+                for (let key of sortedKeys) {
+                    if (text.startsWith(key, i)) {
+                        resultDev += mappings[key].devanagari || '';
+                        resultTir += mappings[key].tirhuta || '';
+                        i += key.length;
+                        matched = true;
+                        break;
+                    }
+                }
+                if (!matched) {
+                    resultDev += text[i];
+                    resultTir += text[i];
+                    i++;
+                }
+            }
+
+            testOutput.textContent = `Devanagari: ${resultDev}  |  Tirhuta: ${resultTir}`;
+        }
+
+        testInput.addEventListener('input', processLiveTest);
+
+        renderPanels();
+        updateSummary();
+        testInput.value = "ka";
+        processLiveTest();
+    </script>
+</body>
+</html>

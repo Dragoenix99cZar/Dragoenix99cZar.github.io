@@ -1,0 +1,42 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "Script Mapper",
+  "subtitle": "Unicode & JSON Support",
+  "date": "2026-10-11",
+  "badge": "JavaScript",
+  "badge_class": "badge-cyan",
+  "categories": [
+    "utility",
+    "typography"
+  ],
+  "tags": [
+    "script-mapper",
+    "devanagari",
+    "tirhuta",
+    "unicode",
+    "javascript"
+  ],
+  "description": "Map Latin keystrokes to Devanagari and Tirhuta characters with interactive composition and Unicode references.",
+  "technologies": [
+    {
+      "name": "JavaScript",
+      "tag_class": "tag-js"
+    },
+    {
+      "name": "HTML5",
+      "tag_class": "tag-html"
+    },
+    {
+      "name": "CSS3"
+    }
+  ],
+  "architecture": "Engineered around modular script mapping components, executing client-side Unicode transformations and local storage persistence.",
+  "vision": "Provide an accessible multi-script mapping, composition, and testing utility for Indic scripts like Devanagari and Tirhuta.",
+  "links": [
+    {
+      "label": "Launch Script Mapper →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

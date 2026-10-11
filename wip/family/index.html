@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Viewer with Zoom & Pan & Exporter</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover { background-color: #1d4ed8; }
+        .zoom-info {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-left: auto;
+        }
+        .viewer-container {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            overflow: hidden; /* Hide overflow so pan stays inside bounds */
+            position: relative;
+            cursor: grab;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .viewer-container:active {
+            cursor: grabbing;
+        }
+        .canvas-wrapper {
+            position: absolute;
+            transform-origin: 0 0;
+            will-change: transform;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        object {
+            display: block;
+            pointer-events: none; /* Let pan/zoom events bubble to container */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>SVG Viewer & Exporter</h1>
+    <p>Scroll to zoom, click and drag to pan around the SVG.</p>
+
+    <div class="toolbar">
+        <button id="btnSvg">Save as SVG</button>
+        <button id="btnPng">Save as PNG</button>
+        <button id="btnJpg">Save as JPG</button>
+        <button id="btnReset">Reset View</button>
+        <span class="zoom-info" id="zoomInfo">Zoom: 100%</span>
+    </div>
+
+    <div class="viewer-container" id="viewerContainer">
+        <div class="canvas-wrapper" id="canvasWrapper">
+            <!-- Change 'tree.svg' to your actual file name or path -->
+            <object id="svgObject" data="tree.svg" type="image/svg+xml">
+                Your browser does not support SVG objects.
+            </object>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('viewerContainer');
+        const wrapper = document.getElementById('canvasWrapper');
+        const svgObject = document.getElementById('svgObject');
+        const zoomInfo = document.getElementById('zoomInfo');
+        const svgPath = 'tree.svg';
+
+        let scale = 1;
+        let panX = 0;
+        let panY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        // Center and fit SVG on initial load
+        svgObject.addEventListener('load', () => {
+            resetView();
+        });
+
+        function updateTransform() {
+            wrapper.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+            zoomInfo.textContent = `Zoom: ${Math.round(scale * 100)}%`;
+        }
+
+        function resetView() {
+            scale = 1;
+            panX = 0;
+            panY = 0;
+            
+            // Try to center inside container based on object's natural dimensions
+            const svgDoc = svgObject.contentDocument;
+            if (svgDoc) {
+                const svgEl = svgDoc.querySelector('svg');
+                if (svgEl) {
+                    const w = svgEl.viewBox.baseVal.width || svgEl.clientWidth || 800;
+                    const h = svgEl.viewBox.baseVal.height || svgEl.clientHeight || 600;
+                    
+                    wrapper.style.width = w + 'px';
+                    wrapper.style.height = h + 'px';
+                    svgObject.style.width = w + 'px';
+                    svgObject.style.height = h + 'px';
+
+                    // Center alignment offset
+                    panX = (container.clientWidth - w) / 2;
+                    panY = (container.clientHeight - h) / 2;
+                }
+            }
+            updateTransform();
+        }
+
+        document.getElementById('btnReset').addEventListener('click', resetView);
+
+        // --- Zoom via Mouse Wheel ---
+        container.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomIntensity = 0.1;
+            const rect = container.getBoundingClientRect();
+            
+            // Mouse position relative to container
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            // Compute point under mouse before zoom
+            const pointX = (mouseX - panX) / scale;
+            const pointY = (mouseY - panY) / scale;
+
+            // Determine zoom direction
+            if (e.deltaY < 0) {
+                scale *= (1 + zoomIntensity);
+            } else {
+                scale /= (1 + zoomIntensity);
+            }
+
+            // Limit min/max zoom
+            scale = Math.max(0.1, Math.min(scale, 20));
+
+            // Adjust pan to keep zoom centered on mouse cursor
+            panX = mouseX - pointX * scale;
+            panY = mouseY - pointY * scale;
+
+            updateTransform();
+        }, { passive: false });
+
+        // --- Pan via Dragging ---
+        container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX - panX;
+            startY = e.clientY - panY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            panX = e.clientX - startX;
+            panY = e.clientY - startY;
+            updateTransform();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // --- Export Functions ---
+
+        document.getElementById('btnSvg').addEventListener('click', async () => {
+            try {
+                const response = await fetch(svgPath);
+                const blob = await response.blob();
+                triggerDownload(blob, 'exported-image.svg');
+            } catch (err) {
+                alert('Could not download SVG. Ensure you are running this via a local server (e.g., Live Server).');
+            }
+        });
+
+        document.getElementById('btnPng').addEventListener('click', () => {
+            exportToRaster('image/png', 'exported-image.png', '#ffffff');
+        });
+
+        document.getElementById('btnJpg').addEventListener('click', () => {
+            exportToRaster('image/jpeg', 'exported-image.jpg', '#ffffff');
+        });
+
+        function exportToRaster(mimeType, filename, backgroundColor) {
+            const svgDoc = svgObject.contentDocument;
+            if (!svgDoc) {
+                alert('SVG is still loading or blocked by security policies. Try running via a local web server.');
+                return;
+            }
+
+            const svgElement = svgDoc.querySelector('svg');
+            if (!svgElement) return;
+
+            const width = svgElement.viewBox.baseVal.width || svgElement.clientWidth || 800;
+            const height = svgElement.viewBox.baseVal.height || svgElement.clientHeight || 600;
+
+            const serializer = new XMLSerializer();
+            const svgString = serializer.serializeToString(svgElement);
+            const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const URL = window.URL || window.webkitURL || window;
+            const blobURL = URL.createObjectURL(svgBlob);
+
+            const image = new Image();
+            image.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+
+                if (backgroundColor) {
+                    ctx.fillStyle = backgroundColor;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+
+                ctx.drawImage(image, 0, 0, width, height);
+                
+                canvas.toBlob((blob) => {
+                    triggerDownload(blob, filename);
+                    URL.revokeObjectURL(blobURL);
+                }, mimeType, 1.0);
+            };
+            image.src = blobURL;
+        }
+
+        function triggerDownload(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
