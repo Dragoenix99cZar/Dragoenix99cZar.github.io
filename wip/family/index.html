@@ -238,130 +238,131 @@
             data: [],
             selectedId: null,
 
-            async init() {
-                try {
-                    const response = await fetch('lineageData.json');
-                    if (!response.ok) throw new Error("Failed to load JSON file");
-                    this.data = await response.json();
-                } catch (error) {
-                    console.warn("Could not fetch external JSON. Falling back to default data.", error);
-                    this.data = [
-                        { "id": 100000,  "name": "जगपतिदास", "fatherId": null,    "name_en": "Jagapatidas",     "gen": "GEN I" },
+            init() {
+                this.data = [
+                    { "id": 100000,  "name": "जगपतिदास", "fatherId": null,    "name_en": "Jagapatidas",     "gen": "GEN I" },
+                            // --------------- 1st Gen ---------------                                
+                    { "id": 1,  "name": "कारीदास", "fatherId": 100000,      "name_en": "Kaaridas",     "gen": "GEN II" },
+                    { "id": 2,  "name": "भिखारीदास", "fatherId": 100000,    "name_en": "Vikaridas",     "gen": "GEN II" },
+                    { "id": 3,  "name": "रंगीदास", "fatherId": 100000,      "name_en": "Rangidas",     "gen": "GEN II" },
+                    { "id": 4,  "name": "जीवछदास", "fatherId": 100000,     "name_en": "Jiwachhadas",     "gen": "GEN II" },
+                            // --------------- 2nd Gen ---------------
+                    { "id": 11,  "name": "अचंभीतदास", "fatherId": 1,     "name_en": "Achamvitdas",    "gen": "GEN III" },
+                    { "id": 12,  "name": "भानुदास", "fatherId": 1,       "name_en": "Bhanudas",             "gen": "GEN III" },
 
-                        { "id": 1,  "name": "कारीदास", "fatherId": 100000,      "name_en": "Kaaridas",     "gen": "GEN II" },
-                        { "id": 2,  "name": "भिखारीदास", "fatherId": 100000,    "name_en": "Vikaridas",     "gen": "GEN II" },
-                        { "id": 3,  "name": "रंगीदास", "fatherId": 100000,      "name_en": "Rangidas",     "gen": "GEN II" },
-                        { "id": 4,  "name": "जीवछदास", "fatherId": 100000,     "name_en": "Jiwachhadas",     "gen": "GEN II" },
+                    { "id": 41,  "name": "मनोहरदास", "fatherId": 4,      "name_en": "Manohardas",             "gen": "GEN III" },
+                    { "id": 42,  "name": "इन्द्र​मणिदास", "fatherId": 4,     "name_en": "Indramanidas",               "gen": "GEN III" },
+                    { "id": 43,  "name": "नित्यानतन्ददास", "fatherId": 4,    "name_en": "Nityananddas",                "gen": "GEN III" },
+                            // --------------- 3rd Gen ---------------
+                    { "id": 111, "name": "युगलकिशोर", "fatherId": 11,    "name_en": "Yugalkishor",                "gen": "GEN IV" },
+                    { "id": 112, "name": "अवधकिशोर", "fatherId": 11,    "name_en": "Awadhkishor",                "gen": "GEN IV" },
+                    { "id": 113, "name": "मोस्सदीलाल", "fatherId": 11,    "name_en": "Mossadilal",                "gen": "GEN IV" },
 
-                        { "id": 11,  "name": "अचंभीतदास", "fatherId": 1,     "name_en": "Achamvitdas",    "gen": "GEN III" },
-                        { "id": 12,  "name": "भानुदास", "fatherId": 1,       "name_en": "Bhanudas",             "gen": "GEN III" },
+                    { "id": 121, "name": "रघुनाथ", "fatherId": 12,    "name_en": "Raghunath",                "gen": "GEN IV" },
+                    { "id": 122, "name": "लक्ष्मीनारायण", "fatherId": 12,    "name_en": "Laxminarayan",                "gen": "GEN IV" },
 
-                        { "id": 41,  "name": "मनोहरदास", "fatherId": 4,      "name_en": "Manohardas",             "gen": "GEN III" },
-                        { "id": 42,  "name": "इन्द्र​मणिदास", "fatherId": 4,     "name_en": "Indramanidas",               "gen": "GEN III" },
-                        { "id": 43,  "name": "नित्यानतन्ददास", "fatherId": 4,    "name_en": "Nityananddas",                "gen": "GEN III" },
+                    { "id": 411, "name": "उग्रनारायण", "fatherId": 41,    "name_en": "Ugranarayan",                "gen": "GEN IV" },
 
-                        { "id": 111, "name": "युगलकिशोर", "fatherId": 11,    "name_en": "Yugalkishor",                "gen": "GEN IV" },
-                        { "id": 112, "name": "अवधकिशोर", "fatherId": 11,    "name_en": "Awadhkishor",                "gen": "GEN IV" },
-                        { "id": 113, "name": "मोस्सदीलाल", "fatherId": 11,    "name_en": "Mossadilal",                "gen": "GEN IV" },
+                    { "id": 421, "name": "सुखदेव", "fatherId": 42,    "name_en": "Sukhadev",                "gen": "GEN IV" },
+                    { "id": 422, "name": "सुभगलाल", "fatherId": 42,    "name_en": "Suvaglal",                "gen": "GEN IV" },
+                    { "id": 423, "name": "रघुवंशी", "fatherId": 42,    "name_en": "Raghubansi",                "gen": "GEN IV" },
 
-                        { "id": 121, "name": "रघुनाथ", "fatherId": 12,    "name_en": "Raghunath",                "gen": "GEN IV" },
-                        { "id": 122, "name": "लक्ष्मीनारायण", "fatherId": 12,    "name_en": "Laxminarayan",                "gen": "GEN IV" },
+                    { "id": 431,  "name": "जनकलाल", "fatherId": 43,    "name_en": "Janaklal",                "gen": "GEN IV" },
+                            // --------------- 4th Gen ---------------
+                    { "id": 1111, "name": "श्रीनारायण", "fatherId": 111,    "name_en": "Shrinarayan",                "gen": "GEN V" },
+                    { "id": 1112, "name": "हरिनारायण", "fatherId": 111,    "name_en": "Harinarayan",                "gen": "GEN V" },
+                    { "id": 1113, "name": "भूपनारायण", "fatherId": 111,    "name_en": "Bhupnarayan",                "gen": "GEN V" },
 
-                        { "id": 411, "name": "उग्रनारायण", "fatherId": 41,    "name_en": "Ugranarayan",                "gen": "GEN IV" },
+                    { "id": 1131, "name": "देवनारायण", "fatherId": 113,    "name_en": "Devnarayan",                "gen": "GEN V" },
+                    { "id": 1132, "name": "बद्रीनारायण", "fatherId": 113,    "name_en": "Badrinarayan",                "gen": "GEN V" },
+                    { "id": 1133, "name": "धरणीधर", "fatherId": 113,    "name_en": "Dharnidhar",                "gen": "GEN V" },
 
-                        { "id": 421, "name": "सुखदेव", "fatherId": 42,    "name_en": "Sukhadev",                "gen": "GEN IV" },
-                        { "id": 422, "name": "सुभगलाल", "fatherId": 42,    "name_en": "Suvaglal",                "gen": "GEN IV" },
-                        { "id": 423, "name": "रघुवंशी", "fatherId": 42,    "name_en": "Raghubansi",                "gen": "GEN IV" },
+                    { "id": 1221, "name": "योगेन्द्र", "fatherId": 122,    "name_en": "Yogendra",                "gen": "GEN V" },
 
-                        { "id": 431,  "name": "जनकलाल", "fatherId": 43,    "name_en": "Janaklal",                "gen": "GEN IV" },
+                    { "id": 4231, "name": "सत्यदेव", "fatherId": 423,    "name_en": "Satyadev",                "gen": "GEN V" },
+                    { "id": 4232, "name": "जयनारायण", "fatherId": 423,    "name_en": "Jaynarayan",                "gen": "GEN V" },
 
-                        { "id": 1111, "name": "श्रीनारायण", "fatherId": 111,    "name_en": "Shrinarayan",                "gen": "GEN V" },
-                        { "id": 1112, "name": "हरिनारायण", "fatherId": 111,    "name_en": "Harinarayan",                "gen": "GEN V" },
-                        { "id": 1113, "name": "भूपनारायण", "fatherId": 111,    "name_en": "Bhupnarayan",                "gen": "GEN V" },
+                    { "id": 4311, "name": "बैद्यनाथ", "fatherId": 431,    "name_en": "Baidyanath",                "gen": "GEN V" },
+                    { "id": 4312, "name": "उमानाथ", "fatherId": 431,    "name_en": "Umanath",                "gen": "GEN V" },
+                            // --------------- 5th Gen ---------------
+                    { "id": 11111, "name": "गोपीवल्लभ", "fatherId": 1111,    "name_en": "Gopiwallav",                "gen": "GEN VI" },
 
-                        { "id": 1131, "name": "देवनारायण", "fatherId": 113,    "name_en": "Devnarayan",                "gen": "GEN V" },
-                        { "id": 1132, "name": "बद्रीनारायण", "fatherId": 113,    "name_en": "Badrinarayan",                "gen": "GEN V" },
-                        { "id": 1133, "name": "धरणीधर", "fatherId": 113,    "name_en": "Dharnidhar",                "gen": "GEN V" },
+                    { "id": 11121, "name": "जगन्नाथ", "fatherId": 1112,    "name_en": "Jagannath",                "gen": "GEN VI" },
+                    { "id": 11122, "name": "शिवनाथ", "fatherId": 1112,    "name_en": "Shivnath",                "gen": "GEN VI" },
+                    { "id": 11123, "name": "सुरेन्द्र", "fatherId": 1112,    "name_en": "Surendra",                "gen": "GEN VI" },
 
-                        { "id": 1221, "name": "योगेन्द्र", "fatherId": 122,    "name_en": "Yogendra",                "gen": "GEN V" },
+                    { "id": 11311, "name": "शशी", "fatherId": 1131,    "name_en": "Shashi",                "gen": "GEN VI" },
+                    { "id": 11312, "name": "अशोक (मदन)", "fatherId": 1131,    "name_en": "Ashok (Madan)",                "gen": "GEN VI" },
+                    { "id": 11313, "name": "शरद (बच्चाबाबु)", "fatherId": 1131,    "name_en": "Sarad (Bachababu)",                "gen": "GEN VI" },
+                    { "id": 11314, "name": "सन्तोष (छोटेबाबु)", "fatherId": 1131,    "name_en": "Santosh (Chhotebabu)",                "gen": "GEN VI" },
 
-                        { "id": 4231, "name": "सत्यदेव", "fatherId": 423,    "name_en": "Satyadev",                "gen": "GEN V" },
-                        { "id": 4232, "name": "जयनारायण", "fatherId": 423,    "name_en": "Jaynarayan",                "gen": "GEN V" },
+                    { "id": 11321, "name": "अमरेन्द्र (अमर​)", "fatherId": 1132,    "name_en": "Amrendra",                "gen": "GEN VI" },
+                    { "id": 11322, "name": "नागेन्द्र (रमन​)", "fatherId": 1132,    "name_en": "Nagendra",                "gen": "GEN VI" },
 
-                        { "id": 4311, "name": "बैद्यनाथ", "fatherId": 431,    "name_en": "Baidyanath",                "gen": "GEN V" },
-                        { "id": 4312, "name": "उमानाथ", "fatherId": 431,    "name_en": "Umanath",                "gen": "GEN V" },
+                    { "id": 11331, "name": "बसन्त", "fatherId": 1133,    "name_en": "Basant",                "gen": "GEN VI" },
+                    { "id": 11332, "name": "अरबिन्द (बचन)", "fatherId": 1133,    "name_en": "Arbind (Bachan)",                "gen": "GEN VI" },
+                    { "id": 11333, "name": "बिनोद", "fatherId": 1133,    "name_en": "Binod",                "gen": "GEN VI" },
 
-                        { "id": 11111, "name": "गोपीवल्लभ", "fatherId": 1111,    "name_en": "Gopiwallav",                "gen": "GEN VI" },
+                    { "id": 42321, "name": "रविन्द्र (बब्लु)", "fatherId": 4232,    "name_en": "Rabindra (Bablu)",                "gen": "GEN VI" },
+                    { "id": 42322, "name": "संन्तोष", "fatherId": 4232,    "name_en": "Santosh",                "gen": "GEN VI" },
 
-                        { "id": 11121, "name": "जगन्नाथ", "fatherId": 1112,    "name_en": "Jagannath",                "gen": "GEN VI" },
-                        { "id": 11122, "name": "शिवनाथ", "fatherId": 1112,    "name_en": "Shivnath",                "gen": "GEN VI" },
-                        { "id": 11123, "name": "सुरेन्द्र", "fatherId": 1112,    "name_en": "Surendra",                "gen": "GEN VI" },
+                    { "id": 43111, "name": "राजेश्वर (शंकर)", "fatherId": 4311,    "name_en": "Rajeshwor (Shankar)",                "gen": "GEN VI" },
+                    { "id": 43112, "name": "दिनेश्वर (गगन)", "fatherId": 4311,    "name_en": "Dineshwor (Gagan)",                "gen": "GEN VI" },
 
-                        { "id": 11311, "name": "शशी", "fatherId": 1131,    "name_en": "Shashi",                "gen": "GEN VI" },
-                        { "id": 11312, "name": "अशोक (मदन)", "fatherId": 1131,    "name_en": "Ashok (Madan)",                "gen": "GEN VI" },
-                        { "id": 11313, "name": "शरद (बच्चाबाबु)", "fatherId": 1131,    "name_en": "Sarad (Bachababu)",                "gen": "GEN VI" },
-                        { "id": 11314, "name": "सन्तोष (छोटेबाबु)", "fatherId": 1131,    "name_en": "Santosh (Chhotebabu)",                "gen": "GEN VI" },
+                    { "id": 43121, "name": "प्रशान्त (सोनु)", "fatherId": 4312,    "name_en": "Prasant (Sonu)",                "gen": "GEN VI" },
+                            // --------------- 6th Gen ---------------
+                    { "id": 111111, "name": "कुलानन्द (गोविन्द)", "fatherId": 11111,    "name_en": "Kulanand (Gobind)",                "gen": "GEN VII" },
+                    { "id": 111112, "name": "घनानन्द", "fatherId": 11111,    "name_en": "Ghananand",                "gen": "GEN VII" },
 
-                        { "id": 11321, "name": "अमरेन्द्र (अमर​)", "fatherId": 1132,    "name_en": "Amrendra",                "gen": "GEN VI" },
-                        { "id": 11322, "name": "नागेन्द्र (रमन​)", "fatherId": 1132,    "name_en": "Nagendra",                "gen": "GEN VI" },
+                    { "id": 111211, "name": "उमेश", "fatherId": 11121,    "name_en": "Umesh",                "gen": "GEN VII" },
+                    { "id": 111212, "name": "राजेश", "fatherId": 11121,    "name_en": "Rajesh",                "gen": "GEN VII" },
 
-                        { "id": 11331, "name": "बसन्त", "fatherId": 1133,    "name_en": "Basant",                "gen": "GEN VI" },
-                        { "id": 11332, "name": "अरबिन्द (बचन)", "fatherId": 1133,    "name_en": "Arbind (Bachan)",                "gen": "GEN VI" },
-                        { "id": 11333, "name": "बिनोद", "fatherId": 1133,    "name_en": "Binod",                "gen": "GEN VI" },
+                    { "id": 111221, "name": "मनोज", "fatherId": 11122,    "name_en": "Manoj",                "gen": "GEN VII" },
+                    { "id": 111222, "name": "सुबोध", "fatherId": 11122,    "name_en": "Subodh",                "gen": "GEN VII" },
 
-                        { "id": 42321, "name": "रविन्द्र (बब्लु)", "fatherId": 4232,    "name_en": "Rabindra (Bablu)",                "gen": "GEN VI" },
-                        { "id": 42322, "name": "संन्तोष", "fatherId": 4232,    "name_en": "Santosh",                "gen": "GEN VI" },
+                    { "id": 111231, "name": "संजय", "fatherId": 11123,    "name_en": "Sanjay",                "gen": "GEN VII" },
+                    { "id": 111232, "name": "सन्तोष", "fatherId": 11123,    "name_en": "Santosh",                "gen": "GEN VII" },
 
-                        { "id": 43111, "name": "राजेश्वर (शंकर)", "fatherId": 4311,    "name_en": "Rajeshwor",                "gen": "GEN VI" },
-                        { "id": 43112, "name": "दिनेश्वर (गगन)", "fatherId": 4311,    "name_en": "Dineshwor",                "gen": "GEN VI" },
+                    { "id": 113121, "name": "अभय", "fatherId": 11312,    "name_en": "Abhya",                "gen": "GEN VII" },
+                    { "id": 113122, "name": "अमित", "fatherId": 11312,    "name_en": "Amit",                "gen": "GEN VII" },
 
-                        { "id": 43121, "name": "प्रशान्त (सोनु)", "fatherId": 4312,    "name_en": "Prasant (Sonu)",                "gen": "GEN VI" },
+                    { "id": 113131, "name": "आदर्श", "fatherId": 11313,    "name_en": "Aadarsh",                "gen": "GEN VII" },
 
-                        { "id": 111111, "name": "कुलानन्द (गोविन्द)", "fatherId": 11111,    "name_en": "Kulanand (Gobind)",                "gen": "GEN VII" },
-                        { "id": 111112, "name": "घनानन्द", "fatherId": 11111,    "name_en": "Ghananand",                "gen": "GEN VII" },
+                    { "id": 113141, "name": "आरम्भ", "fatherId": 11314,    "name_en": "Aarmnbha",                "gen": "GEN VII" },
 
-                        { "id": 111211, "name": "उमेश", "fatherId": 11121,    "name_en": "Umesh",                "gen": "GEN VII" },
-                        { "id": 111212, "name": "राजेश", "fatherId": 11121,    "name_en": "Rajesh",                "gen": "GEN VII" },
+                    { "id": 113211, "name": "अनुप (अन्नू)", "fatherId": 11321,    "name_en": "Anup (Annu)",                "gen": "GEN VII" },
+                    { "id": 113212, "name": "अमन", "fatherId": 11321,    "name_en": "Aman",                "gen": "GEN VII" },
 
-                        { "id": 111221, "name": "मनोज", "fatherId": 11122,    "name_en": "Manoj",                "gen": "GEN VII" },
-                        { "id": 111222, "name": "सुबोध", "fatherId": 11122,    "name_en": "Subodh",                "gen": "GEN VII" },
+                    { "id": 113221, "name": "आर्यन", "fatherId": 11322,    "name_en": "Aaryan",                "gen": "GEN VII" },
 
-                        { "id": 111231, "name": "संजय", "fatherId": 11123,    "name_en": "Sanjay",                "gen": "GEN VII" },
-                        { "id": 111232, "name": "सन्तोष", "fatherId": 11123,    "name_en": "Santosh",                "gen": "GEN VII" },
+                    { "id": 113321, "name": "आयुष (मुर्ली)", "fatherId": 11332,    "name_en": "Aayush (Murli)",                "gen": "GEN VII" },
 
-                        { "id": 113121, "name": "अभय", "fatherId": 11312,    "name_en": "Abhya",                "gen": "GEN VII" },
-                        { "id": 113122, "name": "अमित", "fatherId": 11312,    "name_en": "Amit",                "gen": "GEN VII" },
+                    { "id": 113331, "name": "अनन्त", "fatherId": 11333,    "name_en": "Anant",                "gen": "GEN VII" },
+                    { "id": 113332, "name": "नित्यानतन्द", "fatherId": 11333,    "name_en": "Nityanand",                "gen": "GEN VII" },
+                    
+                    { "id": 423221, "name": "आदित्य", "fatherId": 42322,    "name_en": "Aditya Suman",                "gen": "GEN VII" },
 
-                        { "id": 113131, "name": "आदर्श", "fatherId": 11313,    "name_en": "Aadarsh",                "gen": "GEN VII" },
+                    { "id": 431111, "name": "विजय", "fatherId": 43111,    "name_en": "Vijay",                "gen": "GEN VII" },
+                    { "id": 431112, "name": "विभाष", "fatherId": 43111,    "name_en": "Vivash",                "gen": "GEN VII" },
+                    
+                    { "id": 431121, "name": "प्रिन्स", "fatherId": 43112,    "name_en": "Prince",                "gen": "GEN VII" },
+                    
+                    { "id": 431211, "name": "अविनाश", "fatherId": 43121,    "name_en": "Avinash",                "gen": "GEN VII" },
+                            // --------------- 7th Gen ---------------
+                    { "id": 1111111, "name": "आशिष (आशू)", "fatherId": 111111,    "name_en": "Aashish (Aashu)",                "gen": "GEN VIII" },
 
-                        { "id": 113141, "name": "आरम्भ", "fatherId": 11314,    "name_en": "Aarmnbha",                "gen": "GEN VII" },
+                    { "id": 1111121, "name": "सुमन", "fatherId": 111112,    "name_en": "Suman",                "gen": "GEN VIII" },
+                    { "id": 1111122, "name": "सुमन्त", "fatherId": 111112,    "name_en": "Sumant",                "gen": "GEN VIII" },
 
-                        { "id": 113211, "name": "अनुप (अन्नू)", "fatherId": 11321,    "name_en": "Anup (Annu)",                "gen": "GEN VII" },
-                        { "id": 113212, "name": "अमन", "fatherId": 11321,    "name_en": "Aman",                "gen": "GEN VII" },
+                    { "id": 1112111, "name": "दीपक (पोलो)", "fatherId": 111211,    "name_en": "Dipak (Polo)",                "gen": "GEN VIII" },
+                    
+                    { "id": 1112121, "name": "काव्यांशु", "fatherId": 111212,    "name_en": "Kavyanshu",                "gen": "GEN VIII" },
 
-                        { "id": 113221, "name": "आर्यन", "fatherId": 11322,    "name_en": "Aaryan",                "gen": "GEN VII" },
+                    { "id": 1112311, "name": "स्वर्णभ", "fatherId": 111231,    "name_en": "Swarnav",                "gen": "GEN VIII" },
+                    { "id": 1112312, "name": "समृद्ध​", "fatherId": 111231,    "name_en": "Samriddha",                "gen": "GEN VIII" },
 
-                        { "id": 113321, "name": "आयुष (मुर्ली)", "fatherId": 11332,    "name_en": "Aayush (Murli)",                "gen": "GEN VII" },
-
-                        { "id": 113331, "name": "अनन्त", "fatherId": 11333,    "name_en": "Anant",                "gen": "GEN VII" },
-                        { "id": 113332, "name": "नित्यानतन्द", "fatherId": 11333,    "name_en": "Nityanand",                "gen": "GEN VII" },
-
-                        { "id": 431111, "name": "विजय", "fatherId": 43111,    "name_en": "Vijay",                "gen": "GEN VII" },
-                        { "id": 431112, "name": "विभाष", "fatherId": 43111,    "name_en": "Vivash",                "gen": "GEN VII" },
-
-                        { "id": 1111111, "name": "आशिष (आशू)", "fatherId": 111111,    "name_en": "Aashish (Aashu)",                "gen": "GEN VIII" },
-
-                        { "id": 1111121, "name": "सुमन", "fatherId": 111112,    "name_en": "Suman",                "gen": "GEN VIII" },
-                        { "id": 1111122, "name": "सुमन्त", "fatherId": 111112,    "name_en": "Sumant",                "gen": "GEN VIII" },
-
-                        { "id": 1112111, "name": "दीपक (पोलो)", "fatherId": 111211,    "name_en": "Dipak (Polo)",                "gen": "GEN VIII" },
-
-                        { "id": 1112311, "name": "स्वर्णभ", "fatherId": 111231,    "name_en": "Swarnav",                "gen": "GEN VIII" },
-                        { "id": 1112312, "name": "सम्रिधा", "fatherId": 111231,    "name_en": "Samriddha",                "gen": "GEN VIII" },
-
-                        { "id": 1131211, "name": "अथर्भ", "fatherId": 113121,    "name_en": "Atharv",                "gen": "GEN VIII" }
-                    ];
-                }
+                    { "id": 1131211, "name": "अथर्भ", "fatherId": 113121,    "name_en": "Atharv",                "gen": "GEN VIII" }
+                ];
             },
 
             getTree() {
