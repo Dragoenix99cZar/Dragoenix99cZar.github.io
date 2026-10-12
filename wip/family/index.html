@@ -209,12 +209,24 @@
             stroke: var(--border-color);
             stroke-width: 2px;
         }
+
+        .node-group.marked .node-rect {
+            stroke: #392727; /* Amber/Gold accent */
+            stroke-width: 2.5px;
+            fill: #1d1814ad; /* Tinted background */
+        }
+
+        .node-group.marked:hover .node-rect {
+            stroke: #392727;
+            filter: drop-shadow(0 0px 3px rgba(245, 158, 11, 0.3));
+        }
     </style>
 </head>
 <body>
 
     <h1>Karn's Patriarchal Lineage</h1>
     <div class="subtitle">Compiled by Baidynath Lal Das</div>
+    <div class="subtitle">Updated by Ashok Karn (Madan)</div>
     <div class="subtitle">Updated by Amrendra Kumar Karn (Amar) • 4 Dec, 2013</div>
     <div class="subtitle">Updated by Aman Karn • 11 Oct, 2026</div>
 
@@ -243,8 +255,8 @@
                     { "id": 100000,  "name": "जगपतिदास", "fatherId": null,    "name_en": "Jagapatidas",     "gen": "GEN I" },
                             // --------------- 1st Gen ---------------                                
                     { "id": 1,  "name": "कारीदास", "fatherId": 100000,      "name_en": "Kaaridas",     "gen": "GEN II" },
-                    { "id": 2,  "name": "भिखारीदास", "fatherId": 100000,    "name_en": "Vikaridas",     "gen": "GEN II" },
-                    { "id": 3,  "name": "रंगीदास", "fatherId": 100000,      "name_en": "Rangidas",     "gen": "GEN II" },
+                    { "id": 2,  "name": "भिखारीदास", "fatherId": 100000,    "name_en": "Vikaridas",     "gen": "GEN II", marked: true },
+                    { "id": 3,  "name": "रंगीदास", "fatherId": 100000,      "name_en": "Rangidas",     "gen": "GEN II", marked: true },
                     { "id": 4,  "name": "जीवछदास", "fatherId": 100000,     "name_en": "Jiwachhadas",     "gen": "GEN II" },
                             // --------------- 2nd Gen ---------------
                     { "id": 11,  "name": "अचंभीतदास", "fatherId": 1,     "name_en": "Achamvitdas",    "gen": "GEN III" },
@@ -255,23 +267,23 @@
                     { "id": 43,  "name": "नित्यानतन्ददास", "fatherId": 4,    "name_en": "Nityananddas",                "gen": "GEN III" },
                             // --------------- 3rd Gen ---------------
                     { "id": 111, "name": "युगलकिशोर", "fatherId": 11,    "name_en": "Yugalkishor",                "gen": "GEN IV" },
-                    { "id": 112, "name": "अवधकिशोर", "fatherId": 11,    "name_en": "Awadhkishor",                "gen": "GEN IV" },
+                    { "id": 112, "name": "अवधकिशोर", "fatherId": 11,    "name_en": "Awadhkishor",                "gen": "GEN IV", marked: true },
                     { "id": 113, "name": "मोस्सदीलाल", "fatherId": 11,    "name_en": "Mossadilal",                "gen": "GEN IV" },
 
-                    { "id": 121, "name": "रघुनाथ", "fatherId": 12,    "name_en": "Raghunath",                "gen": "GEN IV" },
+                    { "id": 121, "name": "रघुनाथ", "fatherId": 12,    "name_en": "Raghunath",                "gen": "GEN IV", marked: true },
                     { "id": 122, "name": "लक्ष्मीनारायण", "fatherId": 12,    "name_en": "Laxminarayan",                "gen": "GEN IV" },
 
-                    { "id": 411, "name": "उग्रनारायण", "fatherId": 41,    "name_en": "Ugranarayan",                "gen": "GEN IV" },
+                    { "id": 411, "name": "उग्रनारायण", "fatherId": 41,    "name_en": "Ugranarayan",                "gen": "GEN IV", marked: true },
 
-                    { "id": 421, "name": "सुखदेव", "fatherId": 42,    "name_en": "Sukhadev",                "gen": "GEN IV" },
-                    { "id": 422, "name": "सुभगलाल", "fatherId": 42,    "name_en": "Suvaglal",                "gen": "GEN IV" },
+                    { "id": 421, "name": "सुखदेव", "fatherId": 42,    "name_en": "Sukhadev",                "gen": "GEN IV", marked: true },
+                    { "id": 422, "name": "सुभगलाल", "fatherId": 42,    "name_en": "Suvaglal",                "gen": "GEN IV", marked: true },
                     { "id": 423, "name": "रघुवंशी", "fatherId": 42,    "name_en": "Raghubansi",                "gen": "GEN IV" },
 
                     { "id": 431,  "name": "जनकलाल", "fatherId": 43,    "name_en": "Janaklal",                "gen": "GEN IV" },
                             // --------------- 4th Gen ---------------
                     { "id": 1111, "name": "श्रीनारायण", "fatherId": 111,    "name_en": "Shrinarayan",                "gen": "GEN V" },
                     { "id": 1112, "name": "हरिनारायण", "fatherId": 111,    "name_en": "Harinarayan",                "gen": "GEN V" },
-                    { "id": 1113, "name": "भूपनारायण", "fatherId": 111,    "name_en": "Bhupnarayan",                "gen": "GEN V" },
+                    { "id": 1113, "name": "भूपनारायण", "fatherId": 111,    "name_en": "Bhupnarayan",                "gen": "GEN V", marked: true },
 
                     { "id": 1131, "name": "देवनारायण", "fatherId": 113,    "name_en": "Devnarayan",                "gen": "GEN V" },
                     { "id": 1132, "name": "बद्रीनारायण", "fatherId": 113,    "name_en": "Badrinarayan",                "gen": "GEN V" },
@@ -279,7 +291,7 @@
 
                     { "id": 1221, "name": "योगेन्द्र", "fatherId": 122,    "name_en": "Yogendra",                "gen": "GEN V" },
 
-                    { "id": 4231, "name": "सत्यदेव", "fatherId": 423,    "name_en": "Satyadev",                "gen": "GEN V" },
+                    { "id": 4231, "name": "सत्यदेव", "fatherId": 423,    "name_en": "Satyadev",                "gen": "GEN V", marked: true },
                     { "id": 4232, "name": "जयनारायण", "fatherId": 423,    "name_en": "Jaynarayan",                "gen": "GEN V" },
 
                     { "id": 4311, "name": "बैद्यनाथ", "fatherId": 431,    "name_en": "Baidyanath",                "gen": "GEN V" },
@@ -299,7 +311,7 @@
                     { "id": 11321, "name": "अमरेन्द्र (अमर​)", "fatherId": 1132,    "name_en": "Amrendra",                "gen": "GEN VI" },
                     { "id": 11322, "name": "नागेन्द्र (रमन​)", "fatherId": 1132,    "name_en": "Nagendra",                "gen": "GEN VI" },
 
-                    { "id": 11331, "name": "बसन्त", "fatherId": 1133,    "name_en": "Basant",                "gen": "GEN VI" },
+                    { "id": 11331, "name": "बसन्त", "fatherId": 1133,    "name_en": "Basant",                "gen": "GEN VI", marked: true },
                     { "id": 11332, "name": "अरबिन्द (बचन)", "fatherId": 1133,    "name_en": "Arbind (Bachan)",                "gen": "GEN VI" },
                     { "id": 11333, "name": "बिनोद", "fatherId": 1133,    "name_en": "Binod",                "gen": "GEN VI" },
 
@@ -317,7 +329,7 @@
                     { "id": 111211, "name": "उमेश", "fatherId": 11121,    "name_en": "Umesh",                "gen": "GEN VII" },
                     { "id": 111212, "name": "राजेश", "fatherId": 11121,    "name_en": "Rajesh",                "gen": "GEN VII" },
 
-                    { "id": 111221, "name": "मनोज", "fatherId": 11122,    "name_en": "Manoj",                "gen": "GEN VII" },
+                    { "id": 111221, "name": "मनोज", "fatherId": 11122,    "name_en": "Manoj",                "gen": "GEN VII", marked: true },
                     { "id": 111222, "name": "सुबोध", "fatherId": 11122,    "name_en": "Subodh",                "gen": "GEN VII" },
 
                     { "id": 111231, "name": "संजय", "fatherId": 11123,    "name_en": "Sanjay",                "gen": "GEN VII" },
@@ -349,9 +361,9 @@
                     
                     { "id": 431211, "name": "अविनाश", "fatherId": 43121,    "name_en": "Avinash",                "gen": "GEN VII" },
                             // --------------- 7th Gen ---------------
-                    { "id": 1111111, "name": "आशिष (आशू)", "fatherId": 111111,    "name_en": "Aashish (Aashu)",                "gen": "GEN VIII" },
+                    { "id": 1111111, "name": "आशिष (आशु)", "fatherId": 111111,    "name_en": "Aashish (Aashu)",                "gen": "GEN VIII" },
 
-                    { "id": 1111121, "name": "सुमन", "fatherId": 111112,    "name_en": "Suman",                "gen": "GEN VIII" },
+                    { "id": 1111121, "name": "सुमन (अंशु)", "fatherId": 111112,    "name_en": "Suman (Anshu)",                "gen": "GEN VIII" },
                     { "id": 1111122, "name": "सुमन्त", "fatherId": 111112,    "name_en": "Sumant",                "gen": "GEN VIII" },
 
                     { "id": 1112111, "name": "दीपक (पोलो)", "fatherId": 111211,    "name_en": "Dipak (Polo)",                "gen": "GEN VIII" },
@@ -486,7 +498,7 @@
                 }
 
                 const g = this.el("g", {
-                    class: `node-group ${node.id === selectedNodeId ? 'selected' : ''}`,
+                    class: `node-group ${node.id === selectedNodeId ? 'selected' : ''} ${node.marked ? 'marked' : ''}`,
                     "data-id": node.id
                 });
 
@@ -619,7 +631,7 @@
             const styleEl = document.createElementNS(SVGChartRenderer.ns, "style");
             styleEl.textContent = `
                 .node-rect { fill: ${cardBg}; stroke: ${borderColor}; stroke-width: 1.5px; rx: 6px; }
-                .node-group.selected .node-rect { stroke: ${accentColor}; stroke-width: 2px; fill: ${cardBg}; }
+                .node-group.marked .node-rect { stroke: #392727; stroke-width: 2.5px; fill: #1d1814ad; }
                 .gen-tag { font-family: sans-serif; font-size: 11px; fill: ${textMuted}; font-weight: bold; letter-spacing: 0.5px; text-anchor: end; }
                 .name-text { font-size: 22px; font-weight: bold; fill: ${textMain}; }
                 .date-text { font-family: sans-serif; font-size: 11px; fill: ${textMuted}; text-anchor: end; }
