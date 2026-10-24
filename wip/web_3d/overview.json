@@ -1,0 +1,48 @@
+{
+  "$schema": "../overview.schema.json",
+  "title": "3D Previz & Grayboxing Engine",
+  "subtitle": "C++ WASM & WebGL Editor",
+  "date": "2026-10-24",
+  "badge": "WASM + WebGL",
+  "badge_class": "badge-cyan",
+  "categories": [
+    "wasm",
+    "graphics",
+    "tooling"
+  ],
+  "tags": [
+    "previz",
+    "grayboxing",
+    "c++",
+    "wasm",
+    "webgl",
+    "blender-export"
+  ],
+  "description": "Browser-based 3D grayboxing and pre-visualization tool featuring a modular C++ WASM math core, WebGL accelerated shadow mapping pipeline, and a Unity-style inspector interface.",
+  "technologies": [
+    {
+      "name": "C++",
+      "tag_class": "tag-cpp"
+    },
+    {
+      "name": "WebAssembly",
+      "tag_class": "tag-wasm"
+    },
+    {
+      "name": "WebGL",
+      "tag_class": "tag-webgl"
+    },
+    {
+      "name": "HTML5 / CSS3"
+    }
+  ],
+  "architecture": "Modular 3-tier architecture separating C++/Wasm linear-arena math core, engine.js WebGL abstraction pipeline, and scene_logic.js object inspector and keyframe management.",
+  "vision": "Provide a lightweight, high-performance web tool for spatial blocking and camera animation planning with direct pipeline export to Blender.",
+  "links": [
+    {
+      "label": "Launch Previz Editor →",
+      "url": "index.html",
+      "is_primary": true
+    }
+  ]
+}

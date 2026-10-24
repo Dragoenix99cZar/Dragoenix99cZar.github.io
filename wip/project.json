@@ -728,5 +728,86 @@
     ],
     "id": "EXP_19",
     "folder": "script-mapper"
+  },
+  {
+    "id": "EXP_20",
+    "folder": "family",
+    "title": "SVG Viewer with Zoom & Pan & Exporter",
+    "subtitle": "Experimental Research Prototype",
+    "date": "2026-10-11",
+    "badge": "Interactive Prototype",
+    "badge_class": "badge-primary",
+    "categories": [
+      "graphics"
+    ],
+    "tags": [
+      "family",
+      "graphics"
+    ],
+    "description": "Interactive low-level experimentation and graphics module: SVG Viewer with Zoom & Pan & Exporter.",
+    "technologies": [
+      {
+        "name": "SVG Vector"
+      }
+    ],
+    "architecture": "Engineered around modular family components, executing direct transformations and client-side processing.",
+    "vision": "Provide an accessible first-principles reference and interactive benchmark for web-native systems engineering.",
+    "links": [
+      {
+        "label": "Launch SVG Viewer with Zo →",
+        "url": "family/index.html",
+        "is_primary": true
+      }
+    ]
+  },
+  {
+    "$schema": "../overview.schema.json",
+    "title": "3D Previz & Grayboxing Engine",
+    "subtitle": "C++ WASM & WebGL Editor",
+    "date": "2026-10-24",
+    "badge": "WASM + WebGL",
+    "badge_class": "badge-cyan",
+    "categories": [
+      "wasm",
+      "graphics",
+      "tooling"
+    ],
+    "tags": [
+      "previz",
+      "grayboxing",
+      "c++",
+      "wasm",
+      "webgl",
+      "blender-export"
+    ],
+    "description": "Browser-based 3D grayboxing and pre-visualization tool featuring a modular C++ WASM math core, WebGL accelerated shadow mapping pipeline, and a Unity-style inspector interface.",
+    "technologies": [
+      {
+        "name": "C++",
+        "tag_class": "tag-cpp"
+      },
+      {
+        "name": "WebAssembly",
+        "tag_class": "tag-wasm"
+      },
+      {
+        "name": "WebGL",
+        "tag_class": "tag-webgl"
+      },
+      {
+        "name": "HTML5 / CSS3"
+      }
+    ],
+    "architecture": "Modular 3-tier architecture separating C++/Wasm linear-arena math core, engine.js WebGL abstraction pipeline, and scene_logic.js object inspector and keyframe management.",
+    "vision": "Provide a lightweight, high-performance web tool for spatial blocking and camera animation planning with direct pipeline export to Blender.",
+    "links": [
+      {
+        "label": "Launch Previz Editor →",
+        "url": "web_3d/index.html",
+        "is_primary": true
+      }
+    ],
+    "id": "EXP_21",
+    "folder": "web_3d"
   }
 ]

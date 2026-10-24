@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3D Previz Tool - Unity Style Inspector</title>
+    <style>
+        :root {
+            --bg-dark: #181818;
+            --bg-panel: #222222;
+            --bg-element: #2c2c2c;
+            --border-color: #383838;
+            --text-main: #cccccc;
+            --text-dim: #888888;
+            --accent-blue: #2a5d84;
+            --accent-hover: #3573a3;
+        }
+
+        body { margin: 0; background: var(--bg-dark); color: var(--text-main); font-family: system-ui, -apple-system, sans-serif; font-size: 12px; display: flex; height: 100vh; overflow: hidden; }
+
+        /* Layout Grid */
+        #left-sidebar { width: 240px; background: var(--bg-panel); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        #viewport-container { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; background: #000; }
+        canvas { width: 100%; height: 100%; display: block; }
+        #right-sidebar { width: 280px; background: var(--bg-panel); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 8px; box-sizing: border-box; }
+
+        /* Panel Headers & Lists */
+        .panel-header { background: var(--bg-element); padding: 6px 10px; font-weight: bold; border-bottom: 1px solid var(--border-color); color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; font-size: 10px; }
+
+        #hierarchy-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex: 1; }
+        #hierarchy-list li { padding: 6px 12px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 6px; }
+        #hierarchy-list li:hover { background: rgba(255,255,255,0.04); }
+        #hierarchy-list li.selected { background: var(--accent-blue); color: #fff; }
+
+        /* Inspector Fields */
+        .inspector-section { margin-bottom: 15px; }
+        .inspector-section title { font-weight: bold; display: block; margin-bottom: 6px; color: var(--text-dim); }
+
+        .prop-row { display: flex; align-items: center; margin-bottom: 4px; gap: 4px; }
+        .prop-row label { width: 20px; color: var(--text-dim); font-weight: bold; text-align: center; }
+        .prop-row input { flex: 1; background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-main); padding: 4px 6px; border-radius: 2px; font-family: monospace; }
+        .prop-row input:focus { border-color: var(--accent-blue); outline: none; }
+
+        #toolbar { position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(30,30,30,0.85); padding: 6px 12px; border-radius: 4px; border: 1px solid var(--border-color); pointer-events: none; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+    <!-- LEFT: Hierarchy Tree View -->
+    <div id="left-sidebar">
+        <div class="panel-header">Hierarchy</div>
+        <ul id="hierarchy-list">
+            <!-- Populated dynamically via JS -->
+        </ul>
+    </div>
+
+    <!-- CENTER: WebGL Viewport -->
+    <div id="viewport-container">
+        <div id="toolbar">Click viewport to lock mouse. WASD = Move | Q/E = Down/Up</div>
+        <canvas id="glCanvas"></canvas>
+    </div>
+
+    <!-- RIGHT: Inspector Panel -->
+    <div id="right-sidebar">
+        <div class="panel-header" style="margin-bottom: 10px;">Inspector</div>
+        <div id="inspector-content">
+            <div style="color: var(--text-dim); text-align: center; margin-top: 40px;">No object selected</div>
+        </div>
+    </div>
+
+    <!-- Load decoupled modules -->
+    <script src="engine.js"></script>
+    <script src="scene_logic.js"></script>
+
+    <script>
+        const canvas = document.getElementById('glCanvas');
+        const renderer = new WebGLEngine(canvas);
+        const sceneManager = new SceneManager();
+
+        // Spawn test entities representing characters and props
+        sceneManager.spawnObject("Hero Character", "character", 0, 0.5, 0, [0.8, 0.2, 0.2, 1.0], [1, 2, 1]);
+        sceneManager.spawnObject("Prop Crate 1", "prop", 2, 0.5, 2, [0.2, 0.5, 0.8, 1.0], [1, 1, 1]);
+        sceneManager.spawnObject("Prop Pillar", "prop", -2, 0.5, -2, [0.4, 0.4, 0.4, 1.0], [0.8, 3, 0.8]);
+
+        let selectedObject = null;
+
+        // --- UI HIERARCHY & INSPECTOR BINDINGS ---
+        function updateHierarchyUI() {
+            const list = document.getElementById('hierarchy-list');
+            list.innerHTML = '';
+
+            sceneManager.objects.forEach((obj, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>📦</span> ${obj.name} <span style="margin-left:auto; font-size:10px; color:var(--text-dim)">(${obj.role})</span>`;
+                if (selectedObject === obj) li.classList.add('selected');
+
+                li.onclick = () => {
+                    selectedObject = obj;
+                    updateHierarchyUI();
+                    updateInspectorUI();
+                };
+                list.appendChild(li);
+            });
+        }
+
+        function updateInspectorUI() {
+            const content = document.getElementById('inspector-content');
+            if (!selectedObject) {
+                content.innerHTML = `<div style="color: var(--text-dim); text-align: center; margin-top: 40px;">No object selected</div>`;
+                return;
+            }
+
+            content.innerHTML = `
+                <div class="inspector-section">
+                    <label style="color:var(--text-main); font-weight:bold; margin-bottom:8px; display:block;">Object Settings</label>
+                    <div class="prop-row"><label>Name</label><input type="text" id="in-name" value="${selectedObject.name}" style="flex:1"></div>
+                    <div class="prop-row"><label>Role</label><input type="text" id="in-role" value="${selectedObject.role}" style="flex:1"></div>
+                </div>
+                <hr style="border:0; border-top:1px solid var(--border-color); margin:15px 0;">
+                <div class="inspector-section">
+                    <span class="title">Transform</span>
+                    <div style="font-size:11px; margin-bottom:4px; color:var(--text-dim);">Position</div>
+                    <div class="prop-row"><label>X</label><input type="number" step="0.1" id="pos-x" value="${selectedObject.pos[0]}"></div>
+                    <div class="prop-row"><label>Y</label><input type="number" step="0.1" id="pos-y" value="${selectedObject.pos[1]}"></div>
+                    <div class="prop-row"><label>Z</label><input type="number" step="0.1" id="pos-z" value="${selectedObject.pos[2]}"></div>
+
+                    <div style="font-size:11px; margin:8px 0 4px 0; color:var(--text-dim);">Rotation</div>
+                    <div class="prop-row"><label>X</label><input type="number" step="1" id="rot-x" value="${selectedObject.rot[0]}"></div>
+                    <div class="prop-row"><label>Y</label><input type="number" step="1" id="rot-y" value="${selectedObject.rot[1]}"></div>
+                    <div class="prop-row"><label>Z</label><input type="number" step="1" id="rot-z" value="${selectedObject.rot[2]}"></div>
+
+                    <div style="font-size:11px; margin:8px 0 4px 0; color:var(--text-dim);">Scale</div>
+                    <div class="prop-row"><label>X</label><input type="number" step="0.1" id="scale-x" value="${selectedObject.scale[0]}"></div>
+                    <div class="prop-row"><label>Y</label><input type="number" step="0.1" id="scale-y" value="${selectedObject.scale[1]}"></div>
+                    <div class="prop-row"><label>Z</label><input type="number" step="0.1" id="scale-z" value="${selectedObject.scale[2]}"></div>
+                </div>
+            `;
+
+            // Bind live inputs back to selected object state
+            const bindInput = (id, targetArray, index, isFloat = true) => {
+                const el = document.getElementById(id);
+                if(el) {
+                    el.oninput = (e) => {
+                        targetArray[index] = isFloat ? parseFloat(e.target.value) || 0 : e.target.value;
+                    };
+                }
+            };
+            bindInput('in-name', selectedObject, 'name', false);
+            bindInput('in-role', selectedObject, 'role', false);
+            bindInput('pos-x', selectedObject.pos, 0);
+            bindInput('pos-y', selectedObject.pos, 1);
+            bindInput('pos-z', selectedObject.pos, 2);
+            bindInput('rot-x', selectedObject.rot, 0);
+            bindInput('rot-y', selectedObject.rot, 1);
+            bindInput('rot-z', selectedObject.rot, 2);
+            bindInput('scale-x', selectedObject.scale, 0);
+            bindInput('scale-y', selectedObject.scale, 1);
+            bindInput('scale-z', selectedObject.scale, 2);
+        }
+
+        // Initialize UI hierarchy
+        updateHierarchyUI();
+
+        // --- MOUSE & INPUT HANDLING ---
+        const activeKeys = new Set();
+        let mouseX = 0, mouseY = 0;
+
+        window.addEventListener('keydown', e => activeKeys.add(e.code));
+        window.addEventListener('keyup', e => activeKeys.delete(e.code));
+        canvas.addEventListener('click', () => canvas.requestPointerLock());
+        document.addEventListener('mousemove', e => {
+            if (document.pointerLockElement === canvas) {
+                mouseX += e.movementX * 0.003;
+                mouseY += e.movementY * 0.003;
+            }
+        });
+
+        // --- MAIN RENDER LOOP ---
+        WebAssembly.instantiateStreaming(fetch('engine.wasm'), {}).then(results => {
+            const wasm = results.instance.exports;
+            wasm.init_engine();
+
+            window.addEventListener('resize', () => renderer.resize(window.innerWidth, window.innerHeight));
+            renderer.resize(window.innerWidth, window.innerHeight);
+
+            let lastTime = performance.now();
+
+            function loop(now) {
+                const dt = (now - lastTime) * 0.001;
+                lastTime = now;
+
+                let moveX = 0, moveY = 0, moveZ = 0;
+                if (activeKeys.has('KeyW') || activeKeys.has('ArrowUp')) moveZ += 1.0;
+                if (activeKeys.has('KeyS') || activeKeys.has('ArrowDown')) moveZ -= 1.0;
+                if (activeKeys.has('KeyA') || activeKeys.has('ArrowLeft')) moveX -= 1.0;
+                if (activeKeys.has('KeyD') || activeKeys.has('ArrowRight')) moveX += 1.0;
+                if (activeKeys.has('KeyQ')) moveY -= 1.0;
+                if (activeKeys.has('KeyE')) moveY += 1.0;
+
+                wasm.update_controls(moveX, moveY, moveZ, mouseX, mouseY);
+                wasm.step_simulation();
+
+                // Update scene object transformation matrices
+                sceneManager.update(dt);
+
+                const memory = wasm.memory.buffer;
+                const renderData = {
+                    viewMat: new Float32Array(memory, wasm.get_view_matrix(), 16),
+                    projMat: new Float32Array(memory, wasm.get_projection_matrix(), 16),
+                    lightSpaceMat: new Float32Array(memory, wasm.get_light_space_matrix(), 16),
+                    lightPos: new Float32Array(memory, wasm.get_light_position(), 3),
+                    cubeData: new Float32Array(memory, wasm.get_cube_vertices(), 36 * 3),
+                    cubeNormData: new Float32Array(memory, wasm.get_cube_normals(), 36 * 3),
+                    floorData: new Float32Array(memory, wasm.get_floor_vertices(), 6 * 3),
+                    floorNormData: new Float32Array(memory, wasm.get_floor_normals(), 6 * 3),
+                    renderObjects: sceneManager.objects
+                };
+
+                renderer.renderPass('shadow', renderData);
+                renderer.renderPass('color', renderData);
+
+                requestAnimationFrame(loop);
+            }
+            requestAnimationFrame(loop);
+        }).catch(err => {
+            console.error("Failed to load engine.wasm:", err);
+        });
+    </script>
+</body>
+</html>

@@ -231,6 +231,7 @@
     <div class="subtitle">Updated by Aman Karn • 11 Oct, 2026</div>
 
     <div class="export-group">
+        <!-- <button class="btn btn-secondary" id="export-svg">SVG</button> -->
         <button class="btn btn-secondary" id="export-png">PNG</button>
         <button class="btn btn-secondary" id="export-jpg">JPG</button>
         <button class="btn btn-secondary" id="export-json">JSON Data</button>
@@ -630,6 +631,8 @@
             // Embed an explicit style block into the exported SVG to preserve text alignment and classes
             const styleEl = document.createElementNS(SVGChartRenderer.ns, "style");
             styleEl.textContent = `
+                @import url('https://googleapis.com');
+                .devanagari-text { font-family: 'Noto Serif Devanagari', serif; font-size: 48px; fill: #333333; text-rendering: optimizeLegibility; }
                 .node-rect { fill: ${cardBg}; stroke: ${borderColor}; stroke-width: 1.5px; rx: 6px; }
                 .node-group.marked .node-rect { stroke: #392727; stroke-width: 2.5px; fill: #1d1814ad; }
                 .gen-tag { font-family: sans-serif; font-size: 11px; fill: ${textMuted}; font-weight: bold; letter-spacing: 0.5px; text-anchor: end; }
@@ -642,6 +645,13 @@
             const serializer = new XMLSerializer();
             return serializer.serializeToString(clone);
         }
+
+        // document.getElementById("export-svg").addEventListener("click", () => {
+        //     const svgStr = getReadySVGString();
+        //     if (!svgStr) return;
+        //     const blob = new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" });
+        //     downloadFile(blob, "genealogy-chart.svg");
+        // });
 
         document.getElementById("export-png").addEventListener("click", () => triggerRasterExport("image/png"));
         document.getElementById("export-jpg").addEventListener("click", () => triggerRasterExport("image/jpeg"));
