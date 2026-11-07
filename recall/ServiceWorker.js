@@ -1,9 +1,9 @@
 const cacheName = "vajraGames-Recall game-0.1";
 const contentToCache = [
-    "Build/recall.loader.js",
-    "Build/recall.framework.js",
-    "Build/recall.data",
-    "Build/recall.wasm",
+    "Build/recall_game.loader.js",
+    "Build/recall_game.framework.js",
+    "Build/recall_game.data",
+    "Build/recall_game.wasm",
     "TemplateData/style.css"
 
 ];
